@@ -1,121 +1,202 @@
-# YOUR PRODUCT/TEAM NAME
-> _Note:_ This document is meant to evolve throughout the planning phase of your project.   That is, it makes sense for you commit regularly to this file while working on the project (especially edits/additions/deletions to the _Highlights_ section). Most importantly, it is a reflection of all the planning you work you've done in the first iteration. 
- > **This document will serve as a master plan between your team, your partner and your TA.**
+# Appetite
 
-## Product Details
- 
-#### Q1: What are you planning to build?
+## **Figma Link:**
 
- > Short (1 - 2 min' read)
- * Start with a single sentence, high-level description of the product.
- * Be clear - Describe the problem you are solving in simple terms.
- * Be concrete. For example:
-    * What are you planning to build? Is it a website, mobile app,
-   browser extension, command-line app, etc.?      
-    * When describing the problem/need, give concrete examples of common use cases.
-    * Assume your the reader knows nothing about the problem domain and provide the necessary context. 
- * Focus on *what* your product does, and avoid discussing *how* you're going to implement it.      
-   For example: This is not the time or the place to talk about which programming language and/or framework you are planning to use.
- * **Feel free (and very much encouraged) to include useful diagrams, mock-ups and/or links**.
+https://www.figma.com/file/iwdJdqLhZt13azgZaYGsV1/Appetite?node-id=31%3A579
 
+# Product Details
 
-#### Q2: Who are your target users?
+## What are you planning to build?
 
-  > Short (1 - 2 min' read max)
- * Be specific (e.g. a 'a third-year university student studying Computer Science' and not 'a student')
- * **Feel free (but not obligated) to use personas.         
-   You can create your personas as part of this Markdown file, or add a link to an external site (for example, [Xtensio](https://xtensio.com/user-persona/)).**
+Appetite is the mobile app for food lovers who want to discover and try new cuisines with friends, family, and partners with filters based on group preferences, type of cuisine, location, and price range. Ever have trouble deciding on where to eat with your friends or significant other? Tired of going to the same chain restaurants over and over? For city dwellers, and especially millennials, eating out (or ordering UberEats from home or office) and eating good is the new norm. The app gamifies the all so common drawn-out process of deciding on where to eat for breakfast, brunch, lunch, afternoon tea, dinner, and your occasional late-night cravings using an innovative Tinder-style swiping interface while discovering and supporting local restaurants.
 
-#### Q3: Why would your users choose your product? What are they using today to solve their problem/need?
+## Who are your target users?
 
-> Short (1 - 2 min' read max)
- * We want you to "connect the dots" for us - Why does your product (as described in your answer to Q1) fits the needs of your users (as described in your answer to Q2)?
- * Explain the benefits of your product explicitly & clearly. For example:
-    * Save users time (how much?)
-    * Allow users to discover new information (which information? And, why couldn't they discover it before?)
-    * Provide users with more accurate and/or informative data (what kind of data? Why is it useful to them?)
-    * Does this application exist in another form? If so, how does your differ and provide value to the users?
-    * How does this align with your partner's organization's values/mission/mandate?
+Our target users are individuals in their 20s in urban centres who enjoy eating out or don't have as much time for home cooked meals.
 
-#### Q4: How will you build it?
+Another group of potential users are those who are interested in supporting small businesses, considering recent social justice movements and the impact of COVID-19 on local businesses.
 
-> Short (1-2 min' read max)
- * What is the technology stack? Specify any and all languages, frameworks, libraries, PaaS products or tools. 
- * How will you deploy the application?
- * Describe the architecture - what are the high level components or patterns you will use? Diagrams are useful here. 
- * Will you be using third party applications or APIs? If so, what are they?
- * What is your testing strategy?
+## Why would your users choose your product? What are they using today to solve their problem/need?
 
-#### Q5: What are the user stories that make up the MVP?
+Food recommendation is currently available through Google Maps and Yelp, however their current solutions are limited in their ability to provide recommendations to groups. The individual-centric approach of Maps and Yelp are less personalized than our product idea, which aims to match users with local restaurants depending on users’ personal tastes and location. In addition, friends can create groups where the app will provide the group with the same subset of restaurant recommendations, and based on each user’s choices, the app will generate a list of the top restaurants catered to the group.
 
- * At least 5 user stories concerning the main features of the application - note that this can broken down further
- * You must follow proper user story format (as taught in lecture) ```As a <user of the app>, I want to <do something in the app> in order to <accomplish some goal>```
- * If you have a partner, these must be reviewed and accepted by them
- * The user stories should be written in Github and each one must have clear acceptance criteria.
+Below are some statistics showing the demand for food recommendation systems:
 
-----
+- 48% of restaurant goers are eating out between 2-4 times per week.
+- 64% of restaurant goers occasionally look for somewhere new to dine, while only a slim percentage stay with the same restaurants (18%).
+- 68% of respondents admitted that they had tried a new restaurant based on positive online reviews.
+- 45% regularly check online reviews before deciding on a new restaurant.
+- 87% agreed they would take a recommendation from a friend more seriously than an online rating.
+- 91% tried a new restaurant based entirely on a recommendation from a friend, as opposed to 68% who tried based entirely on positive online reviews, and 41% who tried based entirely on positive feedback on social media.
+- Source:[https://restaurantsuccess.touchbistro.com/touchbistro-blog/how-diners-chooserestaurantsreport?fbclid=IwAR1WMkNXQfP8KulIOCaVaU436E8B0rvqaA_ISKQ_87WuGpixxn2ro0J X5vo](https://restaurantsuccess.touchbistro.com/touchbistro-blog/how-diners-chooserestaurantsreport?fbclid=IwAR1WMkNXQfP8KulIOCaVaU436E8B0rvqaA_ISKQ_87WuGpixxn2ro0J)
 
-## Process Details
+After looking on the various mobile app stores for similar apps, we found [Fork That](http://forkthat.ca/), which is a similar idea but has its own downsides which could be improved upon.
 
-#### Q6: What are the roles & responsibilities on the team?
+Strengths:
 
-Describe the different roles on the team and the responsibilities associated with each role. 
- * Roles should reflect the structure of your team and be appropriate for your project. Not necessarily one role to one team member.
+- Intuitive user interface (actions are obvious due to button layout)
+- Results appear according to what's closest to you and pre-selected preferences (type of cuisine)
 
-List each team member and:
- * A description of their role(s) and responsibilities including the components they'll work on and non-software related work
- * 3 technical strengths and weaknesses each (e.g. languages, frameworks, libraries, development methodologies, etc.)
+Weaknesses:
 
-#### Q7: What operational events will you have as a team?
+- No option to swipe and match with friends.
+- Not Android compatible
 
-Describe meetings (and other events) you are planning to have. 
- * When and where? Recurring or ad hoc? In-person or online?
- * What's the purpose of each meeting?
- * Other events could be coding sessions, code reviews, quick weekly sync meeting online, etc.
- * You must have at least 2 meetings with your project partner (if you have one) before D1 is due. Describe them here:
-   * What did you discuss during the meetings?
-   * What were the outcomes of each meeting?
-   * You must provide meeting minutes.
-   * You must have a regular meeting schedule established by the second meeting.  
-  
-#### Q8: What artifacts will you use to self-organize?
+## How will you build it?
 
-List/describe the artifacts you will produce in order to organize your team.       
+Tech Stack
 
- * Artifacts can be To-Do lists, Task boards, schedule(s), meeting minutes, etc.
- * We want to understand:
-   * How do you keep track of what needs to get done?
-   * How do you prioritize tasks?
-   * How do tasks get assigned to team members?
-   * How do you determine the status of work from inception to completion?
+- Database: MongoDB if we go NoSQL (first choice), PostgreSQL if that doesn’t work (backup)
+- Backend: Golang
+- Mobile: React Native
+- CI/CD: Github Actions
 
-#### Q9: What are the rules regarding how your team works?
+Architecture
 
-Describe your team's working culture.
+- 
 
-**Communications:**
- * What is the expected frequency? What methods/channels are appropriate? 
- * If you have a partner project, what is your process (in detail) for communicating with your partner?
- 
-**Meetings:**
- * How are people held accountable for attending meetings, completing action items? Is there a moderator or process?
- 
-**Conflict Resolution:**
- * List at least three team scenarios/conflicts you discussed in lecture and how you decided you will resolve them. Indecisions? Non-responsive team members? Any other scenarios you can think of?
+    [https://lh4.googleusercontent.com/BdyPB7jKaRunSldKXlUHOzfv2srYIjtZy0GXFqQuDdLlkbbcarfug7tVa41i2SXPOvQjyIn6jSrU4gysiVANhnjnlirfJHHFimLvVPCg1BzBUZ9lPDYJWMZv10XKSS5CrJM9MDOt](https://lh4.googleusercontent.com/BdyPB7jKaRunSldKXlUHOzfv2srYIjtZy0GXFqQuDdLlkbbcarfug7tVa41i2SXPOvQjyIn6jSrU4gysiVANhnjnlirfJHHFimLvVPCg1BzBUZ9lPDYJWMZv10XKSS5CrJM9MDOt)
 
+Deployment
 
+- On the Apple App Store and Google Play Store
+- Deploy Go backend on AWS/GCP and host DB on AWS/GCP.
 
+Third Party Applications/APIs
 
-----
-### Highlights
+- Google Maps
+- Yelp
+- Scraping restaurants from the web
 
-Specify 3 - 5 key decisions and/or insights that came up during your meetings
-and/or collaborative process.
+Testing Strategy
 
- * Short (5 min' read max)
- * Decisions can be related to the product and/or the team process.
-    * Mention which alternatives you were considering.
-    * Present the arguments for each alternative.
-    * Explain why the option you decided on makes the most sense for your team/product/users.
- * Essentially, we want to understand how (and why) you ended up with your current product and process plan.
- * This section is useful for important information regarding your decision making process that may not necessarily fit in other sections. 
+- Unit tests for server and mobile app
+- Integration and E2E testing
+- Usability testing with different demographics of users
+
+## What are the user stories that make up the MVP? (at least 5)
+
+- As a user, I want to be able to upvote or downvote (swipe left/right) restaurants in order to determine a place to eat out
+- As a new user, I want to be able to use the app to specify my cuisine preferences in order to get suggestions that fit my tastes
+- As a user, I want to be able to view a list of my friend groups, with a brief description for each (i.e group name, fav cuisine, etc) so that I can easily use the app with friend groups I frequently eat out with.
+- As a group of friends, we want to pick a location based on our cuisine preferences, budget and current location(s) to pick a restaurant that everyone will be satisfied with
+- As a restaurant owner, I want to promote my business to new customers in order to grow my business
+- As a user, I want to be able to super like certain restaurants and save it to an accessible list so I can refer back to it and return to that particular restaurant.
+- As a user, I want to see what restaurants my friends like in order to get recommendations for myself
+- As a user, I want my super-liked restaurants to appear more often in restaurant-matching sessions so I can revisit restaurants I liked in the past, but may have forgotten about.
+
+# Process Details
+
+## What are the roles & responsibilities on the team?
+
+**Amy: Frontend engineer + Designer**
+
+Description: Responsible for working on Front End as well as designing the UI.
+
+Strengths: Frontend, Testing, UI/UX Design
+
+Weaknesses: Go, MongoDB, Networks
+
+**Kevin: Database engineer + UI Designer**
+
+Description: Responsible for working with Go to build out the core functionality, mostly working with efficient read/write algorithms to interact the database with the REST API. Designing the front-end with optimal user experience in mind.
+
+Strengths: Go, React, MongoDB, REST API, UI/UX design
+
+Weaknesses: React Native, CI/CD, Testing
+
+**Poplar: Backend engineer**
+
+Strengths: Relational Databases, Backend, Networks, Security
+
+Weaknesses: UI/UX Design, NoSQL, Frontend
+
+Description: Curating server side information, writing server scripts and APIs to be utilized by the front-side engineers/UX designers. Testing the aforementioned code, and inspecting it for speed optimization. Ensuring app/stored information is secure.
+
+**Rishab: Fullstack engineer and building CI/CD pipelines**
+
+Description: Responsible for building CI/CD pipelines, architecting backend and mobile app development.
+
+Strengths: Go backend development, React Native, CI/CD
+
+Weaknesses: UI/UX design, frontend testing
+
+**Shayan: Backend engineer**
+
+Description: Responsible for building REST API functionality in Go server. Writing code to interact with external APIs including Google Maps API, Yelp Fusion API. Also responsible for writing tests for the backend.
+
+Strengths: Backend, MongoDB, React Webapps
+
+Weaknesses:UI/UX Design, Relational Databases, CI/CD
+
+**Joshua: Fullstack engineer**
+
+Description: Responsible for integration between frontend and backend, plus UI design
+
+Strengths: Mobile app frameworks, Backend / APIs, UI design
+
+Weaknesses: CI/CD, Go, ML
+
+## What operational events will you have as a team?
+
+Weekly meetings/stand-ups to provide updates on each core area of the project (frontend, backend, data, etc):
+
+- 1 meeting for just a quick midweek update (can be asynchronous over slack)
+- 1 meeting for a full update for a team.
+
+Main asynchronous communication will occur over a Slack channel created for this project.
+
+We do not have a project partner, however, we have had 3 hour-long meetings to discuss our ideas and thoughts for the project, including the planning presented in this document.
+
+## What artifacts will you use to self-organize?
+
+We will be primarily using Notion for our organization, as Notion has built in Kanban boards, we can quickly organize our tasks and issues. We can also use it to record our current progress and write internal documentation. Kanban covers all of the issues of tracking TODO tasks, prioritization, assignment and task status.
+
+As for communication, the group will use a slack workspace made for this project.
+
+## What are the rules regarding how your team works?
+
+In order to boost productivity and make sure everyone on the team is working collaboratively, we have decided on the following team values:
+
+**Communication above all else**
+
+Our team will keep open communication between all members to ensure weekly progress on different components of the project. Different slack channels will be used to communicate and we expect team members to reply within a day.
+
+On top of the asynchronous slack communication, we will have two synchronous meetings a week to keep everyone updated on the status of the project and any issues encountered.
+
+**Mistakes are ok, help is always given**
+
+Everyone is human, if a team member falls behind and/or is having issues that is okay; let the team know and see if anyone is available to help.
+
+**Punctuality is key**
+
+Whoever is late to meeting gets to be the profile picture for the informal Facebook chat : )
+
+Playful punishment aside, everyone is a full time student with their own classes/assignments and extracurriculars to worry about outside of CSC301. Thus, it is important to make sure to arrive at meetings on time so as to not delay everyone else’s schedule(s).
+
+## Conflict Resolution
+
+Indecisions: We live in a society governed by the power of democracy, which we will fully utilise in our decision making as a team. If we ever come across a decision where members are in a disagreement, we will first try to explain the opposing opinions with arguments for both sides, and make an educated vote on the decision of your choosing. Thus, the conflict can be resolved.
+
+Non-responsive Team Members: All members on this team have known each other for the majority of our undergrad thus far. In the unlikely event that a team member does not respond (i.e. has had a fatal accident), the other members will be more worrisome than upset, and will attempt to get a hold of their situation before making adjustments to the balance of work for the project.
+
+Member not finishing their work: Continuing with the theme of ‘communication is key’, see if they are struggling with the workload, as it is possible that they have been assigned too much. In this case, adjust the allocation of tasks. If the issue is that the member is being lazy, make it clear that work needs to be finished and if this continues to be an issue, contact instructors for further instructions/assistance.
+
+# Highlights
+
+- Decisions concerning the platform architecture were heavily debated upon.
+
+    **Backend**
+
+    - We considered several alternatives for backend, including a Node.js + Express server, or a GraphQL api instead of a REST API.
+    - We landed on using a Go server instead of a Node.js + Express backend as multiple team members have experience with Go, and it being a typed language will lend itself to more clean code than writing a Node.js + Express backend in JavaScript.
+    - Additionally, we decided to create a REST API instead of using GraphQL, as our team as a whole has more experience with creating REST APIs in the past.
+
+    **Frontend**
+
+    - Alternatives discussed for frontend were: Flutter, NativeScript, and Android or iOS SDKs.
+    - We went with React Native because our team has extensive experience with React, much of which can transfer over to React Native. Additionally, one team member has experience with NativeScript, which has a similar component style to React Native, both of which use JavaScript for scripting.
+- The focus of the application was also heavily discussed, as we considered the benefits/cons of developing an individual user experience versus a group oriented-one
+    - Individual: Focusing on individuals allows us to build simpler recommendation algorithms, and be more flexible in being able to add group functionality later on.
+    - Group approach: With groups, our app provides the novel functionality by allowing people to choose restaurants together. However, it would require a system that would allow users to add each other and this would add another layer of complexity.
+    - Ultimately, we decided to focus on individual users first with the intention of adding groups at a later point. This is due to the limited number of applications of a group-based model, and a more individual focused model will reflect the original goal of the project, which is to expose users to new cuisines and discover food hotspots.
