@@ -53,9 +53,7 @@ Tech Stack
 
 Architecture
 
-- 
-
-    [https://lh4.googleusercontent.com/BdyPB7jKaRunSldKXlUHOzfv2srYIjtZy0GXFqQuDdLlkbbcarfug7tVa41i2SXPOvQjyIn6jSrU4gysiVANhnjnlirfJHHFimLvVPCg1BzBUZ9lPDYJWMZv10XKSS5CrJM9MDOt](https://lh4.googleusercontent.com/BdyPB7jKaRunSldKXlUHOzfv2srYIjtZy0GXFqQuDdLlkbbcarfug7tVa41i2SXPOvQjyIn6jSrU4gysiVANhnjnlirfJHHFimLvVPCg1BzBUZ9lPDYJWMZv10XKSS5CrJM9MDOt)
+<img src="./architecture_diagram.png">
 
 Deployment
 
