@@ -6,8 +6,8 @@ import (
 )
 
 type Config struct {
-	Port    string
-	MongURI string
+	Port     string
+	MongoURI string
 }
 
 func getConfig() Config {
@@ -19,8 +19,8 @@ func getConfig() Config {
 	}
 
 	config := Config{
-		Port:    port,
-		MongURI: mongoURI,
+		Port:     port,
+		MongoURI: mongoURI,
 	}
 
 	return config
