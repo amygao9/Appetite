@@ -1,7 +1,7 @@
 {
   "name": "deliverable-2",
   "version": "1.0.0",
-  "description": "run backend server: `go run main.go`",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "server": "cd app/server && go run main.go",
