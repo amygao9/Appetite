@@ -9,6 +9,7 @@ import (
 	"backapp/models"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -39,7 +40,7 @@ func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("Error unpacking restaurant data")
 	}
-	restaurant.ID = bson.NewObjectId()
+	restaurant.ID = primitive.NewObjectID()
 	_, err = c.collection.InsertOne(c.ctx, restaurant)
 	if err != nil {
 		w.Write([]byte(err.Error()))
@@ -50,10 +51,40 @@ func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	var restaurant models.Restaurant
+	postBody, _ := ioutil.ReadAll(r.Body)
+	err = json.Unmarshal(postBody, &restaurant)
+	if err != nil {
+		log.Fatalf("Error unpacking restaurant data")
+	}
+	restaurant.ID = objectID
+	_, err = c.collection.ReplaceOne(c.ctx, bson.M{"_id": objectID}, restaurant)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	} else {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+		response, _ := json.Marshal(restaurant)
+		w.Write(response)
+	}
+}
+
 func (c *Collection) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
-
-	_, err := c.collection.DeleteOne(c.ctx, (bson.M{"_id": bson.ObjectIdHex(id)}))
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	_, err = c.collection.DeleteOne(c.ctx, (bson.M{"_id": objectID}))
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	} else {

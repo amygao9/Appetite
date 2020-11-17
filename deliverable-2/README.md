@@ -1,3 +1,3 @@
 # Instructions
 
-run backend server: `go run main.go`
+run backend server: `npm run server`
