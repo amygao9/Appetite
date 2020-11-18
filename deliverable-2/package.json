@@ -1,0 +1,13 @@
+{
+  "name": "deliverable-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd app/server && go run main.go",
+    "mobile": "npm run start --prefix mobile"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

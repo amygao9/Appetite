@@ -27,9 +27,15 @@ func RouterInit() {
 	// Restaurant methods
 	restaurantCollection := Collection{collection: db.Collection("restaurant"), ctx: ctx}
 	restaurantString := "/restaurant"
-	r.HandleFunc(restaurantString+"/", restaurantCollection.GetRestaurants).Methods("GET")
+	r.HandleFunc(restaurantString, restaurantCollection.GetRestaurants).Methods("GET")
 	r.HandleFunc(restaurantString+"/add", restaurantCollection.AddRestaurant).Methods("POST")
 	r.HandleFunc(restaurantString+"/delete/{id:[a-zA-Z0-9]*}", restaurantCollection.DeleteRestaurant).Methods("DELETE")
+	r.HandleFunc(restaurantString+"/update/{id:[a-zA-Z0-9]*}", restaurantCollection.UpdateRestaurant).Methods("PUT")
+
+	// User methods
+	userCollection := Collection{collection: db.Collection("user"), ctx: ctx}
+	userString := "/user"
+	r.HandleFunc(userString+"/add", userCollection.AddUser).Methods("POST")
 
 	address := "127.0.0.1:" + config.Port
 
