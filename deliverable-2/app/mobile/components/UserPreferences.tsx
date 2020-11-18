@@ -43,10 +43,10 @@ export default function UserPreferences() {
 
       <Slider
         style={styles.distanceSlider}
-        step={1}
-        minimumValue={1}
-        maximumValue={50}
-        value={distanceRadius}
+        step={0.5}
+        minimumValue={0.1}
+        maximumValue={3}
+        value={1}
         onValueChange={slideValue => setDistanceRadius(slideValue)}
         minimumTrackTintColor="#1fb28a"
         maximumTrackTintColor="#d3d3d3"
