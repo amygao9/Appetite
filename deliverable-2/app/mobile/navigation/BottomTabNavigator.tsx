@@ -9,8 +9,8 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
-//testing - importing cuisine picker screen
-import CuisinePicker from '../components/CuisinePicker'
+//testing - importing cuisine picker screen and filters screen
+import UserPreferences from '../components/UserPreferences'
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -23,13 +23,12 @@ export default function BottomTabNavigator() {
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
 
       <BottomTab.Screen
-        name="CuisinePicker"
-        component={CuisinePicker}
+        name="UserPreferences"
+        component={UserPreferences}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
-
 
       <BottomTab.Screen
         name="TabOne"

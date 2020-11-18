@@ -11,6 +11,8 @@ export default function CuisineOption(props: any) {
 
   return (
       <CheckBox
+        textStyle={styles.textStyle}
+        containerStyle={styles.buttonStyle}
         title={props.cuisineName}
         iconRight
         iconType='material'
@@ -24,8 +26,12 @@ export default function CuisineOption(props: any) {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
+  textStyle: {
+    fontSize: 10,
     fontWeight: 'bold',
+  }, 
+  buttonStyle: {
+    margin: 5,
+    padding: 0
   }
 });

@@ -25,14 +25,14 @@ export default function CuisineOptionSection(props: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginRight: 30
   },
   sectionHeader: {
     paddingTop: 2,
     paddingLeft: 10,
     paddingBottom: 2,
     fontSize: 20,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)',
+    fontWeight: 'bold'
   }, 
   optionsList: {
   }

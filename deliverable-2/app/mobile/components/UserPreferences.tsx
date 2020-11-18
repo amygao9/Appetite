@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { StyleSheet, Button} from 'react-native';
 import { Text, View } from './Themed';
-import CuisineOptionSection from '../components/CuisineOptionSection';
+import CuisineOptionSection from './CuisineOptionSection';
+import Slider from '@react-native-community/slider';
 
-export default function CuisinePicker() {
+export default function UserPreferences() {
 
   const [cuisinePreferences, setCuisinePreferences] = React.useState(new Array()); 
+  const [distanceRadius, setDistanceRadius] = React.useState(1); 
+
   const cuisines = [
     {name: "Most Popular", options: ['Chinese', 'American', 'Japanese', 'Korean']}, 
     {name: "Underrated", options: ['Greek', 'Mediterranean', 'Jamaican', 'English']}, 
@@ -27,7 +30,7 @@ export default function CuisinePicker() {
 
   const doneSelecting = () => {
     //user preferences to be persisted 
-    console.log("done selecting, here are preferences: " + cuisinePreferences)
+    console.log("done selecting, here are preferences: " + cuisinePreferences + " within " + distanceRadius + " km of me")
   }
 
   return (
@@ -38,9 +41,26 @@ export default function CuisinePicker() {
         {cuisineSections}
       </View>
 
+      <Slider
+        style={styles.distanceSlider}
+        step={1}
+        minimumValue={1}
+        maximumValue={50}
+        value={distanceRadius}
+        onValueChange={slideValue => setDistanceRadius(slideValue)}
+        minimumTrackTintColor="#1fb28a"
+        maximumTrackTintColor="#d3d3d3"
+        thumbTintColor="#b9e4c9"
+      />
+
+      <Text>
+        Look for restaurants within: {distanceRadius}km
+      </Text>
+
       <View style={styles.buttonsPanel}> 
         <Button title="Continue" onPress={doneSelecting}/>
       </View>
+
     
     </View>
   );
@@ -66,5 +86,10 @@ const styles = StyleSheet.create({
   buttonsPanel: {
     flex: 2, 
     flexDirection: 'row'
+  },
+  distanceSlider: {
+    width: 200, 
+    height: 40,
+    flex: 2
   }
 });
