@@ -17,7 +17,7 @@ jobs:
     #### expecting it in the form of
     ####   /go/src/github.com/circleci/go-tool
     ####   /go/src/bitbucket.org/circleci/go-tool
-    working_directory: deliverable-2/app/server
+    working_directory: /go/src/github.com/csc301-fall-2020/team-project-31-appetite/server 
     steps:
       - checkout
 
