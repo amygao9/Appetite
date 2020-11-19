@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"backapp/auth"
 	"backapp/models"
 
 	"github.com/gorilla/mux"
@@ -14,6 +15,11 @@ import (
 )
 
 func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
+	err := auth.ValidateToken(w, r)
+	if err != nil {
+		return
+	}
+
 	result, err := c.collection.Find(c.ctx, bson.M{})
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -34,9 +40,14 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
+	err := auth.ValidateToken(w, r)
+	if err != nil {
+		return
+	}
+
 	var restaurant models.Restaurant
 	postBody, _ := ioutil.ReadAll(r.Body)
-	err := json.Unmarshal(postBody, &restaurant)
+	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
 		log.Fatalf("Error unpacking restaurant data")
 	}
@@ -52,6 +63,11 @@ func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
+	err := auth.ValidateToken(w, r)
+	if err != nil {
+		return
+	}
+
 	id := mux.Vars(r)["id"]
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -78,6 +94,11 @@ func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Collection) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
+	err := auth.ValidateToken(w, r)
+	if err != nil {
+		return
+	}
+
 	id := mux.Vars(r)["id"]
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
