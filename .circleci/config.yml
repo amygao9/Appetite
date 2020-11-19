@@ -1,61 +1,61 @@
-# Golang CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-go/ for more details
-version: 2
-jobs:
-  go-test:
-    docker:
-      # specify the version
-      - image: circleci/golang:1.11
-        environment:
-          GO111MODULE: "on"
+# # Golang CircleCI 2.0 configuration file
+# #
+# # Check https://circleci.com/docs/2.0/language-go/ for more details
+# version: 2
+# jobs:
+#   go-test:
+#     docker:
+#       # specify the version
+#       - image: circleci/golang:1.11
+#         environment:
+#           GO111MODULE: "on"
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-    working_directory: ~/repo/deliverable-2/app/server
-    steps:
-      - checkout:
-          path: ~/repo
-      # specify any bash command here prefixed with run: 
-      - run: ls -a
-      - run: go test ./...
-  # mobile-test:
-  #   docker:
-  #     # specify the version
-  #     - image: circleci/node:14-stretch-browsers
-  #   working_directory: ~/repo/deliverable-2/app/mobile
-  #   steps:
-  #     - checkout:
-  #         path: ~/repo
-  #     # specify any bash command here prefixed with run: 
-  #     - run: npm ci
-  #     - run: npm run test
-  deploy-apk:
-      docker:
-    - image: circleci/node:10.4.1
-  steps:
-    - checkout
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       # - image: circleci/postgres:9.4
+#     working_directory: ~/repo/deliverable-2/app/server
+#     steps:
+#       - checkout:
+#           path: ~/repo
+#       # specify any bash command here prefixed with run: 
+#       - run: ls -a
+#       - run: go test ./...
+#   # mobile-test:
+#   #   docker:
+#   #     # specify the version
+#   #     - image: circleci/node:14-stretch-browsers
+#   #   working_directory: ~/repo/deliverable-2/app/mobile
+#   #   steps:
+#   #     - checkout:
+#   #         path: ~/repo
+#   #     # specify any bash command here prefixed with run: 
+#   #     - run: npm ci
+#   #     - run: npm run test
+#   deploy-apk:
+#       docker:
+#     - image: circleci/node:10.4.1
+#   steps:
+#     - checkout
 
-    - run:
-        name: Installing dependencies
-        command: npm ci
+#     - run:
+#         name: Installing dependencies
+#         command: npm ci
 
-    - run:
-        name: Login into Expo
-        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+#     - run:
+#         name: Login into Expo
+#         command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
-    - run:
-        name: Publish to Expo
-        command: npx expo-cli publish --non-interactive --max-workers 1
-workflows:
-  pre-deploy:
-    jobs:
-      - go-test
-  deploy:
-    jobs:
-      - deploy-apk:
-        filters:
-          branches:
-            only: master
+#     - run:
+#         name: Publish to Expo
+#         command: npx expo-cli publish --non-interactive --max-workers 1
+# workflows:
+#   pre-deploy:
+#     jobs:
+#       - go-test
+#   deploy:
+#     jobs:
+#       - deploy-apk:
+#         filters:
+#           branches:
+#             only: master
