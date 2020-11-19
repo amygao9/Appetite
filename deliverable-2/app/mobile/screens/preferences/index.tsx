@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, Button} from 'react-native';
-import { Text, View } from './Themed';
-import CuisineOptionSection from './CuisineOptionSection';
+import { StyleSheet, Button, Text, View } from 'react-native';
+import CuisineOptionSection from '../../components/Preferences/CuisineOptionSection';
 import Slider from '@react-native-community/slider';
 
-export default function UserPreferences() {
+const Preferences = ({navigation}) => {
 
   const [cuisinePreferences, setCuisinePreferences] = React.useState(new Array()); 
   const [distanceRadius, setDistanceRadius] = React.useState(1); 
@@ -93,3 +92,6 @@ const styles = StyleSheet.create({
     flex: 2
   }
 });
+
+
+export default Preferences;

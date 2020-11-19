@@ -1,27 +1,40 @@
 import React, {useRef} from 'react';
-import { StyleSheet, SafeAreaView, View} from 'react-native';
+import { StyleSheet, SafeAreaView, View, Button} from 'react-native';
 import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
+import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
 
 const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const OnClickDislike = () => useSwiper.current.swipeLeft()
     const OnClickLike = () => useSwiper.current.swipeRight()
+
     return (
     <SafeAreaView style={styles.container}>
-        <Swiper
-            ref={useSwiper}
-            cards={photoCards}
-            renderCard={card => <Card card={card} />}
-            onSwipedRight ={() => {console.log('swiped right')}}
-            onSwipedLeft={() => {console.log('swiped left')}}
-            onSwipedAll={() => {console.log('finished stack')}}
-            infinite = {true}
-            verticalSwipe = {false}
-            backgroundColor={'#191A1D'}
-            stackSize= {2}>
-        </Swiper>
+        <View style={styles.header}> 
+          <CircleButton name="x" Icon = {Icon.Feather}
+            color="#FF0E83" 
+            // onPress={() => console.log("preferences pressed 2")} 
+            onPress={() => navigation.navigate('Preferences')}
+          />
+        </View>
+
+        <View style={styles.swiper}> 
+          <Swiper
+              ref={useSwiper}
+              cards={photoCards}
+              renderCard={card => <Card card={card} />}
+              onSwipedRight ={() => {console.log('swiped right')}}
+              onSwipedLeft={() => {console.log('swiped left')}}
+              onSwipedAll={() => {console.log('finished stack')}}
+              infinite = {true}
+              verticalSwipe = {false}
+              backgroundColor={'#191A1D'}
+              stackSize= {2}>
+          </Swiper>
+        </View>
+
         <View style={styles.footer}>
             <CircleButton name="x" Icon = {Icon.Feather}
             color="#FF0E83" onPress={OnClickDislike}
@@ -37,8 +50,8 @@ const Home = ({navigation}) => {
     )
 }
 
-const dislike = () => {
-    console.log("pressed x button")
+const dislike = (navigation) => {
+    console.log("pressed x button");
   }
   const like = () => {
     console.log("pressed like button")
@@ -66,37 +79,29 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       backgroundColor: '#191A1D'
     },
-    card: {
-      flex: 0.8,
-      borderRadius: 4,
-      borderWidth: 2,
-      borderColor: "#E8E8E8",
-      justifyContent: "center",
-      backgroundColor: "white"
-    },
     text: {
       textAlign: "center",
       fontSize: 50,
       backgroundColor: "transparent"
     },
     header: {
+      position: 'absolute',
+      top:0,
       flexDirection: "row",
-      justifyContent: "space-between",
-      padding: 16,
+      justifyContent: "space-between"
     },
-    cards: {
-      flex: 1,
-      margin: 8,
-      zIndex: 100,
+    swiper: {
+      flex: 1, 
+      justifyContent: 'center'
     },
     footer: {
-      flex: 0.1,
       position: 'absolute',
       bottom:0,
       backgroundColor: 'transparent',
       flexDirection: "row",
       justifyContent: "space-evenly",
-      padding: 70,
+      paddingTop: 20,
+      paddingBottom: 70
     },
     stretch: {
       resizeMode: 'stretch',

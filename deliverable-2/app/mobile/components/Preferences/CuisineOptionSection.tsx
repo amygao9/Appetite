@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, FlatList, SectionList} from 'react-native';
-import { Text, View } from './Themed';
-import CuisineOption from '../components/CuisineOption';
+import { StyleSheet, FlatList, SectionList, Text, View } from 'react-native';
+import CuisineOption from './CuisineOption';
 
 export default function CuisineOptionSection(props: any) {
 
