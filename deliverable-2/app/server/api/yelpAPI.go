@@ -2,15 +2,17 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"backapp/models"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func (c *Collection) ScrapeRestaurants() {
@@ -28,25 +30,27 @@ func (c *Collection) ScrapeRestaurants() {
 	q.Add("offset", "0")
 
 	for i := 0; i < 4; i++ {
-		limit := 50
-		offset := limit * i
+		limit := 50         // Number of restaurants to return in every Yelp API call (max is 50)
+		offset := limit * i // Page offset for Yelp API call
 		q.Set("limit", strconv.Itoa(limit))
 		q.Set("offset", strconv.Itoa(offset))
 
 		req.URL.RawQuery = q.Encode()
 
+		// Call Yelp API
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
-			fmt.Println(err)
+			log.Print(err)
 			return
 		}
 
+		// Process response into map
 		var results interface{}
 
 		body, _ := ioutil.ReadAll(resp.Body)
 		err = json.Unmarshal(body, &results)
 		if err != nil {
-			fmt.Println("Error in decoding JSON")
+			log.Print(err)
 			return
 		}
 
@@ -56,7 +60,6 @@ func (c *Collection) ScrapeRestaurants() {
 			businessMap := business.(map[string]interface{})
 
 			var restaurant models.Restaurant
-			restaurant.ID = primitive.NewObjectID()
 			restaurant.YelpID = businessMap["id"].(string)
 			restaurant.Name = businessMap["name"].(string)
 			restaurant.Rating = businessMap["rating"].(float64)
@@ -77,11 +80,16 @@ func (c *Collection) ScrapeRestaurants() {
 				restaurant.Categories = append(restaurant.Categories, categoryMap["alias"].(string))
 			}
 
+			if val, ok := businessMap["price"]; ok {
+				restaurant.Price = strings.Count(val.(string), "$")
+			}
+
 			restaurant.Weight = 100
 
-			_, err = c.collection.InsertOne(c.ctx, restaurant)
+			restaurantBefore := c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
+			err = restaurantBefore.Err()
 			if err != nil {
-				fmt.Println(err)
+				log.Print(err)
 			}
 		}
 	}

@@ -25,5 +25,6 @@ type Restaurant struct {
 	Lng        float64            `json:"lng" bson:"lng"`
 	Address    string             `json:"address" bson:"address"`
 	Categories []string           `json:"categories" bson:"categories"`
+	Price      int                `json:"price,omitempty" bson:"price,omitempty"`
 	Weight     int                `json:"weight" bson:"weight"`
 }
