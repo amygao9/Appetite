@@ -85,11 +85,7 @@ func (c *Collection) ScrapeRestaurants(YelpKey string) {
 				restaurant.Price = strings.Count(val.(string), "$")
 			}
 
-			restaurantBefore := c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
-			err = restaurantBefore.Err()
-			if err != nil {
-				log.Print(err)
-			}
+			_ = c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
 		}
 	}
 }
