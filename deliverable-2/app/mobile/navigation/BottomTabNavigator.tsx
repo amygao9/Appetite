@@ -5,7 +5,6 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
 
 //testing - importing cuisine picker screen and filters screen
 import UserPreferences from '../components/UserPreferences'
@@ -28,14 +27,6 @@ export default function BottomTabNavigator() {
         }}
       />
 
-      <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-
 
     </BottomTab.Navigator>
   );
@@ -51,14 +42,14 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator();
 
-function TabOneNavigator() {
-  return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Home' }}
-      />
-    </TabOneStack.Navigator>
-  );
-}
+// function TabOneNavigator() {
+//   return (
+//     <TabOneStack.Navigator>
+//       <TabOneStack.Screen
+//         name="HomeScreen"
+//         component={HomeScreen}
+//         options={{ headerTitle: 'Home' }}
+//       />
+//     </TabOneStack.Navigator>
+//   );
+// }
