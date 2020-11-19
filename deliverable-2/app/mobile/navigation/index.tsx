@@ -4,8 +4,7 @@ import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
 import colorTheme from "../constants/Colors";
-
-import {Auth, Home} from "../screens";
+import {Auth, Home, Preferences} from "../screens";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -34,6 +33,7 @@ function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Auth" component={Auth} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Preferences" component={Preferences} /> 
     </Stack.Navigator>
   );
 }
