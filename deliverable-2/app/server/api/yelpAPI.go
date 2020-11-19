@@ -15,27 +15,27 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (c *Collection) ScrapeRestaurants() {
+func (c *Collection) ScrapeRestaurants(YelpKey string) {
 	query_url := "https://api.yelp.com/v3/businesses/search"
-	bearer := "Bearer LR3os-3Cj_WRIBY5GrpHvKNBuy3Me4iw9tHpGmw9BVqWeKvKVDOwIMRvKBo_tgMLhIn9QvD83vjtxkunJaGEmkPf2CsL_bxpszp-ER0SCjbGcw9jWYJPaKX5VcesX3Yx"
+	bearer := "Bearer " + YelpKey
 
 	req, _ := http.NewRequest("GET", query_url, nil)
 	req.Header.Add("Authorization", bearer)
 
-	q := url.Values{}
-	q.Add("location", "1 King's College Circle, Toronto, Ontario")
-	q.Add("category", "restaurants")
-	q.Add("radius", "2000")
-	q.Add("limit", "50")
-	q.Add("offset", "0")
+	queryParams := url.Values{}
+	queryParams.Add("location", "1 King's College Circle, Toronto, Ontario")
+	queryParams.Add("category", "restaurants")
+	queryParams.Add("radius", "2000")
+	queryParams.Add("limit", "50")
+	queryParams.Add("offset", "0")
 
 	for i := 0; i < 4; i++ {
 		limit := 50         // Number of restaurants to return in every Yelp API call (max is 50)
 		offset := limit * i // Page offset for Yelp API call
-		q.Set("limit", strconv.Itoa(limit))
-		q.Set("offset", strconv.Itoa(offset))
+		queryParams.Set("limit", strconv.Itoa(limit))
+		queryParams.Set("offset", strconv.Itoa(offset))
 
-		req.URL.RawQuery = q.Encode()
+		req.URL.RawQuery = queryParams.Encode()
 
 		// Call Yelp API
 		resp, err := http.DefaultClient.Do(req)
@@ -59,13 +59,14 @@ func (c *Collection) ScrapeRestaurants() {
 		for _, business := range businesses {
 			businessMap := business.(map[string]interface{})
 
-			var restaurant models.Restaurant
-			restaurant.YelpID = businessMap["id"].(string)
-			restaurant.Name = businessMap["name"].(string)
-			restaurant.Rating = businessMap["rating"].(float64)
-			restaurant.NumRatings = int(businessMap["review_count"].(float64))
-
-			restaurant.ImageURL = []string{businessMap["image_url"].(string)}
+			restaurant := models.Restaurant{
+				YelpID:     businessMap["id"].(string),
+				Name:       businessMap["name"].(string),
+				Rating:     businessMap["rating"].(float64),
+				NumRatings: int(businessMap["review_count"].(float64)),
+				ImageURL:   []string{businessMap["image_url"].(string)},
+				Weight:     100,
+			}
 
 			coordinates := businessMap["coordinates"].(map[string]interface{})
 			restaurant.Lat = coordinates["latitude"].(float64)
@@ -83,8 +84,6 @@ func (c *Collection) ScrapeRestaurants() {
 			if val, ok := businessMap["price"]; ok {
 				restaurant.Price = strings.Count(val.(string), "$")
 			}
-
-			restaurant.Weight = 100
 
 			restaurantBefore := c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
 			err = restaurantBefore.Err()
