@@ -21,7 +21,8 @@ type Restaurant struct {
 	Rating     float64            `json:"rating" bson:"rating"`
 	NumRatings int                `json:"numratings" bson:"numratings"`
 	ImageURL   []string           `json:"imageURL,omitempty" bson:"imageURL,omitempty"`
-	Location   string             `json:"location" bson:"location"`
+	Lat        float64            `json:"lat" bson:"lat"`
+	Lng        float64            `json:"lng" bson:"lng"`
 	Address    string             `json:"address" bson:"address"`
 	Categories []string           `json:"categories" bson:"categories"`
 	Weight     int                `json:"weight" bson:"weight"`
