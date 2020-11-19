@@ -13,7 +13,8 @@ export default function LoginForm(props) {
                 borderRadius: 40
             },
             label: {
-                color: colors.blue
+                color: colors.green,
+                fontFamily: 'Roboto_700Bold'
             },
             container: {
                 borderBottomWidth: 0
@@ -23,8 +24,8 @@ export default function LoginForm(props) {
     return (
         <>
             <Input
-                label='Username'
-                onChangeText={props.onChangeUsername}
+                label='Email'
+                onChangeText={props.onChangeEmail}
                 labelStyle={styles.label}
                 underlineColorAndroid="transparent"
                 inputStyle={styles.input}
@@ -37,6 +38,7 @@ export default function LoginForm(props) {
                 underlineColorAndroid="transparent"
                 inputStyle={styles.input}
                 inputContainerStyle={styles.container}
+                secureTextEntry={true}
             />
         </>
     )

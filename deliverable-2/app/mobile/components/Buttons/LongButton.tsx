@@ -26,8 +26,9 @@ export default function LongButton(props) {
         <Button
             title={props.title}
             titleStyle={styles.titleStyle}
-            buttonStyle={[styles.base, props.secondary ? styles.secondary : styles.regular]}
+            buttonStyle={[styles.base, props.secondary ? styles.secondary : styles.regular, props.style]}
             onPress={props.onPress}
+            disabled={props.disabled}
         />
     )
 }

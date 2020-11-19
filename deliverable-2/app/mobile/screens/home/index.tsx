@@ -3,11 +3,26 @@ import { StyleSheet, SafeAreaView, View} from 'react-native';
 import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
+import {apiGetRestaurants} from "../../api/restaurantAPI";
 
 const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const OnClickDislike = () => useSwiper.current.swipeLeft()
     const OnClickLike = () => useSwiper.current.swipeRight()
+
+    React.useEffect(() => {
+      async function fetchRestaurants() {
+        try {
+          const restaurants = await apiGetRestaurants();
+        }
+        catch(err) {
+          if (err.message === "auth invalid") {
+            navigation.navigate("Auth");
+          }
+        }
+      }
+      fetchRestaurants();
+    }, []);
     return (
     <SafeAreaView style={styles.container}>
         <Swiper

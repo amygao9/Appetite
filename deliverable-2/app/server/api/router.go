@@ -40,7 +40,7 @@ func RouterInit() {
 
 	restaurantCollection.ScrapeRestaurants(config.YelpKey)
 
-	address := "127.0.0.1:" + config.Port
+	address := "0.0.0.0:" + config.Port
 
 	srv := &http.Server{
 		Handler:      r,
