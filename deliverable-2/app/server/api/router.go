@@ -37,6 +37,8 @@ func RouterInit() {
 	userString := "/user"
 	r.HandleFunc(userString+"/add", userCollection.AddUser).Methods("POST")
 
+	restaurantCollection.ScrapeRestaurants()
+
 	address := "127.0.0.1:" + config.Port
 
 	srv := &http.Server{
