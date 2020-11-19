@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent',
       flexDirection: "row",
       justifyContent: "space-evenly",
-      padding: 50,
+      padding: 70,
     },
     stretch: {
       resizeMode: 'stretch',
