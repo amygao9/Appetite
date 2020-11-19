@@ -1,14 +1,14 @@
-# # Golang CircleCI 2.0 configuration file
-# #
-# # Check https://circleci.com/docs/2.0/language-go/ for more details
-# version: 2
-# jobs:
-#   go-test:
-#     docker:
-#       # specify the version
-#       - image: circleci/golang:1.11
-#         environment:
-#           GO111MODULE: "on"
+# # # Golang CircleCI 2.0 configuration file
+# # #
+# # # Check https://circleci.com/docs/2.0/language-go/ for more details
+# # version: 2
+# # jobs:
+# #   go-test:
+# #     docker:
+# #       # specify the version
+# #       - image: circleci/golang:1.11
+# #         environment:
+# #           GO111MODULE: "on"
 
 #       # Specify service dependencies here if necessary
 #       # CircleCI maintains a library of pre-built images
@@ -33,29 +33,27 @@
 #   #     - run: npm ci
 #   #     - run: npm run test
 #   deploy-apk:
-#       docker:
-#     - image: circleci/node:10.4.1
-#   steps:
-#     - checkout
+#     docker:
+#       - image: circleci/node:10.4.1
+#     steps:
+#       - checkout
+#       - run:
+#           name: Installing dependencies
+#           command: npm ci
 
-#     - run:
-#         name: Installing dependencies
-#         command: npm ci
+#       - run:
+#           name: Login into Expo
+#           command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
-#     - run:
-#         name: Login into Expo
-#         command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-
-#     - run:
-#         name: Publish to Expo
-#         command: npx expo-cli publish --non-interactive --max-workers 1
+#       - run:
+#           name: Publish to Expo
+#           command: npx expo-cli publish --non-interactive --max-workers 1
 # workflows:
-#   pre-deploy:
-#     jobs:
-#       - go-test
+#   version: 2
 #   deploy:
 #     jobs:
+#       - go-test
 #       - deploy-apk:
-#         filters:
-#           branches:
-#             only: master
+#           filters:
+#             branches:
+#               only: master
