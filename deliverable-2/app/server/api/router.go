@@ -36,6 +36,7 @@ func RouterInit() {
 	userCollection := Collection{collection: db.Collection("user"), ctx: ctx}
 	userString := "/user"
 	r.HandleFunc(userString+"/add", userCollection.AddUser).Methods("POST")
+	r.HandleFunc(userString+"/auth", userCollection.AuthenticateUser).Methods("POST")
 
 	restaurantCollection.ScrapeRestaurants()
 
