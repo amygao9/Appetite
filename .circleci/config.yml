@@ -19,9 +19,7 @@ jobs:
     ####   /go/src/bitbucket.org/circleci/go-tool
     working_directory: ~/server
     steps:
-      - checkout:
-          path: ~/
-
+      - checkout
       # specify any bash command here prefixed with `run: `
       - run: go get
       - run: go test -v ./...
