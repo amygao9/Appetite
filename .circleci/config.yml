@@ -18,5 +18,6 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: ls -a
       - run: cd server
+      - run: ls -a
       - run: go get
       - run: go test -v ./...
