@@ -15,13 +15,16 @@ const (
 )
 
 type Restaurant struct {
-	ID          primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	Name        string             `json:"name" bson:"name"`
-	Rating      int                `json:"rating" bson:"rating"`
-	ImageURL    []string           `json:"imageURL,omitempty" bson:"imageURL,omitempty"`
-	Location    string             `json:"location" bson:"location"`
-	Address     string             `json:"address" bson:"address"`
-	Description string             `json:"description" bson:"description"`
-	Category    int                `json:"category" bson:"category"`
-	Weight      int                `json:"weight" bson:"weight"`
+	ID         primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	YelpID     string             `json:"yelpid" bson:"yelpid"`
+	Name       string             `json:"name" bson:"name"`
+	Rating     float64            `json:"rating" bson:"rating"`
+	NumRatings int                `json:"numratings" bson:"numratings"`
+	ImageURL   []string           `json:"imageURL,omitempty" bson:"imageURL,omitempty"`
+	Lat        float64            `json:"lat" bson:"lat"`
+	Lng        float64            `json:"lng" bson:"lng"`
+	Address    string             `json:"address" bson:"address"`
+	Categories []string           `json:"categories" bson:"categories"`
+	Price      int                `json:"price,omitempty" bson:"price,omitempty"`
+	Weight     int                `json:"weight" bson:"weight"`
 }
