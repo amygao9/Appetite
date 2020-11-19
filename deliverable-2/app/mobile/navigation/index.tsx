@@ -5,7 +5,7 @@ import { ColorSchemeName } from 'react-native';
 
 import colorTheme from "../constants/Colors";
 
-import Auth from "../screens/auth";
+import {Auth, Home} from "../screens";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -33,6 +33,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Auth" component={Auth} />
+      <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   );
 }

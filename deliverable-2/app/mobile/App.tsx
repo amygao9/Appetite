@@ -12,6 +12,7 @@ import {
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import colors from './constants/Colors';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -28,7 +29,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <Navigation colorScheme={colorScheme} />
-        <StatusBar />
+        <StatusBar backgroundColor={colors.darkGray} style="light" />
       </SafeAreaProvider>
     );
   }
