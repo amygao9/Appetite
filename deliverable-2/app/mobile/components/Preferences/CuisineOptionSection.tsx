@@ -18,7 +18,7 @@ export default function CuisineOptionSection(props: any) {
             scrollEnabled={false}
             data={props.options}
             renderItem={({ item }) => <CuisineOption cuisineName={item.displayText} cuisineID={item.id} updatePreferences={props.updatePreferences}/>}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.displayText}
         />
     </View>
   );

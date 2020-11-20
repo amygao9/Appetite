@@ -34,7 +34,7 @@ const RootStack = createStackNavigator();
 function MainNavigator() {
   return (
     <Stack.Navigator 
-      screenOptions={{ headerShown: true, headerStyle: {
+      screenOptions={{ headerShown: false, headerStyle: {
         backgroundColor: MyTheme.colors.background,
       },
       headerTitleStyle: {
