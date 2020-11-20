@@ -47,8 +47,6 @@ const styles = StyleSheet.create({
     card: {
       /* Setting the height according to the screen height*/
       height: height - 300,
-      // justifyContent: 'center',
-      // alignItems: 'center',
       backgroundColor: "black",
       borderRadius: 10
     },
