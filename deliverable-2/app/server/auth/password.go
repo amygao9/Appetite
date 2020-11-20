@@ -34,13 +34,12 @@ func CreateToken(email string) (Tokens, error) {
 	tokenClaims := &models.Claims{
 		Username: email,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 60).Unix(),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, tokenClaims)
 	jwtSecret, _ := os.LookupEnv("JWT_SECRET")
-	log.Println(jwtSecret)
 	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
 		return Tokens{}, err
