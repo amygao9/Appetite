@@ -3,7 +3,7 @@ import { StyleSheet, SafeAreaView, View, Button, Dimensions} from 'react-native'
 import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
+import colors from '../../constants/Colors';
 
 const { height } = Dimensions.get('window')
 
@@ -14,22 +14,20 @@ const Home = ({navigation}) => {
 
     return (
       <SafeAreaView style={styles.container}>
+        {/* TEMPORARY PLACEHOLDER FOR PAGE HEADER */}
           <View style={styles.header}> 
             <CircleButton name="x" Icon = {Icon.Feather}
               color="#FF0E83" 
-              // onPress={() => console.log("preferences pressed 2")} 
               onPress={() => navigation.navigate('Preferences')}
             />
 
             <CircleButton name="x" Icon = {Icon.Feather}
               color="#FF0E83" 
-              // onPress={() => console.log("preferences pressed 2")} 
               onPress={() => navigation.navigate('Preferences')}
             />
 
             <CircleButton name="x" Icon = {Icon.Feather}
               color="#FF0E83" 
-              // onPress={() => console.log("preferences pressed 2")} 
               onPress={() => navigation.navigate('Preferences')}
             />
           </View>
@@ -42,6 +40,7 @@ const Home = ({navigation}) => {
                 onSwipedRight ={() => {console.log('swiped right')}}
                 onSwipedLeft={() => {console.log('swiped left')}}
                 onSwipedAll={() => {console.log('finished stack')}}
+                backgroundColor={colors.darkGray}
                 infinite = {true}
                 verticalSwipe = {false}
                 stackSize= {2}>
@@ -50,26 +49,20 @@ const Home = ({navigation}) => {
 
           <View style={styles.footer}>
               <CircleButton name="x" Icon = {Icon.Feather}
-              color="#FF0E83" onPress={OnClickDislike}
+              color={colors.pink} onPress={OnClickDislike}
               />
               <CircleButton name="heart" Icon = {Icon.Entypo}
-              color="#6F05D6" onPress={superlike}
+              color={colors.purple} onPress={superlike}
               />
               <CircleButton name="like" Icon = {Icon.SimpleLineIcons}
-              color="#00CC99" onPress={OnClickLike}
+              color={colors.green} onPress={OnClickLike}
               />
           </View>
       </SafeAreaView>
     )
 }
 
-const dislike = () => {
-    console.log("pressed x button");
-  }
-  const like = () => {
-    console.log("pressed like button")
-  }
-  const superlike = () => {
+ const superlike = () => {
     console.log("pressed superlike button")
  }
 const photoCards = [
@@ -89,25 +82,23 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',
-      backgroundColor: '#b132bf'
+      backgroundColor: colors.darkGray
     },
     header: {
       flex: 4, 
       flexDirection: "row", 
       justifyContent: 'space-around', 
       alignItems: 'flex-end', 
-      backgroundColor: '#c23237',
     },
     swiper: {
-      flex: 36, 
-      backgroundColor: '#3289bf',
+      flex: 22, 
+      marginBottom: 100
     },
     footer: {
       flex: 4, 
-      backgroundColor: '#32bf57',
       flexDirection: "row",
       justifyContent: 'center',
-      alignItems: 'flex-end', 
+      alignItems: 'flex-start', 
     }
   });
 export default Home;

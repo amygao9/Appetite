@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, ImageSourcePropType, StyleSheet, Dimensions } from 'react-native'
 import {Button } from 'react-native-elements';
+
 const { height } = Dimensions.get('window')
 
 export const Card = ({ card }: CardProps) => 
@@ -46,7 +47,7 @@ type CardProps = {
 const styles = StyleSheet.create({
     card: {
       /* Setting the height according to the screen height*/
-      height: height - 300,
+      height: height - 375,
       backgroundColor: "black",
       borderRadius: 10
     },
