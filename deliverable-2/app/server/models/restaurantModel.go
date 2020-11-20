@@ -28,3 +28,22 @@ type Restaurant struct {
 	Price      int                `json:"price,omitempty" bson:"price,omitempty"`
 	Weight     int                `json:"weight" bson:"weight"`
 }
+
+type Swipe struct {
+	Weight int `json:"weight" bson:"weight"`
+}
+
+type Filter struct {
+	Categories []string `json:"categories,omitempty" bson:"categories,omitempty"`
+	Lat        float64  `json:"lat" bson:"lat"`
+	Lng        float64  `json:"lng" bson:"lng"`
+	Price      int      `json:"price,omitempty" bson:"price,omitempty"`
+	Radius     float64  `json:"radius,omitempty" bson:"radius,omitempty"` // kilometers
+}
+
+type Radius struct {
+	LowLat float64
+	HiLat  float64
+	LowLng float64
+	HiLng  float64
+}
