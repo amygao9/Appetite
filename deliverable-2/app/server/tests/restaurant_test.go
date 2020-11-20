@@ -105,83 +105,40 @@ func TestRestaurants(t *testing.T) {
 	}
 	
 	// Test update restaurant, DOESN'T WORK ATM
-	// restaurantUpdate, err := json.Marshal(map[string]interface{}{
-	// 	"ID": nil,
-	// 	"YelpID": "testYelpID",
-	// 	"Name": "testName",
-	// 	"Rating": 4.50,
-	// 	"NumRatings": 60,
-	// 	"ImageURL": []string{"img1", "img2"},
-	// 	"Lat": 1.23456,
-	// 	"Lng": 6.54321,
-	// 	"Address": "testAddress",
-	// 	"Categories": []string{"cat1", "cat2"},
-	// 	"Price": 10,
-	// 	"Weight": 110,
-	// })
-	// if err != nil {
-    //     t.Fatal(err)
-	// }
+	restaurantUpdate, err := json.Marshal(map[string]interface{}{
+		"ID": nil,
+		"YelpID": "testYelpID",
+		"Name": "testName",
+		"Rating": 4.50,
+		"NumRatings": 60,
+		"ImageURL": []string{"img1", "img2"},
+		"Lat": 1.23456,
+		"Lng": 6.54321,
+		"Address": "testAddress",
+		"Categories": []string{"cat1", "cat2"},
+		"Price": 10,
+		"Weight": 110,
+	})
+	if err != nil {
+        t.Fatal(err)
+	}
 
-	// updateReq, err := http.NewRequest("PUT", 
-	// 					"http://localhost:" + port +"/restaurant/update?id=" + restaurantRet.ID.Hex(), 
-	// 					bytes.NewBuffer(restaurantUpdate))
-	// if err != nil {
-    //     t.Fatal(err)
-	// }
-	// addReq.Header.Set("Content-Type", "application/json")
-	// addReq.Header.Set("Authorization", bearer)
+	updateReq, err := http.NewRequest("PUT", 
+						"http://localhost:" + port +"/restaurant/update/" + restaurantRet.ID.Hex(), 
+						bytes.NewBuffer(restaurantUpdate))
+	if err != nil {
+        t.Fatal(err)
+	}
+	updateReq.Header.Set("Content-Type", "application/json")
+	updateReq.Header.Set("Authorization", bearer)
 
-	// updateResp, err := client.Do(updateReq)
-	// if err != nil {
-    //     t.Fatal(err)
-	// }
-	// if updateResp.StatusCode != http.StatusOK {
-	// 	t.Errorf("Update returned wrong status code: got %v, want %v", updateResp.Status, http.StatusOK)
-	// }
-	// updateRespData, err := ioutil.ReadAll(updateResp.Body)
-    // if err != nil {
-    //     t.Fatal(err)
-	// }
-	// var updateRet models.Restaurant
-	// err = json.Unmarshal(updateRespData, &updateRet)
-	// if err != nil {
-	// 	t.Fatal(updateRet)
-	// }
-
-	// if restaurantRet.YelpID != "testYelpID" {
-	// 	t.Errorf("Update request returned unexpected yelp ID: got %v", restaurantRet.YelpID)
-	// }
-	// if restaurantRet.Name != "testName" {
-	// 	t.Errorf("Update request returned unexpected name: got %v", restaurantRet.Name)
-	// }
-	// if restaurantRet.Rating != 4.50 {
-	// 	t.Errorf("Update request returned unexpected rating: got %v", restaurantRet.Rating)
-	// }
-	// if restaurantRet.NumRatings != 60 {
-	// 	t.Errorf("Update request returned unexpected rating count: got %v", restaurantRet.NumRatings)
-	// }
-	// if restaurantRet.ImageURL[0] != "img1" || restaurantRet.ImageURL[1] != "img2" {
-	// 	t.Errorf("Update request returned image urls: got %v", restaurantRet.ImageURL)
-	// }
-	// if restaurantRet.Lat != 1.23456 {
-	// 	t.Errorf("Update request returned unexpected lat: got %v", restaurantRet.Lat)
-	// }
-	// if restaurantRet.Lng != 6.54321 {
-	// 	t.Errorf("Update request returned unexpected lng: got %v", restaurantRet.Lng)
-	// }
-	// if restaurantRet.Address != "testAddress" {
-	// 	t.Errorf("Update request returned unexpected address: got %v", restaurantRet.Address)
-	// }
-	// if restaurantRet.Categories[0] != "cat1" || restaurantRet.Categories[1] != "cat2" {
-	// 	t.Errorf("Update request returned categories: got %v", restaurantRet.Categories)
-	// }
-	// if restaurantRet.Price != 10 {
-	// 	t.Errorf("Update request returned unexpected price: got %v", restaurantRet.Price)
-	// }
-	// if restaurantRet.Weight != 110 {
-	// 	t.Errorf("Update request returned unexpected weight: got %v", restaurantRet.Weight)
-	// }
+	updateResp, err := client.Do(updateReq)
+	if err != nil {
+        t.Fatal(err)
+	}
+	if updateResp.StatusCode != http.StatusOK {
+		t.Errorf("Update returned wrong status code: got %v, want %v", updateResp.Status, http.StatusOK)
+	}
 
 	// Test delete restaurant
 	delReq, err := http.NewRequest(	"DELETE", 
