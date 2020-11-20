@@ -70,7 +70,7 @@ func TestTokens(t *testing.T) {
 	}
 	bearer := "Bearer " + token.AccessToken
 
-	tokenReq, err := http.NewRequest("GET", "http://localhost:5000/restaurant", nil)
+	tokenReq, err := http.NewRequest("GET", "http://localhost:" + port +"/restaurant", nil)
 	if err != nil {
         t.Fatal(err)
 	}
