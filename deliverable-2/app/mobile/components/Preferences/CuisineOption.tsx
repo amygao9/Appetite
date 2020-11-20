@@ -6,7 +6,7 @@ export default function CuisineOption(props: any) {
   const [isChecked, setIsChecked] = React.useState(false);
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
-    props.updatePreferences(props.cuisineName, !isChecked);
+    props.updatePreferences(props.cuisineID, !isChecked);
   }
 
   return (

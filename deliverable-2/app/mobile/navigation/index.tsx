@@ -19,21 +19,37 @@ const MyTheme = {
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer theme={MyTheme}>
-      <RootNavigator />
+      <RootStackScreen />
     </NavigationContainer>
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
+
 const Stack = createStackNavigator();
 
-function RootNavigator() {
+// A root stack navigator is often used for displaying modals on top of all other content
+// Read more here: https://reactnavigation.org/docs/modal
+const RootStack = createStackNavigator(); 
+
+function MainNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Auth" component={Auth} />
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Preferences" component={Preferences} /> 
     </Stack.Navigator>
   );
 }
+
+function RootStackScreen() {
+  return (
+    <RootStack.Navigator mode="modal">
+      <RootStack.Screen
+        name="Main"
+        component={MainNavigator}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen name="Preferences" component={Preferences}  options={{ headerShown: false }}/>
+    </RootStack.Navigator>
+  );
+}
+
