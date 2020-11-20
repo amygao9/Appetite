@@ -38,7 +38,8 @@ func RouterInit() {
 	r.HandleFunc(userString+"/add", userCollection.AddUser).Methods("POST")
 	r.HandleFunc(userString+"/auth", userCollection.AuthenticateUser).Methods("POST")
 
-	restaurantCollection.ScrapeRestaurants(config.YelpKey)
+	// Scrape method
+	r.HandleFunc("/scrape", restaurantCollection.ScrapeRestaurants).Methods("POST")
 
 	address := "0.0.0.0:" + config.Port
 

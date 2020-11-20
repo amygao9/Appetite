@@ -15,9 +15,10 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (c *Collection) ScrapeRestaurants(YelpKey string) {
+func (c *Collection) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
+	config := getConfig()
 	query_url := "https://api.yelp.com/v3/businesses/search"
-	bearer := "Bearer " + YelpKey
+	bearer := "Bearer " + config.YelpKey
 
 	req, _ := http.NewRequest("GET", query_url, nil)
 	req.Header.Add("Authorization", bearer)
@@ -41,6 +42,7 @@ func (c *Collection) ScrapeRestaurants(YelpKey string) {
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -51,6 +53,7 @@ func (c *Collection) ScrapeRestaurants(YelpKey string) {
 		err = json.Unmarshal(body, &results)
 		if err != nil {
 			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
@@ -65,7 +68,6 @@ func (c *Collection) ScrapeRestaurants(YelpKey string) {
 				Rating:     businessMap["rating"].(float64),
 				NumRatings: int(businessMap["review_count"].(float64)),
 				ImageURL:   []string{businessMap["image_url"].(string)},
-				Weight:     100,
 			}
 
 			coordinates := businessMap["coordinates"].(map[string]interface{})
@@ -85,7 +87,23 @@ func (c *Collection) ScrapeRestaurants(YelpKey string) {
 				restaurant.Price = strings.Count(val.(string), "$")
 			}
 
-			_ = c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
+			result := c.collection.FindOne(c.ctx, bson.M{"yelpid": restaurant.YelpID})
+			err = result.Err()
+			if err != nil {
+				restaurant.Weight = 100
+			} else {
+				var existingRestaurant models.Restaurant
+				result.Decode(&existingRestaurant)
+				restaurant.Weight = existingRestaurant.Weight
+			}
+
+			result = c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
+			err = result.Err()
+			if err != nil {
+				log.Print(err)
+			}
 		}
 	}
+
+	w.WriteHeader(http.StatusOK)
 }
