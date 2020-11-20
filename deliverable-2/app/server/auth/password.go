@@ -6,11 +6,16 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type Tokens struct {
+	AccessToken string `json:"access_token"`
+}
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
@@ -25,38 +30,35 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func CreateToken(w http.ResponseWriter, email string) error {
-	expirationTime := time.Now().Add(time.Minute * 1)
-	claims := &models.Claims{
+func CreateToken(email string) (Tokens, error) {
+	tokenClaims := &models.Claims{
 		Username: email,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 60).Unix(),
 		},
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, tokenClaims)
+	jwtSecret, _ := os.LookupEnv("JWT_SECRET")
+	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
-		return err
+		return Tokens{}, err
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
-		Path:    "/",
-	})
 
-	return nil
+	return Tokens{AccessToken: tokenString}, nil
 }
 
 func ValidateToken(w http.ResponseWriter, r *http.Request) error {
-	cookie, err := r.Cookie("token")
-	if err != nil {
+	reqToken := r.Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer ")
+	if len(splitToken) != 2 {
 		w.WriteHeader(http.StatusBadRequest)
+		err := errors.New("Invalid auth token")
 		w.Write([]byte(err.Error()))
 		return err
 	}
-	tokenString := cookie.Value
+
+	tokenString := splitToken[1]
 	claims := &models.Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_SECRET")), nil

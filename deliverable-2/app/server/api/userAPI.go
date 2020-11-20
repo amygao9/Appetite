@@ -34,14 +34,14 @@ func (c *Collection) AddUser(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 	}
 
-	err = auth.CreateToken(w, user.Email)
+	tokens, err := auth.CreateToken(user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	} else {
 		w.Header().Set("Content-Type", "application/json")
-		response, _ := json.Marshal(user)
+		response, _ := json.Marshal(tokens)
 		w.Write(response)
 	}
 }
@@ -68,13 +68,13 @@ func (c *Collection) AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = auth.CreateToken(w, user.Email)
+	tokens, err := auth.CreateToken(user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
 		w.Header().Set("Content-Type", "application/json")
-		response, _ := json.Marshal(user)
+		response, _ := json.Marshal(tokens)
 		w.Write(response)
 	}
 }
