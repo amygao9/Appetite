@@ -67,16 +67,11 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	var result models.Restaurant
 
-	result, err := c.collection.Find(c.ctx, bson.M{"_id": objectID})
+	err = c.collection.FindOne(c.ctx, bson.M{"_id": objectID}).Decode(&result)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
-	var restaurant models.Restaurant
-	if err = result.All(c.ctx, &restaurant); err != nil {
-		log.Print(err)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -84,7 +79,7 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	response, _ := json.Marshal(restaurant)
+	response, _ := json.Marshal(result)
 	w.Write(response)
 
 }
