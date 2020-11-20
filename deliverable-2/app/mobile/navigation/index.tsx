@@ -2,9 +2,9 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
-
 import colorTheme from "../constants/Colors";
 import {Auth, Home, Preferences} from "../screens";
+import {CardDetails} from "../components";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -49,6 +49,7 @@ function RootStackScreen() {
         options={{ headerShown: false }}
       />
       <RootStack.Screen name="Preferences" component={Preferences}  options={{ headerShown: false }}/>
+      <RootStack.Screen name="CardDetails" component={CardDetails}  options={{ headerShown: false }}/>
     </RootStack.Navigator>
   );
 }

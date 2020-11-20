@@ -4,20 +4,20 @@ import {Button } from 'react-native-elements';
 
 const { height } = Dimensions.get('window')
 
-export const Card = ({ card }: CardProps) => 
+export const Card = (props: any) => 
 (
   <View style={styles.card}>
     <Image
       style={styles.image}
-      source={card.photo}
+      source={props.card.photo}
       resizeMode="cover"
     />
     <View style={styles.photoDescriptionContainer}>
       <Text style={styles.title}>
-        {`${card.title}`}
+        {`${props.card.title}`}
       </Text>
       <Text style={styles.category}>
-        {`${card.description}`}
+        {`${props.card.description}`}
       </Text>
       </View>
     <View style = {styles.rightSideContainer}>
@@ -29,7 +29,7 @@ export const Card = ({ card }: CardProps) =>
           fontFamily: 'Roboto_700Bold',
         }}
         type="clear"
-        onPress={() => console.log('Menu Button pressed')}/>
+        onPress={() => props.navigation.navigate('CardDetails')}/>
     </View>
     
   </View>

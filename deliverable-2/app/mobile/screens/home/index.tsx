@@ -36,7 +36,7 @@ const Home = ({navigation}) => {
             <Swiper
                 ref={useSwiper}
                 cards={photoCards}
-                renderCard={card => <Card card={card} />}
+                renderCard={card => <Card card={card} navigation = {navigation}/>}
                 onSwipedRight ={() => {console.log('swiped right')}}
                 onSwipedLeft={() => {console.log('swiped left')}}
                 onSwipedAll={() => {console.log('finished stack')}}
@@ -62,7 +62,14 @@ const Home = ({navigation}) => {
     )
 }
 
- const superlike = () => {
+
+const dislike = () => {
+    console.log("pressed x button");
+  }
+  const like = () => {
+    console.log("pressed like button")
+  }
+  const superlike = () => {
     console.log("pressed superlike button")
  }
 const photoCards = [

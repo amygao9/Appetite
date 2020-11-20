@@ -1,9 +1,9 @@
-import React, {useRef} from 'react';
-import { View, Text, Image, ImageSourcePropType, StyleSheet, Dimensions, SafeAreaView} from 'react-native'
-import {Button } from 'react-native-elements';
-const { height } = Dimensions.get('window');
-
-export default function CardDetails({ details }: RestaurantProps) {
+import React from 'react';
+import { View, Text, Image, ImageSourcePropType, StyleSheet, SafeAreaView} from 'react-native';
+import { Divider } from 'react-native-elements';
+import * as Icon from '@expo/vector-icons'
+//{ details }: RestaurantProps
+export default function CardDetails({navigation}) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upper}>
@@ -12,12 +12,31 @@ export default function CardDetails({ details }: RestaurantProps) {
               source={require('../assets/images/restaurant.jpg')}
               resizeMode="cover"
           />
-        </View>
+        </View> 
         <View style={styles.lower}>
-
+        <Text style={styles.title}>Store Info</Text>
+        <Divider style={{ height: 3, backgroundColor: '#F2F2F2' }} />
+        <Text style={styles.category}>insert category</Text>
+        <View style={{ flexDirection: 'column'}}>
+          <View style={{ flexDirection: 'row'}}>
+              <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail"/>
+              <Text style={styles.category}>insert location</Text>
+          </View>
+          <View style={{ flexDirection: 'row'}}>
+          <Icon.MaterialIcons name="star" style={styles.icons} />
+              <Text style={styles.category}>insert rating</Text>
+          </View>
+          <View style={{ flexDirection: 'row'}}>
+          <Icon.MaterialIcons name="phone" style={styles.icons} />
+              <Text style={styles.category}>insert phone number</Text>
+          </View>
+          <View style={{ flexDirection: 'row'}}>
+          <Icon.MaterialIcons name="attach-money" style={styles.icons} />
+              <Text style={styles.category}>insert pricing</Text>
+          </View>
+        </View>
         </View>
       </SafeAreaView>
-      
     );
 }
 type RestaurantProps = {
@@ -52,35 +71,28 @@ const styles = StyleSheet.create({
       flex: 1,
       width: '95%'
     },
-    photoDescriptionContainer: {
-      justifyContent: 'flex-end',
-      alignItems: 'flex-start',
-      flexDirection: 'column',
-      height: '100%',
-      position: 'absolute',
-      left: 15,
-      bottom: 30,
-    },
-    rightSideContainer: {
-      justifyContent: 'flex-end',
-      alignItems: 'flex-start',
-      flexDirection: 'column',
-      height: '100%',
-      position: 'absolute',
-      right: 15,
-      bottom: 20,
+    icons: {
+      paddingTop: 20,
+      paddingLeft: 20,
+      fontSize: 24,
+      color: "black",
+      opacity: 0.60,
     },
     title: {
-      textAlign: 'center',
+      textAlign: 'left',
+      paddingLeft: 10,
+      paddingTop: 20,
+      paddingBottom: 10,
       fontSize: 24,
-      color: "white",
+      color: "black",
       fontFamily: 'Roboto_700Bold',
     },
     category: {
-      paddingTop: 10,
-      textAlign: 'center',
-      fontSize: 16,
-      color: "white",
+      paddingTop: 20,
+      paddingLeft: 10,
+      textAlign: 'left',
+      fontSize: 20,
+      color: "black",
       opacity: 0.60,
       fontFamily: 'Roboto_700Bold',
     },
