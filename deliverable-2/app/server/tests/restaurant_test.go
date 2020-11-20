@@ -11,14 +11,7 @@ import (
 	"bytes"
 
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-var port string
-
-var newRestID primitive.ObjectID
-var client *http.Client
-var bearer string
 
 func TestRestaurants(t *testing.T) {
 	err := godotenv.Load("../.env")
