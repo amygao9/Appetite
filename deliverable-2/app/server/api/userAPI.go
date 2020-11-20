@@ -18,7 +18,7 @@ func (c *Collection) AddUser(w http.ResponseWriter, r *http.Request) {
 	postBody, _ := ioutil.ReadAll(r.Body)
 	err := json.Unmarshal(postBody, &user)
 	if err != nil {
-		log.Fatalf("Error unpacking user data")
+		log.Print("Error unpacking user data")
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -53,7 +53,7 @@ func (c *Collection) AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	postBody, _ := ioutil.ReadAll(r.Body)
 	err := json.Unmarshal(postBody, &authUser)
 	if err != nil {
-		log.Fatalf("Error unpacking login data")
+		log.Print("Error unpacking login data")
 		w.Write([]byte(err.Error()))
 		return
 	}

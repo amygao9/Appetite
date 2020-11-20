@@ -20,7 +20,7 @@ type Tokens struct {
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
-		log.Fatalf("Error hashing password")
+		log.Print("Error hashing password")
 	}
 	return string(bytes), err
 }
