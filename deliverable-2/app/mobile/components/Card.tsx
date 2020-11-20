@@ -29,7 +29,7 @@ export const Card = (props: any) =>
           fontFamily: 'Roboto_700Bold',
         }}
         type="clear"
-        onPress={() => props.navigation.navigate('CardDetails')}/>
+        onPress={() => props.navigation.navigate('Restaurant Details', {title: props.card.title})}/>
     </View>
     
   </View>

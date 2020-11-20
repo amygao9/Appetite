@@ -13,7 +13,9 @@ const Home = ({navigation}) => {
     const OnClickLike = () => useSwiper.current.swipeRight()
 
     return (
+      
       <SafeAreaView style={styles.container}>
+        
         {/* TEMPORARY PLACEHOLDER FOR PAGE HEADER */}
           <View style={styles.header}> 
             <CircleButton name="x" Icon = {Icon.Feather}

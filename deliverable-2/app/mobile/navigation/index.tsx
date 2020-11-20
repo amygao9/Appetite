@@ -33,9 +33,17 @@ const RootStack = createStackNavigator();
 
 function MainNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Auth" component={Auth} />
+    <Stack.Navigator 
+      screenOptions={{ headerShown: true, headerStyle: {
+        backgroundColor: MyTheme.colors.background,
+      },
+      headerTitleStyle: {
+        color: 'white'
+      }}}>
+
+      <Stack.Screen name="Auth" component={Auth} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Restaurant Details" component={CardDetails} />
     </Stack.Navigator>
   );
 }
@@ -49,7 +57,6 @@ function RootStackScreen() {
         options={{ headerShown: false }}
       />
       <RootStack.Screen name="Preferences" component={Preferences}  options={{ headerShown: false }}/>
-      <RootStack.Screen name="CardDetails" component={CardDetails}  options={{ headerShown: false }}/>
     </RootStack.Navigator>
   );
 }

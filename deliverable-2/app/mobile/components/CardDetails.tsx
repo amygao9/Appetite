@@ -3,7 +3,8 @@ import { View, Text, Image, ImageSourcePropType, StyleSheet, SafeAreaView} from 
 import { Divider } from 'react-native-elements';
 import * as Icon from '@expo/vector-icons'
 //{ details }: RestaurantProps
-export default function CardDetails({navigation}) {
+export default function CardDetails({ route, navigation }) {
+  const {title} = route.params;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upper}>
@@ -14,9 +15,9 @@ export default function CardDetails({navigation}) {
           />
         </View> 
         <View style={styles.lower}>
-        <Text style={styles.title}>Store Info</Text>
+        <Text style={styles.title}>{`${title}`}</Text>
         <Divider style={{ height: 3, backgroundColor: '#F2F2F2' }} />
-        <Text style={styles.category}>insert category</Text>
+        <Text style={styles.category}>{`${title}`}</Text>
         <View style={{ flexDirection: 'column'}}>
           <View style={{ flexDirection: 'row'}}>
               <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail"/>
