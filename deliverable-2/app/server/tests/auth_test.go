@@ -84,6 +84,6 @@ func TestTokens(t *testing.T) {
         t.Fatal(err)
 	}
 	if string(tokenRespData) == noAuth {
-        t.Errorf("Router returned unexpected body: got %v", string(tokenRespData))
+        t.Errorf("Request was not authenticated")
 	}
 }
