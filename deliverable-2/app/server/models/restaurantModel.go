@@ -34,11 +34,11 @@ type Swipe struct {
 }
 
 type Filter struct {
-	Category int     `json:"category,omitempty" bson:"category,omitempty"`
-	Lat      float64 `json:"lat" bson:"lat"`
-	Lng      float64 `json:"lng" bson:"lng"`
-	Price    int     `json:"price,omitempty" bson:"price,omitempty"`
-	Radius   int     `json:"radius,omitempty" bson:"radius,omitempty"`
+	Categories []string `json:"categories,omitempty" bson:"categories,omitempty"`
+	Lat        float64  `json:"lat" bson:"lat"`
+	Lng        float64  `json:"lng" bson:"lng"`
+	Price      int      `json:"price,omitempty" bson:"price,omitempty"`
+	Radius     float64  `json:"radius,omitempty" bson:"radius,omitempty"` // kilometers
 }
 
 type Radius struct {

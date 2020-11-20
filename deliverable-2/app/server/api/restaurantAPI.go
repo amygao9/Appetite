@@ -9,6 +9,8 @@ import (
 	"backapp/auth"
 	"backapp/models"
 
+	"math"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
@@ -27,15 +29,12 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Error unpacking filter data")
 	}
 
-	var radius models.Radius
-	if filter.Radius != 0 {
-		getRadius(filter.Lat, filter.Lng, filter.Radius, &radius)
-	}
+	query := getFindQuery(filter)
 
-	findOptions := options.Find()
-	findOptions.SetSort(bson.M{"weight": -1})
+	options := options.Find()
+	options.SetSort(bson.M{"weight": -1})
 
-	result, err := c.collection.Find(c.ctx, bson.M{}, findOptions)
+	result, err := c.collection.Find(c.ctx, query, options)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
@@ -182,11 +181,42 @@ func (c *Collection) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getRadius(lat float64, lng float64, radius int, modelRadius *models.Radius) {
-	floatRadius := float64(radius)
-	modelRadius.LowLat = lat - floatRadius
-	modelRadius.HiLat = lat + floatRadius
-	modelRadius.LowLng = lng - floatRadius
-	modelRadius.HiLng = lng + floatRadius
+func getRadius(filter models.Filter) models.Radius {
+	var radius models.Radius
 
+	rEarth := float64(6378)
+
+	floatRadius := filter.Radius
+	lat := filter.Lat
+	lng := filter.Lng
+
+	radius.LowLat = lat - (floatRadius/rEarth)*(180/math.Pi)
+	radius.HiLat = lat + (floatRadius/rEarth)*(180/math.Pi)
+	radius.LowLng = lng - (floatRadius/rEarth)*(180/math.Pi)/math.Cos(lat*math.Pi/180)
+	radius.HiLng = lng + (floatRadius/rEarth)*(180/math.Pi)/math.Cos(lat*math.Pi/180)
+
+	return radius
+}
+
+func getFindQuery(filter models.Filter) bson.M {
+	var queries []bson.M
+	if filter.Categories != nil && len(filter.Categories) > 0 {
+		queries = append(queries, bson.M{"categories": bson.M{"$in": filter.Categories}})
+	}
+
+	if filter.Price > 0 {
+		queries = append(queries, bson.M{"price": bson.M{"$eq": filter.Price}})
+	}
+
+	if filter.Radius > 0 {
+		radius := getRadius(filter)
+		queries = append(queries, bson.M{"lat": bson.M{"$gte": radius.LowLat, "$lte": radius.HiLat}})
+		queries = append(queries, bson.M{"lng": bson.M{"$gte": radius.LowLng, "$lte": radius.HiLng}})
+	}
+
+	query := bson.M{
+		"$and": queries,
+	}
+
+	return query
 }
