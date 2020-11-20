@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "hello!")
 }
@@ -22,7 +22,7 @@ func RouterInit() {
 	db := clientInit(ctx)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", handler).Methods("GET")
+	r.HandleFunc("/", Handler).Methods("GET")
 
 	// Restaurant methods
 	restaurantCollection := Collection{collection: db.Collection("restaurant"), ctx: ctx}
