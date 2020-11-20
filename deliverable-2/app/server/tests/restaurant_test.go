@@ -104,7 +104,7 @@ func TestRestaurants(t *testing.T) {
 		t.Errorf("Add request returned unexpected weight: got %v", restaurantRet.Weight)
 	}
 	
-	// Test update restaurant, DOESN'T WORK ATM
+	// Test update restaurant
 	restaurantUpdate, err := json.Marshal(map[string]interface{}{
 		"ID": nil,
 		"YelpID": "testYelpID",
