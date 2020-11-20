@@ -26,7 +26,9 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	postBody, _ := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(postBody, &filter)
 	if err != nil {
-		log.Fatalf("Error unpacking filter data")
+		log.Print("Error unpacking Filter data")
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	query := getFindQuery(filter)
@@ -42,7 +44,9 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	}
 	var restaurants []models.Restaurant
 	if err = result.All(c.ctx, &restaurants); err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -72,7 +76,9 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	}
 	var restaurant models.Restaurant
 	if err = result.All(c.ctx, &restaurant); err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -93,7 +99,9 @@ func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	postBody, _ := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
-		log.Fatalf("Error unpacking restaurant data")
+		log.Print("Error unpacking restaurant data")
+		w.Write([]byte(err.Error()))
+		return
 	}
 	restaurant.ID = primitive.NewObjectID()
 	_, err = c.collection.InsertOne(c.ctx, restaurant)
@@ -121,7 +129,9 @@ func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 	postBody, _ := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
-		log.Fatalf("Error unpacking restaurant data")
+		log.Print("Error unpacking restaurant data")
+		w.Write([]byte(err.Error()))
+		return
 	}
 	restaurant.ID = objectID
 	_, err = c.collection.ReplaceOne(c.ctx, bson.M{"_id": objectID}, restaurant)
@@ -150,7 +160,9 @@ func (c *Collection) Swipe(w http.ResponseWriter, r *http.Request) {
 	postBody, _ := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(postBody, &swipe)
 	if err != nil {
-		log.Fatalf("Error unpacking restaurant data")
+		log.Print("Error unpacking Weight data")
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	update := bson.M{"$inc": bson.M{"weight": swipe.Weight}}
