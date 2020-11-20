@@ -55,7 +55,6 @@ const Auth = ({navigation}) => {
           console.log(user)
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
-            await AsyncStorage.setItem('refreshToken', user.refresh_token);
             navigation.navigate('Home');
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
