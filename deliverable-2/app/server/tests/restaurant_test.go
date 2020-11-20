@@ -139,6 +139,49 @@ func TestRestaurants(t *testing.T) {
 	if updateResp.StatusCode != http.StatusOK {
 		t.Errorf("Update returned wrong status code: got %v, want %v", updateResp.Status, http.StatusOK)
 	}
+	updateRespData, err := ioutil.ReadAll(updateResp.Body)
+    if err != nil {
+        t.Fatal(err)
+	}
+	var updateRet models.Restaurant
+	err = json.Unmarshal(updateRespData, &updateRet)
+	if err != nil {
+		t.Fatal(updateRet)
+	}
+
+	if updateRet.YelpID != "testYelpID" {
+		t.Errorf("Update request returned unexpected yelp ID: got %v", restaurantRet.YelpID)
+	}
+	if updateRet.Name != "testName" {
+		t.Errorf("Update request returned unexpected name: got %v", restaurantRet.Name)
+	}
+	if updateRet.Rating != 4.50 {
+		t.Errorf("Update request returned unexpected rating: got %v", restaurantRet.Rating)
+	}
+	if updateRet.NumRatings != 60 {
+		t.Errorf("Update request returned unexpected rating count: got %v", restaurantRet.NumRatings)
+	}
+	if updateRet.ImageURL[0] != "img1" || restaurantRet.ImageURL[1] != "img2" {
+		t.Errorf("Update request returned image urls: got %v", restaurantRet.ImageURL)
+	}
+	if updateRet.Lat != 1.23456 {
+		t.Errorf("Update request returned unexpected lat: got %v", restaurantRet.Lat)
+	}
+	if updateRet.Lng != 6.54321 {
+		t.Errorf("Update request returned unexpected lng: got %v", restaurantRet.Lng)
+	}
+	if updateRet.Address != "testAddress" {
+		t.Errorf("Update request returned unexpected address: got %v", restaurantRet.Address)
+	}
+	if updateRet.Categories[0] != "cat1" || restaurantRet.Categories[1] != "cat2" {
+		t.Errorf("Update request returned categories: got %v", restaurantRet.Categories)
+	}
+	if updateRet.Price != 10 {
+		t.Errorf("Update request returned unexpected price: got %v", restaurantRet.Price)
+	}
+	if updateRet.Weight != 110 {
+		t.Errorf("Update request returned unexpected weight: got %v", restaurantRet.Weight)
+	}
 
 	// Test delete restaurant
 	delReq, err := http.NewRequest(	"DELETE", 
