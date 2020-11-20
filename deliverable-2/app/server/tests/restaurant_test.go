@@ -10,8 +10,11 @@ import (
 	"os"
 	"bytes"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"github.com/joho/godotenv"
 )
+
+var newRestID primitive.ObjectID
 
 func TestRestaurants(t *testing.T) {
 	err := godotenv.Load("../.env")
@@ -38,19 +41,19 @@ func TestRestaurants(t *testing.T) {
 
 func testAddRestaurant() func(*testing.T) {
 	return func(t *testing.T) {
-		restaurantSent, err := json.Marshal(map[string]interface{}{
-			"ID": nil,
-			"YelpID": "testYelpID",
-			"Name": "testName",
-			"Rating": 4.00,
-			"NumRatings": 50,
-			"ImageURL": []string{"img1", "img2"},
-			"Lat": 1.23456,
-			"Lng": 6.54321,
-			"Address": "testAddress",
-			"Categories": []string{"cat1", "cat2"},
-			"Price": 10,
-			"Weight": 100,
+		restaurantSent, err := json.Marshal(models.Restaurant{
+			ID: primitive.NewObjectID(),
+			YelpID: "testYelpID",
+			Name: "testName",
+			Rating: 4.00,
+			NumRatings: 50,
+			ImageURL: []string{"img1", "img2"},
+			Lat: 1.23456,
+			Lng: 6.54321,
+			Address: "testAddress",
+			Categories: []string{"cat1", "cat2"},
+			Price: 10,
+			Weight: 100,
 		})
 		if err != nil {
 			t.Fatal(err)
@@ -117,19 +120,19 @@ func testAddRestaurant() func(*testing.T) {
 
 func testUpdateRestaurant() func(*testing.T) {
 	return func(t *testing.T) {
-		restaurantUpdate, err := json.Marshal(map[string]interface{}{
-			"ID": nil,
-			"YelpID": "testYelpID",
-			"Name": "testName",
-			"Rating": 4.50,
-			"NumRatings": 60,
-			"ImageURL": []string{"img1", "img2"},
-			"Lat": 1.23456,
-			"Lng": 6.54321,
-			"Address": "testAddress",
-			"Categories": []string{"cat1", "cat2"},
-			"Price": 10,
-			"Weight": 110,
+		restaurantUpdate, err := json.Marshal(models.Restaurant{
+			ID: newRestID,
+			YelpID: "testYelpID",
+			Name: "testName",
+			Rating: 4.50,
+			NumRatings: 60,
+			ImageURL: []string{"img1", "img2"},
+			Lat: 1.23456,
+			Lng: 6.54321,
+			Address: "testAddress",
+			Categories: []string{"cat1", "cat2"},
+			Price: 10,
+			Weight: 110,
 		})
 		if err != nil {
 			t.Fatal(err)
