@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "server": "cd app/server && go run main.go",
-    "mobile": "npm run start --prefix mobile"
+    "mobile": "npm run start --prefix mobile",
+    "test": "cd app/server/tests && go test -v"
   },
   "keywords": [],
   "author": "",
