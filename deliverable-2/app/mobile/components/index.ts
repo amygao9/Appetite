@@ -3,6 +3,6 @@ import CircleButton from "./Buttons/CircleButton";
 import Container from "./Container";
 import LoginForm from "./LoginForm";
 import Card from "./Card";
-import Text from "./Text";
+import CardDetails from "./CardDetails";
+export {LongButton, CircleButton, Container, LoginForm, Card, CardDetails}
 
-export {LongButton, CircleButton, Container, LoginForm, Card, Text}

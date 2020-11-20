@@ -1,14 +1,17 @@
 import React, {useRef} from 'react';
-import { StyleSheet, SafeAreaView, View} from 'react-native';
+import { StyleSheet, SafeAreaView, View, Button, Dimensions} from 'react-native';
 import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
 import {apiGetRestaurants} from "../../api/restaurantAPI";
+import colors from '../../constants/Colors';
+const { height } = Dimensions.get('window')
 
 const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const OnClickDislike = () => useSwiper.current.swipeLeft()
     const OnClickLike = () => useSwiper.current.swipeRight()
+
 
     React.useEffect(() => {
       async function fetchRestaurants() {
@@ -23,37 +26,62 @@ const Home = ({navigation}) => {
       }
       fetchRestaurants();
     }, []);
+
     return (
-    <SafeAreaView style={styles.container}>
-        <Swiper
-            ref={useSwiper}
-            cards={photoCards}
-            renderCard={card => <Card card={card} />}
-            onSwipedRight ={() => {console.log('swiped right')}}
-            onSwipedLeft={() => {console.log('swiped left')}}
-            onSwipedAll={() => {console.log('finished stack')}}
-            infinite = {true}
-            verticalSwipe = {false}
-            backgroundColor={'#191A1D'}
-            stackSize= {2}>
-        </Swiper>
-        <View style={styles.footer}>
+      
+      <SafeAreaView style={styles.container}>
+        
+        {/* TEMPORARY PLACEHOLDER FOR PAGE HEADER */}
+          <View style={styles.header}> 
             <CircleButton name="x" Icon = {Icon.Feather}
-            color="#FF0E83" onPress={OnClickDislike}
+              color="#FF0E83" 
+              onPress={() => navigation.navigate('Preferences')}
             />
-            <CircleButton name="heart" Icon = {Icon.Entypo}
-            color="#6F05D6" onPress={superlike}
+
+            <CircleButton name="x" Icon = {Icon.Feather}
+              color="#FF0E83" 
+              onPress={() => navigation.navigate('Preferences')}
             />
-            <CircleButton name="like" Icon = {Icon.SimpleLineIcons}
-            color="#00CC99" onPress={OnClickLike}
+
+            <CircleButton name="x" Icon = {Icon.Feather}
+              color="#FF0E83" 
+              onPress={() => navigation.navigate('Preferences')}
             />
-        </View>
-    </SafeAreaView>
+          </View>
+
+          <View style={styles.swiper}> 
+            <Swiper
+                ref={useSwiper}
+                cards={photoCards}
+                renderCard={card => <Card card={card} navigation = {navigation}/>}
+                onSwipedRight ={() => {console.log('swiped right')}}
+                onSwipedLeft={() => {console.log('swiped left')}}
+                onSwipedAll={() => {console.log('finished stack')}}
+                backgroundColor={colors.darkGray}
+                infinite = {true}
+                verticalSwipe = {false}
+                stackSize= {2}>
+            </Swiper>
+          </View>
+
+          <View style={styles.footer}>
+              <CircleButton name="x" Icon = {Icon.Feather}
+              color={colors.pink} onPress={OnClickDislike}
+              />
+              <CircleButton name="heart" Icon = {Icon.Entypo}
+              color={colors.purple} onPress={superlike}
+              />
+              <CircleButton name="like" Icon = {Icon.SimpleLineIcons}
+              color={colors.green} onPress={OnClickLike}
+              />
+          </View>
+      </SafeAreaView>
     )
 }
 
+
 const dislike = () => {
-    console.log("pressed x button")
+    console.log("pressed x button");
   }
   const like = () => {
     console.log("pressed like button")
@@ -77,44 +105,24 @@ const photoCards = [
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#191A1D'
-    },
-    card: {
-      flex: 0.8,
-      borderRadius: 4,
-      borderWidth: 2,
-      borderColor: "#E8E8E8",
-      justifyContent: "center",
-      backgroundColor: "white"
-    },
-    text: {
-      textAlign: "center",
-      fontSize: 50,
-      backgroundColor: "transparent"
+      backgroundColor: colors.darkGray
     },
     header: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      padding: 16,
+      flex: 4, 
+      flexDirection: "row", 
+      justifyContent: 'space-around', 
+      alignItems: 'flex-end', 
     },
-    cards: {
-      flex: 1,
-      margin: 8,
-      zIndex: 100,
+    swiper: {
+      flex: 22, 
+      marginBottom: 100
     },
     footer: {
-      flex: 0.1,
-      position: 'absolute',
-      bottom:0,
-      backgroundColor: 'transparent',
+      flex: 4, 
       flexDirection: "row",
-      justifyContent: "space-evenly",
-      padding: 50,
-    },
-    stretch: {
-      resizeMode: 'stretch',
+      justifyContent: 'center',
+      alignItems: 'flex-start', 
     }
   });
 export default Home;

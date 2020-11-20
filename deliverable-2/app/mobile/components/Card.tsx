@@ -1,26 +1,37 @@
 import React from 'react';
-import { View, Text, Image, ImageSourcePropType, StyleSheet, Dimensions, Button } from 'react-native'
+import { View, Text, Image, ImageSourcePropType, StyleSheet, Dimensions } from 'react-native'
+import {Button } from 'react-native-elements';
+
 const { height } = Dimensions.get('window')
 
-export const Card = ({ card }: CardProps) => 
+export const Card = (props: any) => 
 (
   <View style={styles.card}>
     <Image
       style={styles.image}
-      source={card.photo}
+      source={props.card.photo}
       resizeMode="cover"
     />
     <View style={styles.photoDescriptionContainer}>
-      <Text style={styles.text}>
-        {`${card.title}`}
+      <Text style={styles.title}>
+        {`${props.card.title}`}
       </Text>
-      <Text style={styles.text}>
-        {`${card.description}`}
+      <Text style={styles.category}>
+        {`${props.card.description}`}
       </Text>
+      </View>
+    <View style = {styles.rightSideContainer}>
       <Button 
         title="Menu >"
-        onPress={() => console.log('Simple Button pressed')}/>
+        titleStyle={{
+          color: "white",
+          fontSize: 16,
+          fontFamily: 'Roboto_700Bold',
+        }}
+        type="clear"
+        onPress={() => props.navigation.navigate('Restaurant Details', {title: props.card.title})}/>
     </View>
+    
   </View>
 )
 type FixedShape =  {
@@ -36,23 +47,13 @@ type CardProps = {
 const styles = StyleSheet.create({
     card: {
       /* Setting the height according to the screen height*/
-      height: height - 300,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: "white",
-      borderRadius: 5,
-      shadowColor: "gray",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowRadius: 6,
-      shadowOpacity: 0.3,
-      elevation: 2,
+      height: height - 375,
+      backgroundColor: "black",
+      borderRadius: 10
     },
     image: {
-      borderRadius: 5,
-      flex: 1,
+      borderRadius: 10,
+      flex: 0.82,
       width: '100%',
     },
     photoDescriptionContainer: {
@@ -61,16 +62,31 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       height: '100%',
       position: 'absolute',
-      left: 10,
-      bottom: 10,
+      left: 15,
+      bottom: 30,
     },
-    text: {
+    rightSideContainer: {
+      justifyContent: 'flex-end',
+      alignItems: 'flex-start',
+      flexDirection: 'column',
+      height: '100%',
+      position: 'absolute',
+      right: 15,
+      bottom: 20,
+    },
+    title: {
       textAlign: 'center',
-      fontSize: 20,
+      fontSize: 24,
       color: "white",
       fontFamily: 'Roboto_700Bold',
-      textShadowColor: "black",
-      textShadowRadius: 10,
+    },
+    category: {
+      paddingTop: 10,
+      textAlign: 'center',
+      fontSize: 16,
+      color: "white",
+      opacity: 0.60,
+      fontFamily: 'Roboto_700Bold',
     },
   })
 export default Card

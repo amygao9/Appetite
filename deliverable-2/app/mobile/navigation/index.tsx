@@ -2,10 +2,9 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
-
 import colorTheme from "../constants/Colors";
-
-import {Auth, Home} from "../screens";
+import {Auth, Home, Preferences} from "../screens";
+import {CardDetails} from "../components";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -20,20 +19,45 @@ const MyTheme = {
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer theme={MyTheme}>
-      <RootNavigator />
+      <RootStackScreen />
     </NavigationContainer>
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
+
 const Stack = createStackNavigator();
 
-function RootNavigator() {
+// A root stack navigator is often used for displaying modals on top of all other content
+// Read more here: https://reactnavigation.org/docs/modal
+const RootStack = createStackNavigator(); 
+
+function MainNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Auth" component={Auth} />
+    <Stack.Navigator 
+      screenOptions={{ headerShown: true, headerStyle: {
+        backgroundColor: MyTheme.colors.background,
+      },
+      headerTitleStyle: {
+        color: 'white'
+      }}}>
+
+      <Stack.Screen name="Auth" component={Auth} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Restaurant Details" component={CardDetails} />
     </Stack.Navigator>
   );
 }
+
+function RootStackScreen() {
+  return (
+    <RootStack.Navigator mode="modal">
+      <RootStack.Screen
+        name="Main"
+        component={MainNavigator}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen name="Preferences" component={Preferences}  options={{ headerShown: false }}/>
+    </RootStack.Navigator>
+  );
+}
+
