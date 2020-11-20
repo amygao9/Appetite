@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import { StyleSheet, SafeAreaView, View, Button, Dimensions} from 'react-native';
 import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
@@ -11,22 +11,26 @@ const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const OnClickDislike = () => useSwiper.current.swipeLeft()
     const OnClickLike = () => useSwiper.current.swipeRight()
-
-
+    const [restaurants, setResturants] = useState(null);
     React.useEffect(() => {
-      async function fetchRestaurants() {
-        try {
-          const restaurants = await apiGetRestaurants();
-        }
-        catch(err) {
-          if (err.message === "auth invalid") {
-            navigation.navigate("Auth");
-          }
+      navigation.addListener('focus', () => {
+        fetchRestaurants();
+      });
+      fetchRestaurants();  
+    }, [navigation]);
+
+    async function fetchRestaurants() {
+      try {
+        setResturants(await apiGetRestaurants());
+        
+      }
+      catch(err) {
+        if (err.message === "auth invalid") {
+          navigation.navigate("Auth");
         }
       }
-      fetchRestaurants();
-    }, []);
-
+    }
+    console.log(restaurants)
     return (
       
       <SafeAreaView style={styles.container}>
