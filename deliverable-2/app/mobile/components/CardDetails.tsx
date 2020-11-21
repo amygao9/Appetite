@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, Image, ImageSourcePropType, StyleSheet, SafeAreaView} from 'react-native';
 import { Divider } from 'react-native-elements';
 import * as Icon from '@expo/vector-icons'
@@ -6,6 +6,26 @@ import {apiGetDetails} from "../api/restaurantAPI";
 //{ details }: RestaurantProps
 export default function CardDetails({ route, navigation }) {
   const {title, description, photo, address, rating, price, id} = route.params;
+  const [isLoading, setLoading] = useState(true);
+  const [details, setDetails] = useState([]);
+  React.useEffect(() => {
+    navigation.addListener('focus', () => {
+      fetchDetails()});
+    }, [navigation]);
+
+  async function fetchDetails() {
+    try {
+      const details = await apiGetDetails(id);
+      console.log(details)
+      setDetails(details)
+      setLoading(false)
+    }
+    catch(err) {
+      if (err.message === "auth invalid") {
+        navigation.navigate("Auth");
+      }
+    }
+    }
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upper}>
@@ -36,6 +56,9 @@ export default function CardDetails({ route, navigation }) {
           <Icon.MaterialIcons name="attach-money" style={styles.icons} />
               <Text style={styles.category}>{`${price}`+'/4'}</Text>
           </View>
+          <Text style={styles.category}>Top Review</Text>
+          {!isLoading && ( 
+          <Text style={styles.review}>{`${details["topreview"]["reviewtext"]}`}</Text>)}
         </View>
         </View>
       </SafeAreaView>
@@ -98,4 +121,14 @@ const styles = StyleSheet.create({
       opacity: 0.60,
       fontFamily: 'Roboto_700Bold',
     },
+    review: {
+      paddingTop: 20,
+      paddingLeft: 30,
+      paddingRight: 30,
+      textAlign: 'left',
+      fontSize: 16,
+      color: "black",
+      opacity: 0.60,
+      fontFamily: 'Roboto_500Medium',
+    }
   })

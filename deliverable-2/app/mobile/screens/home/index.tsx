@@ -43,7 +43,6 @@ const Home = ({navigation}) => {
         });
         
         console.log(cards)
-        
         setCards(cards)
         setLoading(false)
       }
