@@ -59,10 +59,10 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
-	// err := auth.ValidateToken(w, r)
-	// if err != nil {
-	// 	return
-	// }
+	err := auth.ValidateToken(w, r)
+	if err != nil {
+		return
+	}
 
 	objectID, err := getId(w, r)
 	if err != nil {
@@ -110,6 +110,7 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 			restaurant.ImageURL = append(restaurant.ImageURL, imageURL.(string))
 		}
 
+		// retrieve Yelp reviews
 		var reviews []interface{}
 		reviews, err = getYelpReviews(restaurant.YelpID)
 		if err != nil {
@@ -119,6 +120,7 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 		}
 		review := reviews[0].(map[string]interface{})
 
+		// set Yelp review
 		restaurant.TopReview = models.Review{
 			UserName:   review["user"].(map[string]interface{})["name"].(string),
 			UserImage:  review["user"].(map[string]interface{})["image_url"].(string),
@@ -128,6 +130,8 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 
 		timeCreated, _ := time.Parse("2006-01-02 03:04:05", review["time_created"].(string))
 		restaurant.TopReview.TimeCreated = timeCreated.Format("Jan. 2, 2006")
+
+		restaurant.PhoneNumber = results["display_phone"].(string)
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(restaurant)
