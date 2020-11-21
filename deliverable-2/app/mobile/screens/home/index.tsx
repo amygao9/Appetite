@@ -11,18 +11,29 @@ const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const OnClickDislike = () => useSwiper.current.swipeLeft()
     const OnClickLike = () => useSwiper.current.swipeRight()
-    const [restaurants, setResturants] = useState(null);
+    const [isLoading, setLoading] = useState(true);
+
+    const [restaurantCards, setCards] = useState([]);
     React.useEffect(() => {
       navigation.addListener('focus', () => {
-        fetchRestaurants();
-      });
-      fetchRestaurants();  
+        fetchRestaurants()});
     }, [navigation]);
-
     async function fetchRestaurants() {
       try {
-        setResturants(await apiGetRestaurants());
-        
+        const restaurants = await apiGetRestaurants([],2);
+        console.log(restaurants)
+        let cards = [];
+        restaurants.forEach((restaurant) => {
+          console.log(restaurant)
+          cards.push({
+            title: restaurant["name"],
+            description: restaurant["categories"],
+            photo: {uri: restaurant["imageURL"][0]}
+          });
+        });
+        console.log(cards)
+        setCards(cards)
+        setLoading(false)
       }
       catch(err) {
         if (err.message === "auth invalid") {
@@ -30,7 +41,6 @@ const Home = ({navigation}) => {
         }
       }
     }
-    console.log(restaurants)
     return (
       
       <SafeAreaView style={styles.container}>        
@@ -65,11 +75,11 @@ const Home = ({navigation}) => {
             </View> 
 
           </View>
-
+          {!isLoading && ( 
           <View style={styles.swiper}> 
             <Swiper
                 ref={useSwiper}
-                cards={photoCards}
+                cards={restaurantCards}
                 renderCard={card => <Card card={card} navigation = {navigation}/>}
                 onSwipedRight ={() => {console.log('swiped right')}}
                 onSwipedLeft={() => {console.log('swiped left')}}
@@ -79,12 +89,14 @@ const Home = ({navigation}) => {
                 verticalSwipe = {false}
                 stackSize= {2}>
             </Swiper>
-          </View>
-
+          </View> )}
+          
           <View style={styles.footer}>
+            
               <CircleButton name="x" Icon = {Icon.Feather}
               color={colors.pink} onPress={OnClickDislike}
               />
+              
               <CircleButton name="heart" Icon = {Icon.Entypo}
               color={colors.purple} onPress={superlike}
               />
@@ -99,6 +111,7 @@ const Home = ({navigation}) => {
 const superlike = () => {
     console.log("pressed superlike button")
  }
+
 
 const photoCards = [
     {
