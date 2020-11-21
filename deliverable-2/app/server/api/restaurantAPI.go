@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"backapp/auth"
 	"backapp/models"
@@ -58,29 +59,79 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
-	err := auth.ValidateToken(w, r)
-	if err != nil {
-		return
-	}
+	// err := auth.ValidateToken(w, r)
+	// if err != nil {
+	// 	return
+	// }
 
 	objectID, err := getId(w, r)
 	if err != nil {
 		return
 	}
-	var result models.Restaurant
 
-	err = c.collection.FindOne(c.ctx, bson.M{"_id": objectID}).Decode(&result)
+	result := c.collection.FindOne(c.ctx, bson.M{"_id": objectID})
+	err = result.Err()
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
-		return
+	} else {
+		var restaurant models.Restaurant
+		result.Decode(&restaurant)
+
+		// get more restaurant details from Yelp /businesses API
+		var results map[string]interface{}
+		results, err = getYelpDetails(restaurant.YelpID)
+		if err != nil {
+			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		hours := make(map[int]string)
+		for i, hour := range results["hours"].([]interface{})[0].(map[string]interface{})["open"].([]interface{}) {
+			hourMap := hour.(map[string]interface{})
+			start, _ := time.Parse("1504", hourMap["start"].(string))
+			end, _ := time.Parse("1504", hourMap["end"].(string))
+			hours[i] = start.Format("3:04 pm") + " - " + end.Format("3:04 pm")
+		}
+
+		restaurant.Hours = make(map[string]string)
+		days := []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+		for i := 0; i < 7; i++ {
+			if val, ok := hours[i]; ok {
+				restaurant.Hours[days[i]] = val
+			} else {
+				restaurant.Hours[days[i]] = "Closed"
+			}
+		}
+
+		// set ImageURL array to the array of 3 image URLs returned in Yelp details
+		restaurant.ImageURL = []string{}
+		for _, imageURL := range results["photos"].([]interface{}) {
+			restaurant.ImageURL = append(restaurant.ImageURL, imageURL.(string))
+		}
+
+		var reviews []interface{}
+		reviews, err = getYelpReviews(restaurant.YelpID)
+		if err != nil {
+			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		review := reviews[0].(map[string]interface{})
+
+		restaurant.TopReview = models.Review{
+			UserName:   review["user"].(map[string]interface{})["name"].(string),
+			UserImage:  review["user"].(map[string]interface{})["image_url"].(string),
+			ReviewText: review["text"].(string),
+			Rating:     int(review["rating"].(float64)),
+		}
+
+		timeCreated, _ := time.Parse("2006-01-02 03:04:05", review["time_created"].(string))
+		restaurant.TopReview.TimeCreated = timeCreated.Format("Jan. 2, 2006")
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(restaurant)
 	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-
-	response, _ := json.Marshal(result)
-	w.Write(response)
 
 }
 

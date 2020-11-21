@@ -27,6 +27,16 @@ type Restaurant struct {
 	Categories []string           `json:"categories" bson:"categories"`
 	Price      int                `json:"price,omitempty" bson:"price,omitempty"`
 	Weight     int                `json:"weight" bson:"weight"`
+	Hours      map[string]string  `json:"hours,omitempty" bson:"hours,omitempty"`         // populated in GET /restaurant/details query
+	TopReview  Review             `json:"topreview,omitempty" bson:"topreview,omitempty"` // populated in GET /restaurant/details query
+}
+
+type Review struct {
+	UserName    string `json:"username" bson:"username"`
+	UserImage   string `json:"userimage" bson:"userimage"`
+	ReviewText  string `json:"reviewtext" bson:"reviewtext"`
+	Rating      int    `json:"rating" bson:"rating"`
+	TimeCreated string `json:"timecreated" bson:"timecreated"`
 }
 
 type Swipe struct {
