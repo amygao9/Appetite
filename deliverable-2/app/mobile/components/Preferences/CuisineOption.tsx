@@ -3,7 +3,7 @@ import { StyleSheet, Switch, View} from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
 export default function CuisineOption(props: any) {
-  const [isChecked, setIsChecked] = React.useState(false);
+  const [isChecked, setIsChecked] = React.useState(props.checked);
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
     props.updatePreferences(props.cuisineID, !isChecked);

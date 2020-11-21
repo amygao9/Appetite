@@ -5,17 +5,22 @@ import Slider from '@react-native-community/slider';
 import {LongButton} from "../../components";
 import colors from '../../constants/Colors';
 
-const Preferences = ({navigation}) => {
+const Preferences = ({route, navigation}) => {
+  const [cuisinePreferences, setCuisinePreferences] = React.useState(route.params.preferences); 
+  const [distanceRadius, setDistanceRadius] = React.useState(route.params.searchRadius); 
 
-  const [cuisinePreferences, setCuisinePreferences] = React.useState(new Array()); 
-  const [distanceRadius, setDistanceRadius] = React.useState(1); 
+  const isSelected = (item: string) => {
+    return cuisinePreferences.includes(item) 
+  }
 
+  //stores cuisine options (this is an alternative to persisting cuisine preferences for each user in the database, which is a TO-DO item for future deliverables)
   const cuisines = [
-    {name: "Cuisines", options: [{displayText: 'Traditional American', id: 'tradmerican'}, {displayText: 'Italian', id: 'italian'}, {displayText: 'Chinese', id: 'chinese'}, {displayText: 'Korean', id: 'korean'}, {displayText: 'Japanese', id: 'japanese'}, {displayText: 'Greek', id: 'greek'}]}, 
-    {name: "Popular Items", options: [{displayText: 'Sandwiches', id: 'sandwiches'}, {displayText: 'Bakeries', id: 'bakeries'}, {displayText: 'Ice Cream', id: 'icecream'}, {displayText: 'Salad', id: 'salad'}, {displayText: 'Desserts', id: 'desserts'}, {displayText: 'Coffee', id: 'coffee'}]},
-    {name: "Dietary", options: [{displayText: 'Gluten Free ', id: 'glutenfree'}, {displayText: 'Vegan', id: 'vegan'}]} 
+    {name: "Cuisines", options: [{displayText: 'Traditional American', id: 'tradmerican', selected: isSelected('tradmerican')}, {displayText: 'Italian', id: 'italian', selected: isSelected('italian')}, {displayText: 'Chinese', id: 'chinese', selected: isSelected('chinese')}, {displayText: 'Korean', id: 'korean', selected: isSelected('korean')}, {displayText: 'Japanese', id: 'japanese', selected: isSelected('japanese')}, {displayText: 'Greek', id: 'greek', selected: isSelected('greek')}]}, 
+    {name: "Popular Items", options: [{displayText: 'Sandwiches', id: 'sandwiches', selected: isSelected('sandwiches')}, {displayText: 'Bakeries', id: 'bakeries', selected: isSelected('bakeries')}, {displayText: 'Ice Cream', id: 'icecream', selected: isSelected('icecream')}, {displayText: 'Salad', id: 'salad', selected: isSelected('salad')}, {displayText: 'Desserts', id: 'desserts', selected: isSelected('desserts')}, {displayText: 'Coffee', id: 'coffee', selected: isSelected('coffee')}]},
+    {name: "Dietary", options: [{displayText: 'Gluten Free ', id: 'glutenfree', selected: isSelected('glutenfree')}, {displayText: 'Vegan', id: 'vegan', selected: isSelected('vegan')}]} 
   ]
 
+  //function that is passed to child components, to update the list of selected cuisines
   const updatePreferences = (option: string, checked: boolean) => {
     
     if(cuisinePreferences.includes(option) && !checked){
@@ -27,13 +32,13 @@ const Preferences = ({navigation}) => {
     setCuisinePreferences(cuisinePreferences) 
   }
 
+  //maps the cuisines array to sections and options that will be visible to user 
   const cuisineSections = cuisines.map((section,index) => <CuisineOptionSection key={index} sectionName={section.name} options ={section.options} updatePreferences={updatePreferences}/>)
 
   const applyPreferences = () => {
-
-    console.log("hello!"); 
-    //user preferences to be persisted 
-    // console.log("done selecting, here are preferences: " + cuisinePreferences + " within " + distanceRadius + " km of me")
+    //passes in the selected cuisines and distance radius to the main page 
+    navigation.goBack(); 
+    route.params.onGoBack(cuisinePreferences, distanceRadius);
   }
 
   return (
@@ -49,7 +54,7 @@ const Preferences = ({navigation}) => {
             step={0.1}
             minimumValue={0.1}
             maximumValue={2}
-            value={1}
+            value={distanceRadius}
             onValueChange={slideValue => setDistanceRadius(slideValue)}
             minimumTrackTintColor="#1fb28a"
             maximumTrackTintColor="#d3d3d3"
@@ -63,7 +68,7 @@ const Preferences = ({navigation}) => {
 
 
         <View style={styles.buttonsPanel}> 
-            <LongButton title="Apply" onPress={() => {applyPreferences}} secondary/>
+            <LongButton title="Apply" onPress={() => applyPreferences()} secondary/>
         </View>
 
     </View>
