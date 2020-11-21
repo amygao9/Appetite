@@ -36,3 +36,18 @@ export const apiGetRestaurants = async (preferences, searchRadius) => {
     throw err;
   }
 }
+export const apiGetDetails = async (id) => {
+  try {
+    const authToken = await AsyncStorage.getItem("authToken");
+
+    const details = await client.get(env.apiUrl + 'restaurant/'+id, {headers: {"Authorization" : `Bearer ${authToken}`}});
+      
+    if (!details || typeof details.data === 'string') {
+      throw 'Restaurants not found';
+    }
+    console.log(details.data)
+    return details.data;
+  } catch (err) {
+    throw err;
+  }
+}

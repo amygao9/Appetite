@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, ImageSourcePropType, StyleSheet, SafeAreaView} from 'react-native';
 import { Divider } from 'react-native-elements';
 import * as Icon from '@expo/vector-icons'
+import {apiGetDetails} from "../api/restaurantAPI";
 //{ details }: RestaurantProps
 export default function CardDetails({ route, navigation }) {
   const {title, description, photo, address, rating, price, id} = route.params;
