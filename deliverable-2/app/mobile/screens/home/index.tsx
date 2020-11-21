@@ -11,17 +11,23 @@ const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const OnClickDislike = () => useSwiper.current.swipeLeft()
     const OnClickLike = () => useSwiper.current.swipeRight()
+
     const [isLoading, setLoading] = useState(true);
 
     const [restaurantCards, setCards] = useState([]);
+    const [preferences, setPreferences] = useState([])
+    const [searchRadius, setSearchRadius] = useState(1.5)
+
+    //fetches restaurants on initial render, and whenever preferences and/or radius have been updated 
     React.useEffect(() => {
-      navigation.addListener('focus', () => {
-        fetchRestaurants()});
-    }, [navigation]);
-    async function fetchRestaurants() {
+      fetchRestaurants(preferences, searchRadius)
+    }, [preferences, searchRadius]);
+
+    async function fetchRestaurants(preferences, searchRadius) {
       try {
-        const restaurants = await apiGetRestaurants([],2);
+        const restaurants = await apiGetRestaurants(preferences, searchRadius);
         console.log(restaurants)
+        
         let cards = [];
         restaurants.forEach((restaurant) => {
           console.log(restaurant)
@@ -35,7 +41,9 @@ const Home = ({navigation}) => {
             id: restaurant["id"]
           });
         });
+        
         console.log(cards)
+        
         setCards(cards)
         setLoading(false)
       }
@@ -44,7 +52,18 @@ const Home = ({navigation}) => {
           navigation.navigate("Auth");
         }
       }
-    }
+    } 
+
+    function updatePreferences(preferences, radius){
+
+      console.log('PREFERENCES after navigating: ' + preferences)
+      console.log('RADIUS after navigating: ' + radius)
+                        
+      setSearchRadius(radius);
+      setPreferences(preferences);
+      fetchRestaurants(preferences, radius);
+    } 
+
     return (
       
       <SafeAreaView style={styles.container}>        
@@ -74,7 +93,7 @@ const Home = ({navigation}) => {
                 color={colors.offWhite} 
                 backgroundColor="transparent"
                 size = {32}
-                onPress={() => navigation.navigate('Preferences')} 
+                onPress={() => navigation.navigate('Preferences', {onGoBack: updatePreferences, preferences: preferences, searchRadius: searchRadius})} 
               />
             </View> 
 
@@ -100,10 +119,6 @@ const Home = ({navigation}) => {
               <CircleButton name="x" Icon = {Icon.Feather}
               color={colors.pink} onPress={OnClickDislike}
               />
-              
-              <CircleButton name="heart" Icon = {Icon.Entypo}
-              color={colors.purple} onPress={superlike}
-              />
               <CircleButton name="like" Icon = {Icon.SimpleLineIcons}
               color={colors.green} onPress={OnClickLike}
               />
@@ -112,23 +127,6 @@ const Home = ({navigation}) => {
     )
 }
 
-const superlike = () => {
-    console.log("pressed superlike button")
- }
-
-
-const photoCards = [
-    {
-      title: "Restaurant 1",
-      description: "cool",
-      photo: require('../../assets/images/restaurant.jpg'),
-    },
-    {
-        title: "Restaurant 2",
-        description: "cooler",
-        photo: require('../../assets/images/restaurant.jpg'),
-    }
-  ]
 
 const styles = StyleSheet.create({
     container: {
