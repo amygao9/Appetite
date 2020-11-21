@@ -16,6 +16,7 @@ export default function CircleButton(props) {
             shadowOffset: { width: 1, height: 1 },
             shadowOpacity: 0.18,
             shadowRadius: 2,
+            margin: 10
         }
 
     });

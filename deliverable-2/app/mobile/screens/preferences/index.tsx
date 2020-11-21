@@ -5,6 +5,12 @@ import Slider from '@react-native-community/slider';
 import {LongButton} from "../../components";
 import colors from '../../constants/Colors';
 
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 const Preferences = ({route, navigation}) => {
   const [cuisinePreferences, setCuisinePreferences] = React.useState(route.params.preferences); 
   const [distanceRadius, setDistanceRadius] = React.useState(route.params.searchRadius); 
@@ -61,7 +67,7 @@ const Preferences = ({route, navigation}) => {
             thumbTintColor="#b9e4c9"
             />
             
-            <Text style={{color: colors.offWhite}} >
+            <Text style={{color: colors.offWhite, alignSelf: 'center'}} >
             Look for restaurants within: {distanceRadius.toFixed(1)}km
             </Text>
         </View> 
@@ -79,22 +85,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: 10, 
-    paddingRight: 10
+    justifyContent: 'center', 
+    paddingLeft: 5
   },
   title: {
-    flex: 2, 
-    fontSize: 20,
+    flex: 1.5, 
+    fontSize: 28,
     fontWeight: 'bold',
     paddingTop: 80, 
     color: colors.offWhite
   },
   cuisineSections: {
-    flex: 10
+    flex: 7
   },
   buttonsPanel: {
-    flex: 2
+    flex: 2, 
+    width: 250
   },
   distanceSlider: {
     width: 250, 

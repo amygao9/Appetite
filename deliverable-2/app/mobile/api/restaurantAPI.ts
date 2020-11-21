@@ -54,7 +54,6 @@ export const apiSwipeOnRestaurant = async (restaurantID, weight) => {
 
     console.log('Successfully recorded swipe with weight ' + weight + ' on restaurant ID ' + restaurantID + '.');
 
-    //return restaurants.data;
   } catch (err) {
     throw err;
   }

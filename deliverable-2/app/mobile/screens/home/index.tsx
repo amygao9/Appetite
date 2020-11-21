@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import { StyleSheet, SafeAreaView, View, Button, Dimensions, Image} from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text, Dimensions, Image} from 'react-native';
 import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
@@ -119,6 +119,7 @@ const Home = ({navigation}) => {
           </View>
           {!isLoading && ( 
           <View style={styles.swiper}> 
+            <Text>hello</Text>
             <Swiper
                 ref={useSwiper}
                 cards={restaurantCards}
@@ -159,14 +160,14 @@ const styles = StyleSheet.create({
       alignItems: 'flex-end', 
     },
     swiper: {
-      flex: 22, 
-      marginBottom: 100
+      flex: 24,
+      backgroundColor: 'orange'
     },
     footer: {
-      flex: 4, 
+      flex: 6, 
       flexDirection: "row",
       justifyContent: 'center',
-      alignItems: 'flex-start', 
+      alignItems: 'flex-start'
     }, 
     logo: {
       width: 52, 
