@@ -24,16 +24,18 @@ const Home = ({navigation}) => {
     //fetches restaurants on initial render
     React.useEffect(() => {
       fetchRestaurants(preferences, searchRadius)
-    }, [preferences, searchRadius]);
+    }, []);
 
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
-      fetchRestaurants(preferences, searchRadius)
+      setLoading(true);
+      fetchRestaurants(preferences, searchRadius);
     }, [preferences, searchRadius]);
 
 
     async function fetchRestaurants(preferences, searchRadius) {
       try {
+
         const restaurants = await apiGetRestaurants(preferences, searchRadius);
 
         let cards = [];
@@ -49,13 +51,14 @@ const Home = ({navigation}) => {
           });
         });
         
-        console.log(cards)
         setCards(cards)
         setLoading(false)
       }
       catch(err) {
         if (err.message === "auth invalid") {
           navigation.navigate("Auth");
+        } else if (err == 'Restaurants not found') {
+          alert("No restaurants found! Change preferences to see more.");
         }
       }
     } 
@@ -135,9 +138,9 @@ const Home = ({navigation}) => {
                   renderCard={(card) => <Card card={card} navigation = {navigation}/>}
                   onSwipedRight ={(index) => {recordRightSwipe(index)}}
                   onSwipedLeft={(index) => {recordLeftSwipe(index)}}
-                  onSwipedAll={() => {alert('finished stack')}}
+                  onSwipedAll={() => {alert('Viewed all restaurants! Change preferences to see more.')}}
                   backgroundColor={colors.darkGray}
-                  infinite = {true}
+                  infinite = {false}
                   verticalSwipe = {false}
                   stackSize= {1}>
               </Swiper>)}
