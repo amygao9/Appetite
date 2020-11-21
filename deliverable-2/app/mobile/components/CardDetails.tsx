@@ -4,28 +4,28 @@ import { Divider } from 'react-native-elements';
 import * as Icon from '@expo/vector-icons'
 //{ details }: RestaurantProps
 export default function CardDetails({ route, navigation }) {
-  const {title} = route.params;
+  const {title, description, photo, address, rating, price, id} = route.params;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.upper}>
           <Image
               style={styles.image}
-              source={require('../assets/images/restaurant.jpg')}
+              source={photo}
               resizeMode="cover"
           />
         </View> 
         <View style={styles.lower}>
         <Text style={styles.title}>{`${title}`}</Text>
         <Divider style={{ height: 3, backgroundColor: '#F2F2F2' }} />
-        <Text style={styles.category}>{`${title}`}</Text>
+        <Text style={styles.category}>{`${description}`}</Text>
         <View style={{ flexDirection: 'column'}}>
           <View style={{ flexDirection: 'row'}}>
               <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail"/>
-              <Text style={styles.category}>insert location</Text>
+              <Text style={styles.category}>{`${address}`}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
           <Icon.MaterialIcons name="star" style={styles.icons} />
-              <Text style={styles.category}>insert rating</Text>
+              <Text style={styles.category}>{`${rating}`+'/5'}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
           <Icon.MaterialIcons name="phone" style={styles.icons} />
@@ -33,7 +33,7 @@ export default function CardDetails({ route, navigation }) {
           </View>
           <View style={{ flexDirection: 'row'}}>
           <Icon.MaterialIcons name="attach-money" style={styles.icons} />
-              <Text style={styles.category}>insert pricing</Text>
+              <Text style={styles.category}>{`${price}`+'/4'}</Text>
           </View>
         </View>
         </View>

@@ -28,7 +28,11 @@ const Home = ({navigation}) => {
           cards.push({
             title: restaurant["name"],
             description: restaurant["categories"],
-            photo: {uri: restaurant["imageURL"][0]}
+            photo: {uri: restaurant["imageURL"][0]},
+            address: restaurant["address"],
+            rating: restaurant["rating"],
+            price: restaurant["price"],
+            id: restaurant["id"]
           });
         });
         console.log(cards)
