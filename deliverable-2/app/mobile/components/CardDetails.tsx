@@ -53,7 +53,7 @@ export default function CardDetails({ route, navigation }) {
           </View>
           <View style={{ flexDirection: 'row'}}>
             <Icon.MaterialIcons name="phone" style={styles.icons} />
-            <Text style={styles.category}>{`${details["phonenumber"]}`}</Text>
+            {!isLoading && ( <Text style={styles.category}>{`${details["phonenumber"]}`}</Text>)} 
           </View>
           <View style={{ flexDirection: 'row'}}>
           <Icon.MaterialIcons name="attach-money" style={styles.icons} />
