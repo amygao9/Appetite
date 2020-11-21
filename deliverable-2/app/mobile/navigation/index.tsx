@@ -41,9 +41,9 @@ function MainNavigator() {
         color: 'white'
       }}}>
 
-      <Stack.Screen name="Auth" component={Auth} options={{ headerShown: false }} />
+      <Stack.Screen name="Auth" component={Auth} />
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Restaurant Details" component={CardDetails} />
+      <Stack.Screen name="Restaurant Details" component={CardDetails} options={{ headerShown: true }}/>
     </Stack.Navigator>
   );
 }

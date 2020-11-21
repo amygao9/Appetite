@@ -54,8 +54,7 @@ type CardProps = {
 
 const styles = StyleSheet.create({
     card: {
-      /* Setting the height according to the screen height*/
-      height: '80%',
+      height: height - height*0.4,
       backgroundColor: "black",
       borderRadius: 10
     },

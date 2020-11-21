@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'orange'
     },
     footer: {
-      flex: 6, 
+      flex: 4, 
       flexDirection: "row",
       justifyContent: 'center',
       alignItems: 'flex-start'
