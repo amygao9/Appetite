@@ -34,16 +34,16 @@ const RootStack = createStackNavigator();
 function MainNavigator() {
   return (
     <Stack.Navigator 
-      screenOptions={{ headerShown: true, headerStyle: {
+      screenOptions={{ headerShown: false, headerStyle: {
         backgroundColor: MyTheme.colors.background,
       },
       headerTitleStyle: {
         color: 'white'
       }}}>
 
-      <Stack.Screen name="Auth" component={Auth} options={{ headerShown: false }} />
+      <Stack.Screen name="Auth" component={Auth} />
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Restaurant Details" component={CardDetails} />
+      <Stack.Screen name="Restaurant Details" component={CardDetails} options={{ headerShown: true }}/>
     </Stack.Navigator>
   );
 }

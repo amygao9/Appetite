@@ -20,7 +20,7 @@ const Auth = ({navigation}) => {
             try {
               const authToken = await AsyncStorage.getItem('authToken');
               if (authToken !== null) {
-                navigation.navigate('Home');
+                navigation.replace('Home');
               }
             } catch (error) {
               console.log(error);

@@ -17,8 +17,8 @@ export default function CuisineOptionSection(props: any) {
             showsHorizontalScrollIndicator={false}
             scrollEnabled={false}
             data={props.options}
-            renderItem={({ item }) => <CuisineOption cuisineName={item.displayText} cuisineID={item.id} updatePreferences={props.updatePreferences}/>}
-            keyExtractor={(item) => item}
+            renderItem={({ item }) => <CuisineOption cuisineName={item.displayText} cuisineID={item.id} updatePreferences={props.updatePreferences} checked={item.selected}/>}
+            keyExtractor={(item) => item.displayText}
         />
     </View>
   );
@@ -26,14 +26,13 @@ export default function CuisineOptionSection(props: any) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginRight: 30
+    flex: 1
   },
   sectionHeader: {
     paddingTop: 2,
     paddingLeft: 10,
     paddingBottom: 2,
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
     color: colors.offWhite
   }

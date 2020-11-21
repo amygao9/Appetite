@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { StyleSheet, Switch, View} from 'react-native';
-import { Button } from 'react-native-elements';
 import colors from '../../constants/Colors';
 
 export default function CircleButton(props) {
@@ -17,6 +16,7 @@ export default function CircleButton(props) {
             shadowOffset: { width: 1, height: 1 },
             shadowOpacity: 0.18,
             shadowRadius: 2,
+            margin: 10
         }
 
     });

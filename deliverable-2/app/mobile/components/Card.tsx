@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, Text, Image, ImageSourcePropType, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import {Button } from 'react-native-elements';
-
 const { height } = Dimensions.get('window')
-
 export const Card = (props: any) => 
 (
   <View style={styles.card}>
@@ -12,7 +10,7 @@ export const Card = (props: any) =>
       source={props.card.photo}
       resizeMode="cover"
     />
-    <View style={styles.photoDescriptionContainer}>
+    <View style={styles.descriptionContainer}>
       <Text style={styles.title}>
         {`${props.card.title}`}
       </Text>
@@ -29,25 +27,22 @@ export const Card = (props: any) =>
           fontFamily: 'Roboto_700Bold',
         }}
         type="clear"
-        onPress={() => props.navigation.navigate('Restaurant Details', {title: props.card.title})}/>
+        onPress={() => props.navigation.navigate('Restaurant Details', 
+        {title: props.card.title, 
+          description: props.card.description,
+          photo: props.card.photo,
+          address: props.card.address,
+          rating: props.card.rating,
+          price: props.card.price,
+          id: props.card.id
+        })}/>
     </View>
-    
   </View>
 )
-type FixedShape =  {
-    photo: ImageSourcePropType, 
-    title: string, 
-    description: string
-  }
-  
-type CardProps = {
-    card: FixedShape
-}
 
 const styles = StyleSheet.create({
     card: {
-      /* Setting the height according to the screen height*/
-      height: height - 375,
+      height: height - height*0.4,
       backgroundColor: "black",
       borderRadius: 10
     },
@@ -56,7 +51,7 @@ const styles = StyleSheet.create({
       flex: 0.82,
       width: '100%',
     },
-    photoDescriptionContainer: {
+    descriptionContainer: {
       justifyContent: 'flex-end',
       alignItems: 'flex-start',
       flexDirection: 'column',
