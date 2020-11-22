@@ -24,7 +24,7 @@ jobs:
   #   steps:
   #     - checkout:
   #         path: ~/repo
-  #     # specify any bash command here prefixed with run: 
+  #     # specify any bashcommand here prefixed with run: 
   #     - run: npm ci
   #     - run: npm run test
   deploy-apk:
