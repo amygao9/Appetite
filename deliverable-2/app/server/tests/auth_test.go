@@ -4,7 +4,6 @@ import (
 	auth "backapp/auth"
 	"testing"
 	"net/http"
-	"io/ioutil"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -67,7 +66,7 @@ func TestTokens(t *testing.T) {
 
 func testAuthNoToken() func(*testing.T) {
 	return func(t *testing.T) {
-		noTokenReq, err := http.NewRequest("GET", "http://localhost:" + port +"/restaurant", nil)
+		noTokenReq, err := http.NewRequest("POST", "http://localhost:" + port +"/restaurant", nil)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -75,12 +74,8 @@ func testAuthNoToken() func(*testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		noTokenRespData, err := ioutil.ReadAll(noTokenResp.Body)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if string(noTokenRespData) != "Invalid auth token" {
-			t.Errorf("Router returned unexpected body: got %v", string(noTokenRespData))
+		if noTokenResp.StatusCode != 400 {
+			t.Errorf("Unexpected return code: got %v", noTokenResp.StatusCode)
 		}
 	}
 }
@@ -93,7 +88,7 @@ func testAuthWithToken() func(*testing.T) {
 		}
 		bearer := "Bearer " + token.AccessToken
 
-		tokenReq, err := http.NewRequest("GET", "http://localhost:" + port +"/restaurant", nil)
+		tokenReq, err := http.NewRequest("POST", "http://localhost:" + port +"/restaurant", nil)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -102,12 +97,8 @@ func testAuthWithToken() func(*testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		tokenRespData, err := ioutil.ReadAll(tokenResp.Body)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if string(tokenRespData) == "Invalid auth token" {
-			t.Errorf("Request was not authenticated")
+		if tokenResp.StatusCode != 200 {
+			t.Errorf("Unexpected return code: got %v", tokenResp.StatusCode)
 		}
 	}
 }
