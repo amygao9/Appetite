@@ -44,7 +44,7 @@ jobs:
 
       - run:
           name: Publish to Expo
-          command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel prod  
+          command: npx expo-cli build:android -t apk --no-wait --release-channel prod  
 workflows:
   version: 2
   deploy:
