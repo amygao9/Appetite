@@ -29,7 +29,7 @@ jobs:
   #     - run: npm run test
   deploy-apk:
     docker:
-      - image: circleci/node:10.4.1
+      - image: circleci/node:14-stretch-browsers
     working_directory: ~/repo/deliverable-2/app/mobile
     steps:
       - checkout:
