@@ -55,6 +55,7 @@ const Home = ({navigation}) => {
         setLoading(false)
       }
       catch(err) {
+        console.log(err)
         if (err.message === "auth invalid") {
           navigation.navigate("Auth");
         } else if (err == 'Restaurants not found') {
