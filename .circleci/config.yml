@@ -14,7 +14,6 @@ jobs:
     steps:
       - checkout:
           path: ~/repo
-      - run: go run main.go &
       - run: go test ./...
   # mobile-test:
   #   docker:
@@ -49,7 +48,7 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - go-test
+      # - go-test
       - deploy-apk:
           filters:
             branches:
