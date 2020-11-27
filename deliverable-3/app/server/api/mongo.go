@@ -9,9 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Collection struct {
-	collection *mongo.Collection
-	ctx        context.Context
+type DB struct {
+	db  *mongo.Database
+	ctx context.Context
 }
 
 func clientInit(ctx context.Context) *mongo.Database {
