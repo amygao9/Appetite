@@ -2,6 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from "../env";
 
+
+
 export const apiLogin = async (email: string, password: string) => {
   try {
     const user = await axios.post(env.apiUrl + 'user/auth', {

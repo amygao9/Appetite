@@ -4,17 +4,22 @@ import CuisineOptionSection from '../../components/Preferences/CuisineOptionSect
 import Slider from '@react-native-community/slider';
 import {LongButton} from "../../components";
 import colors from '../../constants/Colors';
-
 import { LogBox } from 'react-native';
+
+import {HorizontalScrollPicker} from '../../components/react-native-horizontal-scroll-picker';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-const Preferences = ({route, navigation}) => {
-  const [cuisinePreferences, setCuisinePreferences] = React.useState(route.params.preferences); 
-  const [distanceRadius, setDistanceRadius] = React.useState(route.params.searchRadius); 
 
+const priceOptions = [{label: 'Any Price', value: 0}, {label: '$', value: 1}, {label: '$$', value: 2}, {label: '$$$', value: 3}, {label: '$$$$', value: 4}]
+
+const Preferences = ({route, navigation}) => {
+  const [cuisinePreferences, setCuisinePreferences] = React.useState(route.params.cuisinePreferences); 
+  const [distanceRadius, setDistanceRadius] = React.useState(route.params.searchRadius); 
+  const [pricePreference, setPricePreference] = React.useState(route.params.pricePreference)
+  
   const isSelected = (item: string) => {
     return cuisinePreferences.includes(item) 
   }
@@ -44,7 +49,7 @@ const Preferences = ({route, navigation}) => {
   const applyPreferences = () => {
     //passes in the selected cuisines and distance radius to the main page 
     navigation.goBack(); 
-    route.params.onGoBack(cuisinePreferences, distanceRadius);
+    route.params.onGoBack(cuisinePreferences, distanceRadius, pricePreference);
   }
 
   return (
@@ -73,6 +78,20 @@ const Preferences = ({route, navigation}) => {
         </View> 
 
 
+        <View style={styles.priceOptions}> 
+          <HorizontalScrollPicker
+            items={priceOptions}
+            textStyle={styles.textStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            containerStyle={styles.pricesContainer}
+            itemStyle={styles.itemContainer}
+            selectorStyle={styles.selectedItem}
+            onSelect={(selection) => setPricePreference(selection)}
+            initialIdx={pricePreference}
+          />
+        </View> 
+
+
         <View style={styles.buttonsPanel}> 
             <LongButton title="Apply" onPress={() => applyPreferences()} secondary/>
         </View>
@@ -98,6 +117,7 @@ const styles = StyleSheet.create({
   cuisineSections: {
     flex: 7
   },
+
   buttonsPanel: {
     flex: 2, 
     width: 250
@@ -106,8 +126,47 @@ const styles = StyleSheet.create({
     width: 250, 
     height: 40,
     flex: 2
-  }
+  },   
+  priceOptions: {
+    flex: 2
+  }, 
+  itemContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexGrow: 0,
+    padding: 10
+  },
+  selectedItem: {
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.offWhite, 
+    borderRadius: 12,
+  },
+  textStyle: {
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      color: colors.offWhite, 
+      fontSize: 18,
+  },
+  selectedTextStyle: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: colors.offWhite, 
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  pricesContainer: {
+    flexGrow: 0,
+    flexDirection: 'row',
+  },  
 });
+
+
+
+
 
 
 export default Preferences;
