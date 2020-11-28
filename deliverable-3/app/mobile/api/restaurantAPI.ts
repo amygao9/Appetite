@@ -3,18 +3,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from "../env";
 import client from "./axios";
 
-export const apiGetRestaurants = async (preferences, searchRadius) => {
+export const apiGetRestaurants = async (cuisines, radius, price) => {
   try {
     const authToken = await AsyncStorage.getItem("authToken");
 
     //user location is hardcoded at 1 King's College Circle (to be updated for future deliverables)
     const requestBody = {
-      "categories": preferences,
+      "categories": cuisines,
       "lat": 43.661282922175914,
       "lng": -79.39409611053878, 
-      "radius": searchRadius
+      "radius": radius, 
     }
 
+    if(price >= 1 && price <= 4){
+      requestBody["price"] = price
+    } 
+      
     const restaurants = await client.post(env.apiUrl + 'restaurant', requestBody, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
     if (restaurants == undefined) {

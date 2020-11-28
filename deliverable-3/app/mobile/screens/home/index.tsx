@@ -17,26 +17,28 @@ const Home = ({navigation}) => {
     const useSwiper = useRef(null)
     const [isLoading, setLoading] = useState(true);
     const [restaurantCards, setCards] = useState([]);
-    const [preferences, setPreferences] = useState([])
+    const [cuisinePreferences, setCuisinePreferences] = useState([])
     const [searchRadius, setSearchRadius] = useState(1.5)
+    const [pricePreference, setPricePreference] = useState(0)
 
 
     //fetches restaurants on initial render
     React.useEffect(() => {
-      fetchRestaurants(preferences, searchRadius)
+      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference)
     }, []);
 
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
       setLoading(true);
-      fetchRestaurants(preferences, searchRadius);
-    }, [preferences, searchRadius]);
+      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
+    }, [cuisinePreferences, searchRadius, pricePreference]);
 
 
-    async function fetchRestaurants(preferences, searchRadius) {
+    async function fetchRestaurants(cuisine, radius, price) {
+
       try {
 
-        const restaurants = await apiGetRestaurants(preferences, searchRadius);
+        const restaurants = await apiGetRestaurants(cuisine, radius, price);
 
         let cards = [];
         restaurants.forEach((restaurant) => {
@@ -64,9 +66,10 @@ const Home = ({navigation}) => {
       }
     } 
 
-    const updatePreferences = (preferences, radius) => {       
+    const updatePreferences = (cuisinePreferences, radius, pricePreference) => {       
       setSearchRadius(radius);
-      setPreferences(preferences);
+      setCuisinePreferences(cuisinePreferences);
+      setPricePreference(pricePreference)
     } 
 
     const onClickDislike = () => {
@@ -124,7 +127,7 @@ const Home = ({navigation}) => {
                 color={colors.offWhite} 
                 backgroundColor="transparent"
                 size = {32}
-                onPress={() => navigation.navigate('Preferences', {onGoBack: updatePreferences, preferences: [...preferences], searchRadius: searchRadius})} 
+                onPress={() => navigation.navigate('Preferences', {onGoBack: updatePreferences, cuisinePreferences: [...cuisinePreferences], searchRadius: searchRadius, pricePreference: pricePreference})} 
               />
             </View> 
 
