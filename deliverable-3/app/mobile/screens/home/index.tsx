@@ -24,6 +24,7 @@ const Home = ({navigation}) => {
 
     //fetches restaurants on initial render
     React.useEffect(() => {
+      setLoading(true);
       fetchRestaurants(cuisinePreferences, searchRadius, pricePreference)
     }, []);
 

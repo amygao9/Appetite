@@ -3,7 +3,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from "../env";
 import client from "./axios";
 
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+ 
+
+const getLocationAsync = async () => {
+  let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  if (status !== 'granted') {
+    alert("Permission denied to access location! ")
+  } else {
+    let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+    const { latitude , longitude } = location.coords
+    console.log("LATITUDE: " + latitude + ", LONGITUDE: " + longitude)
+  } 
+};
+
+
 export const apiGetRestaurants = async (cuisines, radius, price) => {
+
+  await getLocationAsync(); 
+
   try {
     const authToken = await AsyncStorage.getItem("authToken");
 
