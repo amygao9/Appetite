@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, Button, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {LongButton, PageHeader} from "../../components";
+import {HorizontalScrollPicker} from '../../components/react-native-horizontal-scroll-picker';
 import CuisineOptionSection from '../../components/Preferences/CuisineOptionSection';
 import Slider from '@react-native-community/slider';
-import {LongButton} from "../../components";
 import colors from '../../constants/Colors';
-import { LogBox } from 'react-native';
+import layout from "../../constants/Layout";
 
-import {HorizontalScrollPicker} from '../../components/react-native-horizontal-scroll-picker';
+import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -53,8 +54,9 @@ const Preferences = ({route, navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
-        <Text style={styles.title}>User Preferences</Text>
+    <SafeAreaView style={styles.container}>
+
+        <PageHeader title="User Preferences" navigationFunction={() => navigation.navigate('Home')} /> 
 
         <View style={styles.cuisineSections}> 
         {cuisineSections}
@@ -72,7 +74,7 @@ const Preferences = ({route, navigation}) => {
             thumbTintColor="#b9e4c9"
             />
             
-            <Text style={{color: colors.offWhite, alignSelf: 'center'}} >
+            <Text style={{color: colors.offWhite, alignSelf: 'center', fontSize: 14, fontStyle: 'italic'}} >
             Look for restaurants within: {distanceRadius.toFixed(1)}km
             </Text>
         </View> 
@@ -93,10 +95,10 @@ const Preferences = ({route, navigation}) => {
 
 
         <View style={styles.buttonsPanel}> 
-            <LongButton title="Apply" onPress={() => applyPreferences()} secondary/>
+            <LongButton title="Apply" onPress={() => applyPreferences()} primary/>
         </View>
 
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -104,31 +106,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center', 
-    paddingLeft: 5
-  },
-  title: {
-    flex: 1.5, 
-    fontSize: 28,
-    fontWeight: 'bold',
-    paddingTop: 80, 
-    color: colors.offWhite
+    margin: 20
   },
   cuisineSections: {
-    flex: 7
+    flex: 3.5,
+    paddingTop: 40,
+    margin: 0
   },
-
   buttonsPanel: {
-    flex: 2, 
-    width: 250
+    flex: 1, 
+    justifyContent: 'center', 
+    width: layout.window.width * 0.7
   },
   distanceSlider: {
-    width: 250, 
-    height: 40,
-    flex: 2
+    width: layout.window.width * 0.7, 
+    flex: 0.5
   },   
   priceOptions: {
-    flex: 2
+    flex: 1, 
+    justifyContent: 'flex-end'
   }, 
   itemContainer: {
     alignItems: 'center',
@@ -142,7 +138,7 @@ const styles = StyleSheet.create({
     top: 0,
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: colors.offWhite, 
+    borderColor: "gold", 
     borderRadius: 12,
   },
   textStyle: {
@@ -154,7 +150,7 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: colors.offWhite, 
+    color: "gold", 
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -163,9 +159,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },  
 });
-
-
-
 
 
 

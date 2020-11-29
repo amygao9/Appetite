@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, FlatList, SectionList, Text, View } from 'react-native';
+import { StyleSheet, FlatList, Text, View } from 'react-native';
 import CuisineOption from './CuisineOption';
 import colors from '../../constants/Colors';
 
@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   sectionHeader: {
-    paddingTop: 2,
     paddingLeft: 10,
     paddingBottom: 2,
     fontSize: 24,

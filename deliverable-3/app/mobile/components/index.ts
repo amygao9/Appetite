@@ -5,5 +5,9 @@ import Container from "./Container";
 import LoginForm from "./LoginForm";
 import Card from "./Card";
 import CardDetails from "./CardDetails";
-export {LongButton, CircleButton, IconButton, Container, LoginForm, Card, CardDetails}
+import PersonalInfo from "./UserProfile/PersonalInfo"
+import TopPick from "./UserProfile/TopPick"
+import PageHeader from "./PageHeader"
+
+export {LongButton, CircleButton, IconButton, Container, LoginForm, Card, CardDetails, PersonalInfo, TopPick, PageHeader}
 

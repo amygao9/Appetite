@@ -22,12 +22,6 @@ const Home = ({navigation}) => {
     const [pricePreference, setPricePreference] = useState(0)
     const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
 
-
-    //fetches restaurants on initial render
-    // React.useEffect(() => {
-    //   fetchRestaurants(cuisinePreferences, searchRadius, pricePreference)
-    // }, []);
-
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
       setLoading(true);
@@ -128,7 +122,7 @@ const Home = ({navigation}) => {
                 color={colors.offWhite} 
                 backgroundColor="transparent"
                 size = {32}
-                onPress={() => alert('Profile page coming soon!')} 
+                onPress={() => navigation.navigate('Profile')} 
               />
             </View> 
 
@@ -174,7 +168,8 @@ const Home = ({navigation}) => {
                     right: 15,
                     width: 'auto',
                     height: 'auto'
-                  }}>
+                  }}
+                  disableBottomSwipe = {true}
               </Swiper>)}
 
               {isLoading && (

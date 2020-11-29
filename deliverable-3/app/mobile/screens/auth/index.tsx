@@ -10,9 +10,7 @@ import colors from "../../constants/Colors"
 const Auth = ({navigation}) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [authenticated, setAuthenticated] = React.useState(false);
     const [error, setError] = React.useState('');
-
     const [currentView, setView] = React.useState('main');
 
     React.useEffect(() => {

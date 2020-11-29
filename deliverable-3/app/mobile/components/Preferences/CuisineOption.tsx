@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Switch, View} from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import colors from '../../constants/Colors';
 
 export default function CuisineOption(props: any) {
   const [isChecked, setIsChecked] = React.useState(props.checked);
@@ -18,7 +19,7 @@ export default function CuisineOption(props: any) {
         iconType='material'
         checkedIcon='check'
         uncheckedIcon='add'
-        checkedColor='green'
+        checkedColor={colors.green}
         checked={isChecked}
         onPress={toggleCheckBox}
       />

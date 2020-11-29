@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName, Button} from 'react-native';
 import colorTheme from "../constants/Colors";
-import {Auth, Home, Preferences} from "../screens";
+import {Auth, Home, Preferences, Profile} from "../screens";
 import {CardDetails} from "../components";
 
 const MyTheme = {
@@ -34,13 +34,13 @@ const RootStack = createStackNavigator();
 function MainNavigator() {
   return (
     <Stack.Navigator 
-      screenOptions={{ headerShown: false, headerStyle: {
-        backgroundColor: MyTheme.colors.background,
-      },
-      headerTitleStyle: {
-        color: 'white'
-      }}}>
-      <Stack.Screen name="Auth" component={Auth} />
+      screenOptions={{ 
+        headerShown: false, 
+        headerStyle: { backgroundColor: MyTheme.colors.background},
+        headerTitleStyle: {color: 'white'}, 
+        gestureEnabled: false
+        }}>
+      <Stack.Screen name="Auth" component={Auth}/>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Restaurant Details" component={CardDetails} 
       options={{ headerShown: true, headerTintColor: colorTheme.offWhite, headerStyle: {
@@ -63,6 +63,7 @@ function RootStackScreen() {
         options={{ headerShown: false }}
       />
       <RootStack.Screen name="Preferences" component={Preferences}  options={{ headerShown: false }}/>
+      <RootStack.Screen name="Profile" component={Profile}  options={{ headerShown: false }}/>
     </RootStack.Navigator>
   );
 }
