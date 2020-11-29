@@ -20,13 +20,13 @@ const Home = ({navigation}) => {
     const [cuisinePreferences, setCuisinePreferences] = useState([])
     const [searchRadius, setSearchRadius] = useState(1.5)
     const [pricePreference, setPricePreference] = useState(0)
+    const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
 
 
     //fetches restaurants on initial render
-    React.useEffect(() => {
-      setLoading(true);
-      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference)
-    }, []);
+    // React.useEffect(() => {
+    //   fetchRestaurants(cuisinePreferences, searchRadius, pricePreference)
+    // }, []);
 
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
@@ -36,7 +36,8 @@ const Home = ({navigation}) => {
 
 
     async function fetchRestaurants(cuisine, radius, price) {
-
+      setButtonsDisabled(true);
+      
       try {
 
         const restaurants = await apiGetRestaurants(cuisine, radius, price);
@@ -56,6 +57,7 @@ const Home = ({navigation}) => {
         
         setCards(cards)
         setLoading(false)
+        setButtonsDisabled(false)
       }
       catch(err) {
         console.log(err)
@@ -63,6 +65,9 @@ const Home = ({navigation}) => {
           navigation.navigate("Auth");
         } else if (err == 'Restaurants not found') {
           alert("No restaurants found! Change preferences to see more.");
+          setCards([]);
+          setLoading(false);
+          setButtonsDisabled(true);
         }
       }
     } 
@@ -73,11 +78,21 @@ const Home = ({navigation}) => {
       setPricePreference(pricePreference)
     } 
 
+    const onClickSuperlike = () => {
+      if(!buttonsDisabled) {
+        useSwiper.current.swipeTop(); 
+      } 
+    }
+
     const onClickDislike = () => {
-      useSwiper.current.swipeLeft();
+      if(!buttonsDisabled) {
+        useSwiper.current.swipeLeft();
+      } 
     }
     const onClickLike = () => {
-      useSwiper.current.swipeRight();
+      if(!buttonsDisabled) {
+        useSwiper.current.swipeRight();
+      } 
     }
 
     const recordLeftSwipe = (index) => {
@@ -86,6 +101,10 @@ const Home = ({navigation}) => {
 
     const recordRightSwipe = (index) => {     
       recordSwipe(restaurantCards[index].id, 1)
+    }
+
+    const recordSuperLike = (index) => {
+      alert("Superlike!"); 
     }
 
     const recordSwipe = async (restaurantID, weight) => {
@@ -136,18 +155,19 @@ const Home = ({navigation}) => {
      
           <View style={styles.swiper}> 
           
-            {!isLoading && ( 
+            {!isLoading && !buttonsDisabled && ( 
               <Swiper
                   ref={useSwiper}
                   cards={restaurantCards}
                   renderCard={(card) => <Card card={card} navigation = {navigation}/>}
                   onSwipedRight ={(index) => {recordRightSwipe(index)}}
                   onSwipedLeft={(index) => {recordLeftSwipe(index)}}
+                  onSwipedTop={(index) => {recordSuperLike(index)}}
                   onSwipedAll={() => {alert('Viewed all restaurants! Change preferences to see more.')}}
                   backgroundColor={colors.darkGray}
                   infinite = {false}
-                  verticalSwipe = {false}
-                  stackSize= {1}>
+                  verticalSwipe = {true}
+                  stackSize= {2}>
               </Swiper>)}
 
               {isLoading && (
@@ -157,10 +177,13 @@ const Home = ({navigation}) => {
           </View> 
           
           <View style={styles.footer}>
-              <CircleButton name="x" Icon = {Icon.Feather}
+              <CircleButton name="x" Icon = {Icon.Feather} disabled={buttonsDisabled}
               color={colors.pink} onPress={() => onClickDislike()}
               />
-              <CircleButton name="like" Icon = {Icon.SimpleLineIcons}
+              <CircleButton name="heart" Icon = {Icon.Entypo} disabled={buttonsDisabled}
+              color={colors.purple} onPress={() => onClickSuperlike()}
+              />
+              <CircleButton name="like" Icon = {Icon.SimpleLineIcons} disabled={buttonsDisabled}
               color={colors.green} onPress={() => onClickLike()}
               />
           </View>
@@ -196,4 +219,5 @@ const styles = StyleSheet.create({
       height: 52
     }
   });
+
 export default Home;

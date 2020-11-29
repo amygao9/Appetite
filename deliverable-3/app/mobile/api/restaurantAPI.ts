@@ -87,3 +87,7 @@ export const apiSwipeOnRestaurant = async (restaurantID, weight) => {
     throw err;
   }
 }
+
+export const apiSuperLikeRestaurant = async (restaurantID, weight) => {
+  //to-do
+}
