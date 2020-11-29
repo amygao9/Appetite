@@ -116,7 +116,7 @@ const Home = ({navigation}) => {
       
       <SafeAreaView style={styles.container}>        
           <View style={styles.header}> 
-          <View> 
+            <View> 
               <Icon.FontAwesome.Button  
                 name="user-circle"
                 color={colors.offWhite} 
@@ -169,7 +169,7 @@ const Home = ({navigation}) => {
                     width: 'auto',
                     height: 'auto'
                   }}
-                  disableBottomSwipe = {true}
+                  disableBottomSwipe = {true}> 
               </Swiper>)}
 
               {isLoading && (
