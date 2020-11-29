@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import {Button } from 'react-native-elements';
-const { height } = Dimensions.get('window')
+import colors from "../constants/Colors"
+import layout from "../constants/Layout"
 export const Card = (props: any) => 
 (
   <View style={styles.card}>
@@ -22,7 +23,7 @@ export const Card = (props: any) =>
       <Button 
         title="Menu >"
         titleStyle={{
-          color: "white",
+          color: colors.offWhite,
           fontSize: 16,
           fontFamily: 'Roboto_700Bold',
         }}
@@ -42,8 +43,8 @@ export const Card = (props: any) =>
 
 const styles = StyleSheet.create({
     card: {
-      height: height - height*0.4,
-      backgroundColor: "black",
+      height: layout.window.height - layout.window.height*0.4,
+      backgroundColor: colors.black,
       borderRadius: 10
     },
     image: {
@@ -72,14 +73,14 @@ const styles = StyleSheet.create({
     title: {
       textAlign: 'center',
       fontSize: 24,
-      color: "white",
+      color: colors.offWhite,
       fontFamily: 'Roboto_700Bold',
     },
     category: {
       paddingTop: 10,
       textAlign: 'center',
       fontSize: 16,
-      color: "white",
+      color: colors.offWhite,
       opacity: 0.60,
       fontFamily: 'Roboto_700Bold',
     },

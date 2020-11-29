@@ -5,4 +5,5 @@ export default {
   green: "#00CC99",
   purple: "#6F05D6",
   pink: "#FF0E83",
+  black: "#000000",
 };
