@@ -1,7 +1,7 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { ColorSchemeName } from 'react-native';
+import { ColorSchemeName, Button} from 'react-native';
 import colorTheme from "../constants/Colors";
 import {Auth, Home, Preferences} from "../screens";
 import {CardDetails} from "../components";
@@ -40,10 +40,16 @@ function MainNavigator() {
       headerTitleStyle: {
         color: 'white'
       }}}>
-
       <Stack.Screen name="Auth" component={Auth} />
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Restaurant Details" component={CardDetails} options={{ headerShown: true }}/>
+      <Stack.Screen name="Restaurant Details" component={CardDetails} 
+      options={{ headerShown: true, headerTintColor: colorTheme.offWhite, headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        backgroundColor: colorTheme.darkGray
+      }
+      }}/>
     </Stack.Navigator>
   );
 }
