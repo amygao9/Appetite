@@ -122,7 +122,6 @@ const Home = ({navigation}) => {
       
       <SafeAreaView style={styles.container}>        
           <View style={styles.header}> 
-
           <View> 
               <Icon.FontAwesome.Button  
                 name="user-circle"
@@ -167,7 +166,15 @@ const Home = ({navigation}) => {
                   backgroundColor={colors.darkGray}
                   infinite = {false}
                   verticalSwipe = {true}
-                  stackSize= {2}>
+                  stackSize= {3}
+                  cardStyle={{
+                    top: 20,
+                    left: 15,
+                    bottom: 20,
+                    right: 15,
+                    width: 'auto',
+                    height: 'auto'
+                  }}>
               </Swiper>)}
 
               {isLoading && (
@@ -195,24 +202,28 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
+      alignContent: 'center',
+      flexDirection: "column", 
       backgroundColor: colors.darkGray
     },
     header: {
-      flex: 4, 
+      flex: 0.1, 
       flexDirection: "row", 
       justifyContent: 'space-around', 
       alignItems: 'flex-end', 
     },
     swiper: {
-      flex: 24, 
+      flexDirection: "column", 
+      flex: 0.8, 
       justifyContent: 'center'
     },
     footer: {
-      flex: 4, 
+      flex: 0.1, 
       flexDirection: "row",
       justifyContent: 'center',
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
+      bottom: 20,
     }, 
     logo: {
       width: 52, 
