@@ -42,7 +42,7 @@ export default function CardDetails({ route, navigation }) {
             resizeMode="cover"
           /> )}
         {!isLoading && ( 
-          <Carousel>
+          <Carousel delay={3000}>
             <View style={styles.carousel}>
               <Image
                 style={styles.image}
@@ -67,7 +67,7 @@ export default function CardDetails({ route, navigation }) {
           </Carousel> )}
           
         </View> 
-        <ScrollView >
+        <ScrollView style={styles.lower}>
         <View style={styles.lower}>
         <Text style={styles.title}>{`${title}`}</Text>
         <Divider style={{ height: 3, backgroundColor: "#808080"}} />
@@ -124,6 +124,7 @@ type FixedShape =  {
 }
 const styles = StyleSheet.create({
     container: {
+      backgroundColor: colors.offWhite,
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'transparent',
     },
     upper: {
-      /* Setting the height according to the screen height*/
+      backgroundColor: colors.darkGray,
       paddingTop:20,
       height: height - height*0.70,
       paddingBottom:20,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     lower: {
-      /* Setting the height according to the screen height*/
+
       backgroundColor: colors.offWhite,
       flex: 5,
     },
