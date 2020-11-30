@@ -3,15 +3,15 @@ package tests
 import (
 	"backapp/auth"
 	"backapp/models"
-	"testing"
-	"net/http"
-	"io/ioutil"
-	"encoding/json"
-	"os"
 	"bytes"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"testing"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var newRestID primitive.ObjectID
@@ -30,9 +30,9 @@ func TestRestaurants(t *testing.T) {
 	client = &http.Client{}
 	token, err := auth.CreateToken("test@test.com")
 	if err != nil {
-        t.Fatal(err)
+		t.Fatal(err)
 	}
-	bearer = "Bearer " + token.AccessToken
+	bearer = "Bearer " + token
 
 	t.Run("Test adding new restaurant", testAddRestaurant())
 	t.Run("Test updating existing restaurant", testUpdateRestaurant())
@@ -42,30 +42,30 @@ func TestRestaurants(t *testing.T) {
 func testAddRestaurant() func(*testing.T) {
 	return func(t *testing.T) {
 		restaurantSent, err := json.Marshal(models.Restaurant{
-			ID: primitive.NewObjectID(),
-			YelpID: "testYelpID",
-			Name: "testName",
-			Rating: 4.00,
+			ID:         primitive.NewObjectID(),
+			YelpID:     "testYelpID",
+			Name:       "testName",
+			Rating:     4.00,
 			NumRatings: 50,
-			ImageURL: []string{"img1", "img2"},
-			Lat: 1.23456,
-			Lng: 6.54321,
-			Address: "testAddress",
+			ImageURL:   []string{"img1", "img2"},
+			Lat:        1.23456,
+			Lng:        6.54321,
+			Address:    "testAddress",
 			Categories: []string{"cat1", "cat2"},
-			Price: 10,
-			Weight: 100,
+			Price:      10,
+			Weight:     100,
 		})
 		if err != nil {
 			t.Fatal(err)
 		}
-	
-		addReq, err := http.NewRequest("POST", "http://localhost:" + port + "/restaurant/add", bytes.NewBuffer(restaurantSent))
+
+		addReq, err := http.NewRequest("POST", "http://localhost:"+port+"/restaurant/add", bytes.NewBuffer(restaurantSent))
 		if err != nil {
 			t.Fatal(err)
 		}
 		addReq.Header.Set("Content-Type", "application/json")
 		addReq.Header.Set("Authorization", bearer)
-		
+
 		addResp, err := client.Do(addReq)
 		if err != nil {
 			t.Fatal(err)
@@ -79,7 +79,7 @@ func testAddRestaurant() func(*testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-	
+
 		if restaurantRet.YelpID != "testYelpID" {
 			t.Errorf("Add request returned unexpected yelp ID: got %v", restaurantRet.YelpID)
 		}
@@ -121,32 +121,32 @@ func testAddRestaurant() func(*testing.T) {
 func testUpdateRestaurant() func(*testing.T) {
 	return func(t *testing.T) {
 		restaurantUpdate, err := json.Marshal(models.Restaurant{
-			ID: newRestID,
-			YelpID: "testYelpID",
-			Name: "testName",
-			Rating: 4.50,
+			ID:         newRestID,
+			YelpID:     "testYelpID",
+			Name:       "testName",
+			Rating:     4.50,
 			NumRatings: 60,
-			ImageURL: []string{"img1", "img2"},
-			Lat: 1.23456,
-			Lng: 6.54321,
-			Address: "testAddress",
+			ImageURL:   []string{"img1", "img2"},
+			Lat:        1.23456,
+			Lng:        6.54321,
+			Address:    "testAddress",
 			Categories: []string{"cat1", "cat2"},
-			Price: 10,
-			Weight: 110,
+			Price:      10,
+			Weight:     110,
 		})
 		if err != nil {
 			t.Fatal(err)
 		}
-	
-		updateReq, err := http.NewRequest("PUT", 
-							"http://localhost:" + port +"/restaurant/update/" + newRestID.Hex(), 
-							bytes.NewBuffer(restaurantUpdate))
+
+		updateReq, err := http.NewRequest("PUT",
+			"http://localhost:"+port+"/restaurant/update/"+newRestID.Hex(),
+			bytes.NewBuffer(restaurantUpdate))
 		if err != nil {
 			t.Fatal(err)
 		}
 		updateReq.Header.Set("Content-Type", "application/json")
 		updateReq.Header.Set("Authorization", bearer)
-	
+
 		updateResp, err := client.Do(updateReq)
 		if err != nil {
 			t.Fatal(err)
@@ -163,7 +163,7 @@ func testUpdateRestaurant() func(*testing.T) {
 		if err != nil {
 			t.Fatal(updateRet)
 		}
-	
+
 		if updateRet.YelpID != "testYelpID" {
 			t.Errorf("Update request returned unexpected yelp ID: got %v", updateRet.YelpID)
 		}
@@ -202,9 +202,9 @@ func testUpdateRestaurant() func(*testing.T) {
 
 func testDeleteRestaurant() func(*testing.T) {
 	return func(t *testing.T) {
-		delReq, err := http.NewRequest(	"DELETE", 
-									"http://localhost:" + port + "/restaurant/delete/" + newRestID.Hex(), 
-									nil)
+		delReq, err := http.NewRequest("DELETE",
+			"http://localhost:"+port+"/restaurant/delete/"+newRestID.Hex(),
+			nil)
 		if err != nil {
 			t.Fatal(err)
 		}

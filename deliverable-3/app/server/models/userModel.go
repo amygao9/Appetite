@@ -22,6 +22,11 @@ type AuthUser struct {
 	Password string             `json:"password" bson:"password"`
 }
 
+type AuthResponse struct {
+	ID          primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	AccessToken string             `json:"access_token"`
+}
+
 type Claims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims

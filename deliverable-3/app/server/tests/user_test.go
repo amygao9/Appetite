@@ -1,13 +1,13 @@
 package tests
 
 import (
-	auth "backapp/auth"
-	"testing"
-	"net/http"
-	"io/ioutil"
-	"encoding/json"
-	"os"
+	"backapp/models"
 	"bytes"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"testing"
 
 	"github.com/joho/godotenv"
 )
@@ -32,25 +32,25 @@ func TestUsers(t *testing.T) {
 func testInvalidLogin() func(*testing.T) {
 	return func(t *testing.T) {
 		authDataInvalid, err := json.Marshal(map[string]interface{}{
-			"Email": "user@test.com",
+			"Email":    "user@test.com",
 			"Password": "NotThePassword",
 		})
 		if err != nil {
 			t.Fatal(err)
 		}
-	
-		authReqFail, err := http.NewRequest("POST", "http://localhost:" + port + "/user/auth", bytes.NewBuffer(authDataInvalid))
+
+		authReqFail, err := http.NewRequest("POST", "http://localhost:"+port+"/user/auth", bytes.NewBuffer(authDataInvalid))
 		if err != nil {
 			t.Fatal(err)
 		}
 		authReqFail.Header.Set("Content-Type", "application/json")
-	
+
 		authRespFail, err := client.Do(authReqFail)
 		if err != nil {
 			t.Fatal(err)
 		}
 		defer authRespFail.Body.Close()
-	
+
 		bodyBytes, err := ioutil.ReadAll(authRespFail.Body)
 		if err != nil {
 			t.Fatal(err)
@@ -65,19 +65,19 @@ func testInvalidLogin() func(*testing.T) {
 func testValidLogin() func(*testing.T) {
 	return func(t *testing.T) {
 		authDataValid, err := json.Marshal(map[string]interface{}{
-			"Email": "user@test.com",
+			"Email":    "user@test.com",
 			"Password": "TestPassword1",
 		})
 		if err != nil {
 			t.Fatal(err)
 		}
-	
-		authReqPass, err := http.NewRequest("POST", "http://localhost:" + port + "/user/auth", bytes.NewBuffer(authDataValid))
+
+		authReqPass, err := http.NewRequest("POST", "http://localhost:"+port+"/user/auth", bytes.NewBuffer(authDataValid))
 		if err != nil {
 			t.Fatal(err)
 		}
 		authReqPass.Header.Set("Content-Type", "application/json")
-	
+
 		authRespPass, err := client.Do(authReqPass)
 		if err != nil {
 			t.Fatal(err)
@@ -86,16 +86,16 @@ func testValidLogin() func(*testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		var tokenRet auth.Tokens
-		err = json.Unmarshal(authRespData, &tokenRet)
+		var authResponse models.AuthResponse
+		err = json.Unmarshal(authRespData, &authResponse)
 		if err != nil {
 			t.Fatal(err)
 		}
-	
-		bearer := "Bearer " + tokenRet.AccessToken
+
+		bearer := "Bearer " + authResponse.AccessToken
 		const noAuth = "Invalid auth token"
-	
-		checkAuthReq, err := http.NewRequest("GET", "http://localhost:" + port + "/restaurant", nil)
+
+		checkAuthReq, err := http.NewRequest("GET", "http://localhost:"+port+"/restaurant", nil)
 		if err != nil {
 			t.Fatal(err)
 		}
