@@ -1,10 +1,11 @@
 package tests
 
 import (
-	auth "backapp/auth"
-	"testing"
 	"net/http"
 	"os"
+	"testing"
+
+	auth "github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 
 	"github.com/joho/godotenv"
 )
@@ -25,7 +26,7 @@ func TestHashing(t *testing.T) {
 	t.Run("Test wrong passwords", testWrongPassword(testPasswords, hashedPasswords))
 }
 
-func testCorrectPassword(testPasswords[3] string, hashedPasswords[3] string) func(*testing.T) {
+func testCorrectPassword(testPasswords [3]string, hashedPasswords [3]string) func(*testing.T) {
 	return func(t *testing.T) {
 		for index, password := range testPasswords {
 			checkCorrectPassword := auth.CheckPasswordHash(password, hashedPasswords[index])
@@ -36,13 +37,13 @@ func testCorrectPassword(testPasswords[3] string, hashedPasswords[3] string) fun
 	}
 }
 
-func testWrongPassword(testPasswords[3] string, hashedPasswords[3] string) func(*testing.T) {
+func testWrongPassword(testPasswords [3]string, hashedPasswords [3]string) func(*testing.T) {
 	return func(t *testing.T) {
 		for index, _ := range testPasswords {
 			checkWrongPassword := auth.CheckPasswordHash("Wrong", hashedPasswords[index])
 			if checkWrongPassword {
 				t.Errorf("Hash and decryption matched when not expected")
-		}
+			}
 		}
 	}
 }
@@ -66,7 +67,7 @@ func TestTokens(t *testing.T) {
 
 func testAuthNoToken() func(*testing.T) {
 	return func(t *testing.T) {
-		noTokenReq, err := http.NewRequest("POST", "http://localhost:" + port +"/restaurant", nil)
+		noTokenReq, err := http.NewRequest("POST", "http://localhost:"+port+"/restaurant", nil)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -88,7 +89,7 @@ func testAuthWithToken() func(*testing.T) {
 		}
 		bearer := "Bearer " + token.AccessToken
 
-		tokenReq, err := http.NewRequest("POST", "http://localhost:" + port +"/restaurant", nil)
+		tokenReq, err := http.NewRequest("POST", "http://localhost:"+port+"/restaurant", nil)
 		if err != nil {
 			t.Fatal(err)
 		}

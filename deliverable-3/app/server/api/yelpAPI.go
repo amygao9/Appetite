@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"backapp/models"
+	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
