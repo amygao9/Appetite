@@ -17,7 +17,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
+func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	err := auth.ValidateToken(w, r)
 	if err != nil {
 		return
@@ -37,14 +37,14 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	options := options.Find()
 	options.SetSort(bson.M{"weight": -1})
 
-	result, err := c.collection.Find(c.ctx, query, options)
+	result, err := data.db.Collection("restaurant").Find(data.ctx, query, options)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 	var restaurants []models.Restaurant
-	if err = result.All(c.ctx, &restaurants); err != nil {
+	if err = result.All(data.ctx, &restaurants); err != nil {
 		log.Print(err)
 		w.Write([]byte(err.Error()))
 		return
@@ -58,7 +58,7 @@ func (c *Collection) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
+func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	err := auth.ValidateToken(w, r)
 	if err != nil {
 		return
@@ -69,7 +69,7 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := c.collection.FindOne(c.ctx, bson.M{"_id": objectID})
+	result := data.db.Collection("restaurant").FindOne(data.ctx, bson.M{"_id": objectID})
 	err = result.Err()
 	if err != nil {
 		w.Write([]byte(err.Error()))
@@ -139,7 +139,7 @@ func (c *Collection) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
+func (data *DB) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	err := auth.ValidateToken(w, r)
 	if err != nil {
 		return
@@ -154,7 +154,7 @@ func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	restaurant.ID = primitive.NewObjectID()
-	_, err = c.collection.InsertOne(c.ctx, restaurant)
+	_, err = data.db.Collection("restaurant").InsertOne(data.ctx, restaurant)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
@@ -164,7 +164,7 @@ func (c *Collection) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
+func (data *DB) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 	err := auth.ValidateToken(w, r)
 	if err != nil {
 		return
@@ -184,7 +184,7 @@ func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	restaurant.ID = objectID
-	_, err = c.collection.ReplaceOne(c.ctx, bson.M{"_id": objectID}, restaurant)
+	_, err = data.db.Collection("restaurant").ReplaceOne(data.ctx, bson.M{"_id": objectID}, restaurant)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
@@ -195,7 +195,7 @@ func (c *Collection) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Collection) Swipe(w http.ResponseWriter, r *http.Request) {
+func (data *DB) Swipe(w http.ResponseWriter, r *http.Request) {
 	err := auth.ValidateToken(w, r)
 	if err != nil {
 		return
@@ -216,7 +216,7 @@ func (c *Collection) Swipe(w http.ResponseWriter, r *http.Request) {
 	}
 
 	update := bson.M{"$inc": bson.M{"weight": swipe.Weight}}
-	_, err = c.collection.UpdateOne(c.ctx, bson.M{"_id": objectID}, update)
+	_, err = data.db.Collection("restaurant").UpdateOne(data.ctx, bson.M{"_id": objectID}, update)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
@@ -224,7 +224,7 @@ func (c *Collection) Swipe(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Collection) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
+func (data *DB) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
 	err := auth.ValidateToken(w, r)
 	if err != nil {
 		return
@@ -235,7 +235,7 @@ func (c *Collection) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = c.collection.DeleteOne(c.ctx, (bson.M{"_id": objectID}))
+	_, err = data.db.Collection("restaurant").DeleteOne(data.ctx, (bson.M{"_id": objectID}))
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	} else {

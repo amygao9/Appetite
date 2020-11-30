@@ -16,7 +16,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (c *Collection) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
+func (data *DB) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 	config := getConfig()
 	query_url := "https://api.yelp.com/v3/businesses/search"
 	bearer := "Bearer " + config.YelpKey
@@ -88,7 +88,7 @@ func (c *Collection) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 				restaurant.Price = strings.Count(val.(string), "$")
 			}
 
-			result := c.collection.FindOne(c.ctx, bson.M{"yelpid": restaurant.YelpID})
+			result := data.db.Collection("restaurant").FindOne(data.ctx, bson.M{"yelpid": restaurant.YelpID})
 			err = result.Err()
 			if err != nil {
 				restaurant.Weight = 100
@@ -98,7 +98,7 @@ func (c *Collection) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 				restaurant.Weight = existingRestaurant.Weight
 			}
 
-			result = c.collection.FindOneAndReplace(c.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
+			result = data.db.Collection("restaurant").FindOneAndReplace(data.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
 			err = result.Err()
 			if err != nil {
 				log.Print(err)

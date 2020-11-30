@@ -24,24 +24,26 @@ func RouterInit() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", Handler).Methods("GET")
 
+	data := DB{db: db, ctx: ctx}
 	// Restaurant methods
-	restaurantCollection := Collection{collection: db.Collection("restaurant"), ctx: ctx}
 	restaurantString := "/restaurant"
-	r.HandleFunc(restaurantString, restaurantCollection.GetRestaurants).Methods("POST")
-	r.HandleFunc(restaurantString+"/{id:[a-zA-Z0-9]*}", restaurantCollection.GetRestaurant).Methods("GET")
-	r.HandleFunc(restaurantString+"/add", restaurantCollection.AddRestaurant).Methods("POST")
-	r.HandleFunc(restaurantString+"/delete/{id:[a-zA-Z0-9]*}", restaurantCollection.DeleteRestaurant).Methods("DELETE")
-	r.HandleFunc(restaurantString+"/update/{id:[a-zA-Z0-9]*}", restaurantCollection.UpdateRestaurant).Methods("PUT")
-	r.HandleFunc(restaurantString+"/swipe/{id:[a-zA-Z0-9]*}", restaurantCollection.Swipe).Methods("PUT")
+	r.HandleFunc(restaurantString, data.GetRestaurants).Methods("POST")
+	r.HandleFunc(restaurantString+"/{id:[a-zA-Z0-9]*}", data.GetRestaurant).Methods("GET")
+	r.HandleFunc(restaurantString+"/add", data.AddRestaurant).Methods("POST")
+	r.HandleFunc(restaurantString+"/delete/{id:[a-zA-Z0-9]*}", data.DeleteRestaurant).Methods("DELETE")
+	r.HandleFunc(restaurantString+"/update/{id:[a-zA-Z0-9]*}", data.UpdateRestaurant).Methods("PUT")
+	r.HandleFunc(restaurantString+"/swipe/{id:[a-zA-Z0-9]*}", data.Swipe).Methods("PUT")
 
 	// User methods
-	userCollection := Collection{collection: db.Collection("user"), ctx: ctx}
 	userString := "/user"
-	r.HandleFunc(userString+"/add", userCollection.AddUser).Methods("POST")
-	r.HandleFunc(userString+"/auth", userCollection.AuthenticateUser).Methods("POST")
-
+	r.HandleFunc(userString+"/add", data.AddUser).Methods("POST")
+	r.HandleFunc(userString+"/auth", data.AuthenticateUser).Methods("POST")
+	r.HandleFunc(userString+"/add/superlike/{id:[a-zA-Z0-9]*}", data.AddSuperLike).Methods("POST")
+	r.HandleFunc(userString+"/superlike/{id:[a-zA-Z0-9]*}", data.GetSuperLikes).Methods("GET")
+	r.HandleFunc(userString+"/add/superlike/{id:[a-zA-Z0-9]*}", data.AddSuperLike).Methods("POST")
+	r.HandleFunc(userString+"/delete/superlike/{id:[a-zA-Z0-9]*}", data.DeleteSuperLike).Methods("DELETE")
 	// Scrape method
-	r.HandleFunc("/scrape", restaurantCollection.ScrapeRestaurants).Methods("POST")
+	r.HandleFunc("/scrape", data.ScrapeRestaurants).Methods("POST")
 
 	address := "0.0.0.0:" + config.Port
 
