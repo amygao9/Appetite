@@ -39,7 +39,6 @@ func RouterInit() {
 	r.HandleFunc(userString+"/{id:[a-zA-Z0-9]*}", data.GetUser).Methods("GET")
 	r.HandleFunc(userString+"/add", data.AddUser).Methods("POST")
 	r.HandleFunc(userString+"/auth", data.AuthenticateUser).Methods("POST")
-	r.HandleFunc(userString+"/add/superlike/{id:[a-zA-Z0-9]*}", data.AddSuperLike).Methods("POST")
 	r.HandleFunc(userString+"/superlike/{id:[a-zA-Z0-9]*}", data.GetSuperLikes).Methods("GET")
 	r.HandleFunc(userString+"/add/superlike/{id:[a-zA-Z0-9]*}", data.AddSuperLike).Methods("POST")
 	r.HandleFunc(userString+"/delete/superlike/{id:[a-zA-Z0-9]*}", data.DeleteSuperLike).Methods("DELETE")

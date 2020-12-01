@@ -1,37 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList} from 'react-native';
 import {LongButton, PersonalInfo, PageHeader, TopPick} from "../../components";
-import {apiLogOut} from "../../api/authAPI";
 import colors from '../../constants/Colors';
-import * as Icon from '@expo/vector-icons'
-
+import {userLogOut} from "../../api/userAPI";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const Profile = ({route, navigation}) => {
-
-    
-    const topRestaurantPicks = [ 
-      {name: "Place 1", categories: "category1", rating: "5/5", imageURI: "http://shorturl.at/nIXZ7"}, 
-      {name: "Place 2", categories: "category2", rating: "4/5", imageURI: "http://shorturl.at/nIXZ7"}, 
-      {name: "Place 3", categories: "category3", rating: "5/5", imageURI: "http://shorturl.at/nIXZ7"}, 
-      {name: "Place 4", categories: "category4", rating: "3/5", imageURI: "http://shorturl.at/nIXZ7"}, 
-      {name: "Place 5", categories: "category5", rating: "5/5", imageURI: "http://shorturl.at/nIXZ7"} 
-    ] 
-  
-  
+export const Profile = ({route, navigation}) => {
+    const [superlikes, setSuperLikes] = React.useState(route.params.superlikes); 
 
     const logOut = async () => {
-
-      try {
-          await AsyncStorage.removeItem("authToken");
-          await AsyncStorage.removeItem("userId");
-      }
-      catch(exception) {
-      } finally {
-        console.log("logging out!");
-        navigation.navigate("Auth", ); 
-      }
+      await userLogOut(navigation); 
     }
 
     return (
@@ -50,8 +29,8 @@ const Profile = ({route, navigation}) => {
               <FlatList style={styles.topPicksList}
               showsHorizontalScrollIndicator={false}
               scrollEnabled={true}
-              data={topRestaurantPicks}
-              renderItem={({ item }) => <TopPick restaurantName={item.name} categories={item.categories} rating={item.rating} imageURI={item.imageURI}/>}
+              data={superlikes.slice(0,5)}
+              renderItem={({ item }) => <TopPick restaurantName={item.name} categories={item.categories[0]} rating={item.rating + "/5"} imageURI={item.imageURL[0]}/>}
               keyExtractor={(item) => item.name}
               />
           </View> 
@@ -97,6 +76,7 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start' 
     }, 
     logoutButton: {
+      marginTop: 25,
       width: '100%'
     }
   });
