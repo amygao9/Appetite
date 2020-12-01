@@ -3,7 +3,6 @@ import {StyleSheet, View, Image, Text} from 'react-native';
 import {LongButton, Container, LoginForm} from "../../components";
 import env from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {apiLogin, apiSignup} from '../../api/authAPI';
 import colors from "../../constants/Colors"
 
@@ -35,10 +34,11 @@ const Auth = ({navigation}) => {
           console.log(user)
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
+            await AsyncStorage.setItem('userId', user.id)
             navigation.navigate('Home');
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
-            setError('Error storing authentication token');
+            setError('Error storing authentication token and/or user ID.');
           }
         } catch (error) {
             console.log("error")
@@ -53,10 +53,11 @@ const Auth = ({navigation}) => {
           console.log(user)
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
+            await AsyncStorage.setItem('userId', user.ID)
             navigation.navigate('Home');
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
-            setError('Error storing authentication token');
+            setError('Error storing authentication token and/or user ID.');
           }
         } catch (error) {
           setError('Error signing in');

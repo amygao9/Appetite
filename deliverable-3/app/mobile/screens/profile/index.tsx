@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList} from 'react-native';
 import {LongButton, PersonalInfo, PageHeader, TopPick} from "../../components";
+import {apiLogOut} from "../../api/authAPI";
 import colors from '../../constants/Colors';
 import * as Icon from '@expo/vector-icons'
 
@@ -19,11 +20,12 @@ const Profile = ({route, navigation}) => {
     ] 
   
   
-  
+
     const logOut = async () => {
 
       try {
           await AsyncStorage.removeItem("authToken");
+          await AsyncStorage.removeItem("userId");
       }
       catch(exception) {
       } finally {

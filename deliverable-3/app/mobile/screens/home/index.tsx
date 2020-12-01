@@ -22,6 +22,11 @@ const Home = ({navigation}) => {
     const [pricePreference, setPricePreference] = useState(0)
     const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
 
+
+    React.useEffect(() => {
+      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
+    }, []);
+
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
       setLoading(true);
