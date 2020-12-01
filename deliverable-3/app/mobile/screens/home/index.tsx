@@ -4,6 +4,7 @@ import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
 import {apiGetRestaurants, apiSwipeOnRestaurant} from "../../api/restaurantAPI";
+import {apiSuperLikeRestaurant, apiGetSuperLikes, userLogOut} from "../../api/userAPI";
 import colors from '../../constants/Colors';
 const { height } = Dimensions.get('window')
 
@@ -21,6 +22,13 @@ const Home = ({navigation}) => {
     const [searchRadius, setSearchRadius] = useState(1.5)
     const [pricePreference, setPricePreference] = useState(0)
     const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
+    const [superLikes, setSuperLikes] = React.useState([]); 
+
+
+    React.useEffect(() => {
+      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
+      fetchSuperLikes();  
+    }, []);
 
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
@@ -56,7 +64,7 @@ const Home = ({navigation}) => {
       catch(err) {
         console.log(err)
         if (err.message === "auth invalid") {
-          navigation.navigate("Auth");
+          await userLogOut(navigation); 
         } else if (err == 'Restaurants not found') {
           alert("No restaurants found! Change preferences to see more.");
           setCards([]);
@@ -65,6 +73,20 @@ const Home = ({navigation}) => {
         }
       }
     } 
+
+
+    async function fetchSuperLikes() {
+      try {
+        let superlikes = await apiGetSuperLikes();
+        setSuperLikes(superlikes);
+      }
+      catch(err) {
+        console.log(err)
+        if (err.message === "auth invalid") {
+          await userLogOut(navigation); 
+        } 
+      } 
+    }
 
     const updatePreferences = (cuisinePreferences, radius, pricePreference) => {       
       setSearchRadius(radius);
@@ -97,8 +119,19 @@ const Home = ({navigation}) => {
       recordSwipe(restaurantCards[index].id, 1)
     }
 
-    const recordSuperLike = (index) => {
-      alert("Superlike!"); 
+    const recordSuperLike = async (index) => {
+      try {
+        await apiSuperLikeRestaurant(restaurantCards[index].id);
+      }
+      catch(err) {
+        console.log(err)
+        if (err.message === "auth invalid") {
+          await userLogOut(navigation); 
+        } 
+      }
+
+      fetchSuperLikes(); 
+
     }
 
     const recordSwipe = async (restaurantID, weight) => {
@@ -107,7 +140,7 @@ const Home = ({navigation}) => {
       }
       catch(err) {
         if (err.message === "auth invalid") {
-          navigation.navigate("Auth");
+          await userLogOut(navigation); 
         }
       }
     }
@@ -122,7 +155,7 @@ const Home = ({navigation}) => {
                 color={colors.offWhite} 
                 backgroundColor="transparent"
                 size = {32}
-                onPress={() => navigation.navigate('Profile')} 
+                onPress={() => navigation.navigate('Profile', {superlikes: superLikes})} 
               />
             </View> 
 

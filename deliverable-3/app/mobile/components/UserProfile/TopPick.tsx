@@ -8,7 +8,7 @@ export default function TopPick(props) {
             flex: 1, 
             flexDirection: 'row', 
             alignItems: 'center',
-            justifyContent: 'space-around'
+            justifyContent: 'flex-start'
         },     
         restaurantImage: {
             width: 48,
@@ -18,13 +18,13 @@ export default function TopPick(props) {
         name: {
             padding: 15,
             color: colors.offWhite, 
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: 'bold'
         }, 
         categories: {
             padding: 15,
             color: colors.offWhite, 
-            fontSize: 18,
+            fontSize: 16,
             fontStyle: 'italic'
         }, 
         rating: {
@@ -32,16 +32,50 @@ export default function TopPick(props) {
             color: 'gold', 
             fontSize: 18,
             fontWeight: 'bold', 
+        }, 
+
+        imageContainer: {
+            width: '15%'
+        },
+
+        nameContainer: {
+            width: '30%', 
+            // textWrap: 'wrap'
+        },
+
+        categoriesContainer: {
+            width: '30%', 
+        },
+
+        ratingContainer: {
+            width: '25%'
         }
     });
 
     return (
         <View style={styles.container}>
-            <Image style={styles.restaurantImage} source={{ uri: props.imageURI}}/>
+            <View style={styles.imageContainer}> 
+                <Image style={styles.restaurantImage} source={{ uri: props.imageURI}}/>
+            </View> 
+
+            <View style={styles.nameContainer}> 
+                <Text style={styles.name}>{props.restaurantName}</Text> 
+            </View> 
+
+            <View style={styles.categoriesContainer}> 
+                <Text style={styles.categories}>{props.categories}</Text> 
+            </View> 
+
+            <View style={styles.ratingContainer}> 
+                <Text style={styles.rating}>{props.rating}</Text> 
+            </View> 
+        
+        
+            {/* <Image style={styles.restaurantImage} source={{ uri: props.imageURI}}/>
             <Text style={styles.name}>{props.restaurantName}</Text> 
             <Text style={styles.categories}>{props.categories}</Text> 
-            <Text style={styles.rating}>{props.rating}</Text> 
+            <Text style={styles.rating}>{props.rating}</Text>  */}
+
         </View> 
-        
     )
 }

@@ -35,21 +35,3 @@ export const apiSignup = async (email: string, password: string) => {
       throw err;
     }
 };
-
-export const logout = async () => {
-  try {
-    const authToken = await AsyncStorage.getItem('authToken');
-    if (authToken === null) {
-      throw 'Token Missing';
-    }
-    const res = await axios.post(env.API_URL  + 'api/auth/logout', {
-      headers: {
-        Cookie: `token=${authToken}`,
-      },
-    });
-    await AsyncStorage.removeItem('authToken');
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
