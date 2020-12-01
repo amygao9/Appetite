@@ -1,13 +1,14 @@
 package auth
 
 import (
-	"backapp/models"
 	"errors"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"

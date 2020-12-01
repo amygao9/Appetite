@@ -1,10 +1,11 @@
 package tests
 
 import (
-	auth "backapp/auth"
 	"net/http"
 	"os"
 	"testing"
+
+	auth "github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 
 	"github.com/joho/godotenv"
 )

@@ -1,8 +1,6 @@
 package tests
 
 import (
-	"backapp/auth"
-	"backapp/models"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -10,6 +8,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
+	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

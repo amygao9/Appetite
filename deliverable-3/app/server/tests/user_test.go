@@ -1,13 +1,14 @@
 package tests
 
 import (
-	"backapp/models"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"testing"
+
+	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
 	"github.com/joho/godotenv"
 )
