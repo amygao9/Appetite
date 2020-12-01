@@ -10,7 +10,6 @@ import (
 
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
-
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -33,7 +32,7 @@ func TestRestaurants(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	bearer = "Bearer " + token.AccessToken
+	bearer = "Bearer " + token
 
 	t.Run("Test adding new restaurant", testAddRestaurant())
 	t.Run("Test updating existing restaurant", testUpdateRestaurant())

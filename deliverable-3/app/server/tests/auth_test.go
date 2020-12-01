@@ -87,7 +87,7 @@ func testAuthWithToken() func(*testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		bearer := "Bearer " + token.AccessToken
+		bearer := "Bearer " + token
 
 		tokenReq, err := http.NewRequest("POST", "http://localhost:"+port+"/restaurant", nil)
 		if err != nil {

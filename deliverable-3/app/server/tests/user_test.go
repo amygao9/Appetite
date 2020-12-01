@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	auth "github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
+	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
 	"github.com/joho/godotenv"
 )
@@ -87,13 +87,13 @@ func testValidLogin() func(*testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		var tokenRet auth.Tokens
-		err = json.Unmarshal(authRespData, &tokenRet)
+		var authResponse models.AuthResponse
+		err = json.Unmarshal(authRespData, &authResponse)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		bearer := "Bearer " + tokenRet.AccessToken
+		bearer := "Bearer " + authResponse.AccessToken
 		const noAuth = "Invalid auth token"
 
 		checkAuthReq, err := http.NewRequest("GET", "http://localhost:"+port+"/restaurant", nil)

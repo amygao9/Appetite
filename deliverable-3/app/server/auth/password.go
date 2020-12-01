@@ -14,10 +14,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Tokens struct {
-	AccessToken string `json:"access_token"`
-}
-
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -31,7 +27,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func CreateToken(email string) (Tokens, error) {
+func CreateToken(email string) (string, error) {
 	tokenClaims := &models.Claims{
 		Username: email,
 		StandardClaims: jwt.StandardClaims{
@@ -43,10 +39,10 @@ func CreateToken(email string) (Tokens, error) {
 	jwtSecret, _ := os.LookupEnv("JWT_SECRET")
 	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
-		return Tokens{}, err
+		return "", err
 	}
 
-	return Tokens{AccessToken: tokenString}, nil
+	return tokenString, nil
 }
 
 func ValidateToken(w http.ResponseWriter, r *http.Request) error {

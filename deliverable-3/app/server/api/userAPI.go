@@ -10,8 +10,39 @@ import (
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
+
+func (data *DB) GetUser(w http.ResponseWriter, r *http.Request) {
+	err := auth.ValidateToken(w, r)
+	if err != nil {
+		return
+	}
+
+	objectID, err := getId(w, r)
+	if err != nil {
+		return
+	}
+	result := data.db.Collection("user").FindOne(
+		data.ctx,
+		bson.M{"_id": objectID},
+		options.FindOne().SetProjection(bson.M{"password": 0}),
+	)
+	err = result.Err()
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	var user models.User
+	result.Decode(&user)
+
+	w.Header().Set("Content-Type", "application/json")
+	response, _ := json.Marshal(user)
+	w.Write(response)
+
+}
 
 func (data *DB) AddUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
@@ -34,14 +65,17 @@ func (data *DB) AddUser(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 	}
 
-	tokens, err := auth.CreateToken(user.Email)
+	tokenString, err := auth.CreateToken(user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	} else {
+		var authResponse models.AuthResponse
+		authResponse.AccessToken = tokenString
+		authResponse.ID = user.ID
 		w.Header().Set("Content-Type", "application/json")
-		response, _ := json.Marshal(tokens)
+		response, _ := json.Marshal(authResponse)
 		w.Write(response)
 	}
 }
@@ -68,13 +102,16 @@ func (data *DB) AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokens, err := auth.CreateToken(user.Email)
+	tokenString, err := auth.CreateToken(user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
+		var authResponse models.AuthResponse
+		authResponse.AccessToken = tokenString
+		authResponse.ID = user.ID
 		w.Header().Set("Content-Type", "application/json")
-		response, _ := json.Marshal(tokens)
+		response, _ := json.Marshal(authResponse)
 		w.Write(response)
 	}
 }
