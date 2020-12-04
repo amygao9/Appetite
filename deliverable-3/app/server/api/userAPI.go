@@ -54,6 +54,7 @@ func (data *DB) AddUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user.ID = primitive.NewObjectID()
+	user.Categories = models.NewCategories()
 	hashed, err := auth.HashPassword(user.Password)
 	if err != nil {
 		w.Write([]byte(err.Error()))
