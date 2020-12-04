@@ -1,0 +1,41 @@
+// not actual tests rn will change later
+
+func main() {
+	categories := map[string]float64{
+    		"a": 0.0,
+    		"b":   100.0,
+    		"c": -100.0,
+	}
+	fmt.Println("Base values:")
+	fmt.Println(categories)
+	
+	ApplySigmoid(&categories)
+	fmt.Println("\nAfter sigmoid: ")
+	fmt.Println(categories)
+	
+	NormalizeWeights(&categories)
+	fmt.Println("\nAfter normalization: ")
+	fmt.Println(categories)
+	
+	categoriesSplice := []string{"a", "b", "c"}
+	restaurants := [3]Restaurant{
+		Restaurant{
+			Name: "Restaurant a",
+			Categories: []string{"a"},
+		},
+		Restaurant{
+			Name: "Restaurant b",
+			Categories: []string{"b"},
+		},
+		Restaurant{
+			Name: "Restaurant ac",
+			Categories: []string{"a", "c"},
+		},
+	}
+	fmt.Println("\nRestaurants: ")
+	fmt.Println(restaurants)
+	
+	queues := BuildQueues(categoriesSplice, restaurants)
+	fmt.Println("\nQueued: ")
+	fmt.Println(queues)
+}

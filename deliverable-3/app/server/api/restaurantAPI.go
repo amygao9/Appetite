@@ -282,3 +282,58 @@ func getFindQuery(filter models.Filter) bson.M {
 
 	return query
 }
+
+// PARKJS STUFF
+func ApplySigmoid(categories *map[string]float64) {
+	// PARK.js Algo step 3, puts weightings through a sigmoid function
+	for key, value := range(*categories) {
+		(*categories)[key] = sigmoid(value)
+	}
+}
+
+func sigmoid(valueIn float64) float64 {
+	// Helper function - the sigmoid function itself
+	var maxVal = 0.5
+	var steepness = 0.2
+	var offset = 0.25
+
+	return (maxVal / (1 + math.Exp(-steepness * valueIn)) ) + offset
+}
+
+func NormalizeWeights(categories *map[string]float64) {
+	// PARK.js Algo step 4, normalize sigmoid weights to probabilities
+	var multiplier = 0.0
+	for key := range(*categories) {
+		multiplier += (*categories)[key]
+	}
+
+	for key := range(*categories) {
+		(*categories)[key] /= multiplier
+	}
+}
+
+func BuildQueues(categoriesSplice []string, restaurants [100]models.Restaurant) map[string][]models.Restaurant {
+	// PARK.js algo step 5, put restaurants into a queue
+	var ret = make(map[string][]models.Restaurant)
+	var categories = make(map[string]bool)
+	
+	// Build hashmap for quicker lookup
+	for _, category := range categoriesSplice {
+		categories[category] = true
+	}
+	// Initialize splices in returned map
+	for category := range categories {
+		ret[category] = []models.Restaurant{}
+	}
+
+	// Populate
+	for _, restaurant := range restaurants {
+		for _, restCategory := range restaurant.Categories {
+			if _, ok := categories[restCategory]; ok {
+				ret[restCategory] = append(ret[restCategory], restaurant)
+			}
+		}
+	}
+
+	return ret
+}
