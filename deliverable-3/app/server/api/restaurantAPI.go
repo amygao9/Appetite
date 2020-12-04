@@ -312,7 +312,7 @@ func NormalizeWeights(categories *map[string]float64) {
 	}
 }
 
-func BuildQueues(categoriesSplice []string, restaurants [100]models.Restaurant) map[string][]models.Restaurant {
+func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map[string][]models.Restaurant {
 	// PARK.js algo step 5, put restaurants into a queue
 	var ret = make(map[string][]models.Restaurant)
 	var categories = make(map[string]bool)
