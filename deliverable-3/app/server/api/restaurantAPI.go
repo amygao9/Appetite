@@ -325,13 +325,19 @@ func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map
 	for category := range categories {
 		ret[category] = []models.Restaurant{}
 	}
+	ret["other"] = []models.Restaurant{}
 
 	// Populate
 	for _, restaurant := range restaurants {
+		queued := false
 		for _, restCategory := range restaurant.Categories {
 			if _, ok := categories[restCategory]; ok {
 				ret[restCategory] = append(ret[restCategory], restaurant)
+				queued = true
 			}
+		}
+		if !queued {
+			ret["other"] = append(ret["other"], restaurant)
 		}
 	}
 
