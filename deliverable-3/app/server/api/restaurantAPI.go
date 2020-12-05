@@ -9,6 +9,7 @@ import (
 
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
+	queue "github.com/golang-collections/go-datastructures/queue"
 
 	"math"
 
@@ -281,4 +282,65 @@ func getFindQuery(filter models.Filter) bson.M {
 	}
 
 	return query
+}
+
+// PARKJS STUFF
+func ApplySigmoid(categories *map[string]float64) {
+	// PARK.js Algo step 3, puts weightings through a sigmoid function
+	for key, value := range(*categories) {
+		(*categories)[key] = Sigmoid(value)
+	}
+}
+
+func Sigmoid(valueIn float64) float64 {
+	// Helper function - the sigmoid function itself
+	var maxVal = 0.5
+	var steepness = 0.2
+	var offset = 0.25
+
+	return (maxVal / (1 + math.Exp(-steepness * valueIn)) ) + offset
+}
+
+func NormalizeWeights(categories *map[string]float64) {
+	// PARK.js Algo step 4, normalize sigmoid weights to probabilities
+	var multiplier = 0.0
+	for key := range(*categories) {
+		multiplier += (*categories)[key]
+	}
+
+	for key := range(*categories) {
+		(*categories)[key] /= multiplier
+	}
+}
+
+func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map[string]*queue.Queue {
+	// PARK.js algo step 5, put restaurants into a queue
+	var ret = make(map[string]*queue.Queue)
+	var categories = make(map[string]bool)
+	
+	// Build hashmap for quicker lookup
+	for _, category := range categoriesSplice {
+		categories[category] = true
+	}
+	// Initialize splices in returned map
+	for category := range categories {
+		ret[category] = queue.New(int64(len(restaurants)))
+	}
+	ret["other"] = queue.New(int64(len(restaurants)))
+
+	// Populate
+	for _, restaurant := range restaurants {
+		queued := false
+		for _, restCategory := range restaurant.Categories {
+			if _, ok := categories[restCategory]; ok {
+				ret[restCategory].Put(restaurant)
+				queued = true
+			}
+		}
+		if !queued {
+			ret["other"].Put(restaurant)
+		}
+	}
+
+	return ret
 }
