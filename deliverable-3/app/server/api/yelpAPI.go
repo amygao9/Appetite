@@ -93,6 +93,7 @@ func (data *DB) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 	if scrapeReq.Limit%50 != 0 {
 		log.Print("Limit is not a multiple of 50")
 		w.Write([]byte(errors.New("Scrape limit is not a multiple of 50").Error()))
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -114,6 +115,7 @@ func (data *DB) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 	blockFile, err := ioutil.ReadFile("blocklist.txt")
 	if err != nil {
 		log.Print("Couldn't open blocked restaurants file")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
