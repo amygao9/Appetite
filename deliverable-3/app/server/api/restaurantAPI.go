@@ -288,11 +288,11 @@ func getFindQuery(filter models.Filter) bson.M {
 func ApplySigmoid(categories *map[string]float64) {
 	// PARK.js Algo step 3, puts weightings through a sigmoid function
 	for key, value := range(*categories) {
-		(*categories)[key] = sigmoid(value)
+		(*categories)[key] = Sigmoid(value)
 	}
 }
 
-func sigmoid(valueIn float64) float64 {
+func Sigmoid(valueIn float64) float64 {
 	// Helper function - the sigmoid function itself
 	var maxVal = 0.5
 	var steepness = 0.2
