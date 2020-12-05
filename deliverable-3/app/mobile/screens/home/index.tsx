@@ -6,7 +6,6 @@ import {Card, CircleButton} from "../../components";
 import {apiGetRestaurants, apiSwipeOnRestaurant} from "../../api/restaurantAPI";
 import {apiSuperLikeRestaurant, apiGetSuperLikes, apiGetUserDetails, userLogOut} from "../../api/userAPI";
 import colors from '../../constants/Colors';
-const { height } = Dimensions.get('window')
 
 import { LogBox } from 'react-native';
 
@@ -14,7 +13,7 @@ LogBox.ignoreLogs([
   'Possible Unhandled Promise Rejection',
 ]);
 
-const Home = ({navigation}) => {
+const Home = (navigation) => {
     const useSwiper = useRef(null)
     const [isLoading, setLoading] = useState(true);
     const [restaurantCards, setCards] = useState([]);
@@ -25,16 +24,22 @@ const Home = ({navigation}) => {
     const [superLikes, setSuperLikes] = React.useState([]); 
     const [userDetails, setUserDetails] = React.useState([]); 
 
+    // React.useEffect(() => {
 
-    React.useEffect(() => {
-      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
-      fetchSuperLikes();  
-      fetchUserDetails(); 
-    }, []);
+    //   // console.log("INSIDE FOR FIRST TIME: " + route.params.onLogin)
+
+    //   fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
+    //   fetchSuperLikes();  
+    //   fetchUserDetails(); 
+    // }, []);
 
     // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
       setLoading(true);
+
+      fetchSuperLikes();  
+      fetchUserDetails(); 
+
       fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
     }, [cuisinePreferences, searchRadius, pricePreference]);
 

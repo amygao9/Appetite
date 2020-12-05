@@ -35,6 +35,11 @@ const Auth = ({navigation}) => {
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
             await AsyncStorage.setItem('userId', user.id)
+
+            console.log("LOGIN")
+            console.log("authToken: " + user.access_token)
+            console.log("userId: " + user.id)
+
             navigation.navigate('Home');
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
@@ -53,6 +58,12 @@ const Auth = ({navigation}) => {
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
             await AsyncStorage.setItem('userId', user.id)
+
+            console.log("SIGNUP")
+            console.log("authToken: " + user.access_token)
+            console.log("userId: " + user.id)
+
+
             navigation.navigate('Home');
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);

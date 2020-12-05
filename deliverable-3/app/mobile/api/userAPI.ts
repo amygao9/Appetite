@@ -10,6 +10,11 @@ export const apiGetUserDetails = async () => {
     const authToken = await AsyncStorage.getItem("authToken");
     const userId = await AsyncStorage.getItem("userId");
 
+    console.log("GET USER DETAILS")
+    console.log("authToken: " + authToken)
+    console.log("userId: " + userId)
+
+
     const res = await client.get(env.apiUrl + 'user/' + userId, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
     if (!res || res.status != 200 || typeof(res.data) == "string") {
@@ -29,6 +34,10 @@ export const apiGetSuperLikes = async () => {
     try {
       const authToken = await AsyncStorage.getItem("authToken");
       const userId = await AsyncStorage.getItem("userId");
+
+      console.log("GET SUPERLIKES")
+      console.log("authToken: " + authToken)
+      console.log("userId: " + userId)
   
       const res = await client.get(env.apiUrl + 'user/superlike/' + userId, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
@@ -48,6 +57,10 @@ export const apiSuperLikeRestaurant = async (restaurantId) => {
     try {
       const authToken = await AsyncStorage.getItem("authToken");
       const userId = await AsyncStorage.getItem("userId");
+
+      console.log("SUPERLIKE")
+      console.log("authToken: " + authToken)
+      console.log("userId: " + userId)
   
       const res = await client.post(env.apiUrl + 'user/add/superlike/', {id: userId, restaurantId: restaurantId}, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
@@ -66,10 +79,19 @@ export const apiSuperLikeRestaurant = async (restaurantId) => {
 
 export const userLogOut = async (navigation) => {
     try {
+
+        const authToken = await AsyncStorage.getItem("authToken");  
+        const userId = await AsyncStorage.getItem("userId");
+
+        console.log("LOGOUT")
+        console.log("authToken: " + authToken)
+        console.log("userId: " + userId)
+
         await AsyncStorage.removeItem("authToken");
         await AsyncStorage.removeItem("userId");
     }
     catch(exception) {
+      console.log("ERROR DESTROYING AUTHTOKEN OR USERID")
     } finally {
       console.log("logging out!");
       navigation.navigate("Auth"); 
