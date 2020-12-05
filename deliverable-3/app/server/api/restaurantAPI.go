@@ -14,7 +14,6 @@ import (
 	"math"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -34,16 +33,18 @@ func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := getFindQuery(filter)
+	match := bson.M{"$match": query}
+	sample := bson.M{"$sample": bson.M{"size": 100}}
+	sort := bson.M{"$sort": bson.M{"weight": -1}}
+	pipeline := []bson.M{match, sample, sort}
 
-	options := options.Find()
-	options.SetSort(bson.M{"weight": -1})
-
-	result, err := data.db.Collection("restaurant").Find(data.ctx, query, options)
+	result, err := data.db.Collection("restaurant").Aggregate(data.ctx, pipeline)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
+
 	var restaurants []models.Restaurant
 	if err = result.All(data.ctx, &restaurants); err != nil {
 		log.Print(err)
@@ -280,17 +281,20 @@ func getFindQuery(filter models.Filter) bson.M {
 		queries = append(queries, bson.M{"lng": bson.M{"$gte": radius.LowLng, "$lte": radius.HiLng}})
 	}
 
+	if len(queries) == 0 {
+		return bson.M{}
+	}
+
 	query := bson.M{
 		"$and": queries,
 	}
-
 	return query
 }
 
 // PARKJS STUFF
 func ApplySigmoid(categories *map[string]float64) {
 	// PARK.js Algo step 3, puts weightings through a sigmoid function
-	for key, value := range(*categories) {
+	for key, value := range *categories {
 		(*categories)[key] = Sigmoid(value)
 	}
 }
@@ -301,17 +305,17 @@ func Sigmoid(valueIn float64) float64 {
 	var steepness = 0.2
 	var offset = 0.25
 
-	return (maxVal / (1 + math.Exp(-steepness * valueIn)) ) + offset
+	return (maxVal / (1 + math.Exp(-steepness*valueIn))) + offset
 }
 
 func NormalizeWeights(categories *map[string]float64) {
 	// PARK.js Algo step 4, normalize sigmoid weights to probabilities
 	var multiplier = 0.0
-	for key := range(*categories) {
+	for key := range *categories {
 		multiplier += (*categories)[key]
 	}
 
-	for key := range(*categories) {
+	for key := range *categories {
 		(*categories)[key] /= multiplier
 	}
 }
@@ -320,7 +324,7 @@ func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map
 	// PARK.js algo step 5, put restaurants into a queue
 	var ret = make(map[string]*queue.Queue)
 	var categories = make(map[string]bool)
-	
+
 	// Build hashmap for quicker lookup
 	for _, category := range categoriesSplice {
 		categories[category] = true
