@@ -29,6 +29,7 @@ func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &filter)
 	if err != nil {
 		log.Print("Error unpacking Filter data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -47,6 +48,7 @@ func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	var restaurants []models.Restaurant
 	if err = result.All(data.ctx, &restaurants); err != nil {
 		log.Print(err)
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -73,6 +75,7 @@ func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	result := data.db.Collection("restaurant").FindOne(data.ctx, bson.M{"_id": objectID})
 	err = result.Err()
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		var restaurant models.Restaurant
@@ -153,12 +156,14 @@ func (data *DB) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
 		log.Print("Error unpacking restaurant data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 	restaurant.ID = primitive.NewObjectID()
 	_, err = data.db.Collection("restaurant").InsertOne(data.ctx, restaurant)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		w.Header().Set("Content-Type", "application/json")
@@ -183,12 +188,14 @@ func (data *DB) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
 		log.Print("Error unpacking restaurant data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 	restaurant.ID = objectID
 	_, err = data.db.Collection("restaurant").ReplaceOne(data.ctx, bson.M{"_id": objectID}, restaurant)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		w.WriteHeader(http.StatusOK)
@@ -214,6 +221,7 @@ func (data *DB) Swipe(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &swipe)
 	if err != nil {
 		log.Print("Error unpacking Weight data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -227,6 +235,7 @@ func (data *DB) Swipe(w http.ResponseWriter, r *http.Request) {
 	update := bson.M{"$inc": bson.M{"weight": swipe.Weight}}
 	_, err = data.db.Collection("restaurant").UpdateOne(data.ctx, bson.M{"_id": objectID}, update)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -273,6 +282,7 @@ func (data *DB) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
 
 	_, err = data.db.Collection("restaurant").DeleteOne(data.ctx, (bson.M{"_id": objectID}))
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		w.WriteHeader(http.StatusOK)
