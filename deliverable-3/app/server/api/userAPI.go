@@ -13,7 +13,6 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -27,24 +26,16 @@ func (data *DB) GetUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	result := data.db.Collection("user").FindOne(
-		data.ctx,
-		bson.M{"_id": objectID},
-		options.FindOne().SetProjection(bson.M{"password": 0}),
-	)
-	err = result.Err()
+
+	user, err := FindUser(data, objectID)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	var user models.User
-	result.Decode(&user)
-
 	w.Header().Set("Content-Type", "application/json")
 	response, _ := json.Marshal(user)
 	w.Write(response)
-
 }
 
 func (data *DB) AddUser(w http.ResponseWriter, r *http.Request) {
@@ -185,16 +176,11 @@ func (data *DB) GetSuperLikes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := data.db.Collection("user").FindOne(data.ctx, bson.M{"_id": objectID})
-	err = result.Err()
+	user, err := FindUser(data, objectID)
 	if err != nil {
-		log.Printf("Cannot find user with id %s", objectID)
 		w.Write([]byte(err.Error()))
 		return
 	}
-
-	var user models.User
-	result.Decode(&user)
 
 	var query bson.M
 
