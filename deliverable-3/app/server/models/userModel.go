@@ -30,7 +30,7 @@ type User struct {
 	Lat        float64              `json:"latitude" bson:"latitude"`
 	Lng        float64              `json:"longitude" bson:"longitude"`
 	SuperLikes []primitive.ObjectID `json:"superLikes,omitempty" bson:"superLikes,omitempty"`
-	Categories map[string]float64   `json:"categories,omitempty" bson:"categories,omitempty"`
+	Categories map[string]int       `json:"categories,omitempty" bson:"categories,omitempty"`
 }
 
 type AuthUser struct {
@@ -53,8 +53,8 @@ type RestaurantId struct {
 	RestaurantId primitive.ObjectID `json:"restaurantId,omitempty" bson:"restaurantId,omitempty"`
 }
 
-func NewCategories() map[string]float64 {
-	return map[string]float64{
+func NewCategories() map[string]int {
+	return map[string]int{
 		"American (Traditional)":    0,
 		"Italian":                   0,
 		"Chinese":                   0,
