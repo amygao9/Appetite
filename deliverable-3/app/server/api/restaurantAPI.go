@@ -9,6 +9,7 @@ import (
 
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
+	queue "github.com/golang-collections/go-datastructures/queue"
 
 	"math"
 
@@ -312,9 +313,9 @@ func NormalizeWeights(categories *map[string]float64) {
 	}
 }
 
-func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map[string][]models.Restaurant {
+func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map[string]*queue.Queue {
 	// PARK.js algo step 5, put restaurants into a queue
-	var ret = make(map[string][]models.Restaurant)
+	var ret = make(map[string]*queue.Queue)
 	var categories = make(map[string]bool)
 	
 	// Build hashmap for quicker lookup
@@ -323,21 +324,21 @@ func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map
 	}
 	// Initialize splices in returned map
 	for category := range categories {
-		ret[category] = []models.Restaurant{}
+		ret[category] = queue.New(int64(len(restaurants)))
 	}
-	ret["other"] = []models.Restaurant{}
+	ret["other"] = queue.New(int64(len(restaurants)))
 
 	// Populate
 	for _, restaurant := range restaurants {
 		queued := false
 		for _, restCategory := range restaurant.Categories {
 			if _, ok := categories[restCategory]; ok {
-				ret[restCategory] = append(ret[restCategory], restaurant)
+				ret[restCategory].Put(restaurant)
 				queued = true
 			}
 		}
 		if !queued {
-			ret["other"] = append(ret["other"], restaurant)
+			ret["other"].Put(restaurant)
 		}
 	}
 
