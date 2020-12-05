@@ -18,7 +18,7 @@ const Auth = ({navigation}) => {
             try {
               const authToken = await AsyncStorage.getItem('authToken');
               if (authToken !== null) {
-                navigation.replace('Home');
+                navigation.navigate('Home', {login: true});
               }
             } catch (error) {
               console.log(error);
@@ -36,11 +36,7 @@ const Auth = ({navigation}) => {
             await AsyncStorage.setItem('authToken', user.access_token);
             await AsyncStorage.setItem('userId', user.id)
 
-            console.log("LOGIN")
-            console.log("authToken: " + user.access_token)
-            console.log("userId: " + user.id)
-
-            navigation.navigate('Home');
+            navigation.navigate('Home', {login: true});
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
             setError('Error storing authentication token and/or user ID.');
@@ -59,12 +55,7 @@ const Auth = ({navigation}) => {
             await AsyncStorage.setItem('authToken', user.access_token);
             await AsyncStorage.setItem('userId', user.id)
 
-            console.log("SIGNUP")
-            console.log("authToken: " + user.access_token)
-            console.log("userId: " + user.id)
-
-
-            navigation.navigate('Home');
+            navigation.navigate('Home', {login: true});
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
             setError('Error storing authentication token and/or user ID.');

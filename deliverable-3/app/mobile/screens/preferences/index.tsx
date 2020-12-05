@@ -49,14 +49,14 @@ const Preferences = ({route, navigation}) => {
 
   const applyPreferences = () => {
     //passes in the selected cuisines and distance radius to the main page 
-    navigation.goBack(); 
+    navigation.navigate('Home', {login: false}); 
     route.params.onGoBack(cuisinePreferences, distanceRadius, pricePreference);
   }
 
   return (
     <SafeAreaView style={styles.container}>
 
-        <PageHeader title="User Preferences" navigationFunction={() => navigation.navigate('Home')} /> 
+        <PageHeader title="User Preferences" navigationFunction={() => navigation.navigate('Home', {login: false})} /> 
 
         <View style={styles.cuisineSections}> 
         {cuisineSections}

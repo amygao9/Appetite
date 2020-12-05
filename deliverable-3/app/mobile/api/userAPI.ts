@@ -10,16 +10,13 @@ export const apiGetUserDetails = async () => {
     const authToken = await AsyncStorage.getItem("authToken");
     const userId = await AsyncStorage.getItem("userId");
 
-    console.log("GET USER DETAILS")
-    console.log("authToken: " + authToken)
-    console.log("userId: " + userId)
-
-
     const res = await client.get(env.apiUrl + 'user/' + userId, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
     if (!res || res.status != 200 || typeof(res.data) == "string") {
       throw 'Unable to retrieve user details.';
     }
+
+    console.log("user details: " + res.data.name)
 
     return res.data;
 
@@ -34,16 +31,14 @@ export const apiGetSuperLikes = async () => {
     try {
       const authToken = await AsyncStorage.getItem("authToken");
       const userId = await AsyncStorage.getItem("userId");
-
-      console.log("GET SUPERLIKES")
-      console.log("authToken: " + authToken)
-      console.log("userId: " + userId)
   
       const res = await client.get(env.apiUrl + 'user/superlike/' + userId, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
       if (!res || res.status != 200 || typeof(res.data) == "string") {
         throw 'Unable to retrieve superlikes.';
       }
+
+      console.log("superlikes: " + res.data)
 
       return res.data;
 
@@ -57,10 +52,6 @@ export const apiSuperLikeRestaurant = async (restaurantId) => {
     try {
       const authToken = await AsyncStorage.getItem("authToken");
       const userId = await AsyncStorage.getItem("userId");
-
-      console.log("SUPERLIKE")
-      console.log("authToken: " + authToken)
-      console.log("userId: " + userId)
   
       const res = await client.post(env.apiUrl + 'user/add/superlike/', {id: userId, restaurantId: restaurantId}, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
@@ -82,10 +73,6 @@ export const userLogOut = async (navigation) => {
 
         const authToken = await AsyncStorage.getItem("authToken");  
         const userId = await AsyncStorage.getItem("userId");
-
-        console.log("LOGOUT")
-        console.log("authToken: " + authToken)
-        console.log("userId: " + userId)
 
         await AsyncStorage.removeItem("authToken");
         await AsyncStorage.removeItem("userId");

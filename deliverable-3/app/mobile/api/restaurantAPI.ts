@@ -21,8 +21,10 @@ const getLocationAsync = async () => {
 
 export const apiGetRestaurants = async (cuisines, radius, price) => {
 
-  const { latitude , longitude } = await getLocationAsync(); 
-  console.log("LATITUDE: " + latitude + ", LONGITUDE: " + longitude)
+  let { latitude , longitude } = await getLocationAsync(); 
+ 
+  latitude = 43.661282922175914
+  longitude = -79.39409611053878
 
   try {
     const authToken = await AsyncStorage.getItem("authToken");

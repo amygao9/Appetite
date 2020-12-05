@@ -21,7 +21,7 @@ export const Profile = ({route, navigation}) => {
   
         <SafeAreaView style={styles.container}> 
 
-          <PageHeader title="Your Profile" navigationFunction={() => navigation.navigate('Home')} /> 
+          <PageHeader title="Your Profile" navigationFunction={() => navigation.navigate('Home', {login: false})} /> 
         
           <View style={styles.userInfo}> 
               <PersonalInfo firstname={firstname} lastname={lastname}/> 

@@ -13,7 +13,7 @@ LogBox.ignoreLogs([
   'Possible Unhandled Promise Rejection',
 ]);
 
-const Home = (navigation) => {
+const Home = ({route, navigation}) => {
     const useSwiper = useRef(null)
     const [isLoading, setLoading] = useState(true);
     const [restaurantCards, setCards] = useState([]);
@@ -23,24 +23,24 @@ const Home = (navigation) => {
     const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
     const [superLikes, setSuperLikes] = React.useState([]); 
     const [userDetails, setUserDetails] = React.useState([]); 
+ 
 
-    // React.useEffect(() => {
-
-    //   // console.log("INSIDE FOR FIRST TIME: " + route.params.onLogin)
-
-    //   fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
-    //   fetchSuperLikes();  
-    //   fetchUserDetails(); 
-    // }, []);
-
-    // fetches when preferences and/or radius have been updated 
     React.useEffect(() => {
+
+        if(route.params.login == true) {
+          console.log("FROM LOGIN");
+
+          fetchUserDetails(); 
+          fetchSuperLikes();  
+        } 
+
+    }, [navigation]);
+
+    React.useEffect(() => {
+
       setLoading(true);
-
-      fetchSuperLikes();  
-      fetchUserDetails(); 
-
       fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
+
     }, [cuisinePreferences, searchRadius, pricePreference]);
 
 
@@ -73,7 +73,7 @@ const Home = (navigation) => {
         if (err.message === "auth invalid") {
           await userLogOut(navigation); 
         } else if (err == 'Restaurants not found') {
-          alert("No restaurants found! Change preferences to see more.");
+          //alert("No restaurants found! Change preferences to see more.");
           setCards([]);
           setLoading(false);
           setButtonsDisabled(true);
