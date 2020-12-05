@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
-import {LongButton, Container, LoginForm} from "../../components";
+import {LongButton, Container, LoginForm, SignupForm} from "../../components";
 import env from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiLogin, apiSignup} from '../../api/authAPI';
@@ -9,6 +9,7 @@ import colors from "../../constants/Colors"
 const Auth = ({navigation}) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [name, setName] = React.useState('');
     const [error, setError] = React.useState('');
     const [currentView, setView] = React.useState('main');
 
@@ -31,7 +32,6 @@ const Auth = ({navigation}) => {
         setError('');
         try {
           const user = await apiLogin(email, password);
-          console.log(user)
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
             await AsyncStorage.setItem('userId', user.id)
@@ -49,11 +49,10 @@ const Auth = ({navigation}) => {
     const signup = async () => {
         setError('');
         try {
-          const user = await apiSignup(email, password);
-          console.log(user)
+          const user = await apiSignup(email, password, name);
           try {
             await AsyncStorage.setItem('authToken', user.access_token);
-            await AsyncStorage.setItem('userId', user.ID)
+            await AsyncStorage.setItem('userId', user.id)
             navigation.navigate('Home');
           } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
@@ -140,10 +139,10 @@ const Auth = ({navigation}) => {
                     source={require('../../assets/images/logo.png')}
                 />
             </View>
-            <LoginForm style={styles.loginForm}  onChangeEmail={(email) => setEmail(email)} onChangePassword={(password) => setPassword(password)} />
+            <SignupForm style={styles.loginForm} onChangeEmail={(email) => setEmail(email)} onChangePassword={(password) => setPassword(password)} onChangeName={(name) => setName(name)} />
             {error.length > 0 && <Text style={styles.text}>{error}</Text>}
             <View style={styles.buttonHolder}>
-                <LongButton style={styles.loginButton} title="SIGN UP" onPress={() => signup()} disabled={email.length == 0 || password.length == 0} />
+                <LongButton style={styles.loginButton} title="SIGN UP" onPress={() => signup()} disabled={email.length == 0 || password.length == 0 || name.length == 0} />
                 <LongButton style={styles.loginButton} title="BACK" onPress={() => setView("main")} secondary/>
             </View>
         </View>

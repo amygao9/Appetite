@@ -7,8 +7,7 @@ export default function PersonalInfo(props) {
     const styles = StyleSheet.create({
         container: {
             flex: 1, 
-            alignItems: 'center', 
-            // backgroundColor: 'yellow'
+            alignItems: 'center'
         },     
         userAvatar: {
             width: 150,
@@ -23,7 +22,7 @@ export default function PersonalInfo(props) {
 
     });
     const {firstname, lastname} = props
-    const avatarURI = "https://ui-avatars.com/api?name=" + "Joshua" + "+" + "Chua" + "&background=" + colors.greenRaw + "&color=" + colors.offWhiteRaw + "&size=" + 512; 
+    const avatarURI = "https://ui-avatars.com/api?name=" + firstname + "+" + lastname + "&background=" + colors.greenRaw + "&color=" + colors.offWhiteRaw + "&size=" + 512; 
 
     return (
         <View style={styles.container}>

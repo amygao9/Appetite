@@ -7,7 +7,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const Profile = ({route, navigation}) => {
+    const [userDetails, setUserDetails] = React.useState(route.params.userDetails); 
     const [superlikes, setSuperLikes] = React.useState(route.params.superlikes); 
+
+    const firstname = userDetails.name.substr(0, userDetails.name.indexOf(' ')); 
+    const lastname = userDetails.name.substr(userDetails.name.indexOf(' ')+1);
 
     const logOut = async () => {
       await userLogOut(navigation); 
@@ -20,19 +24,19 @@ export const Profile = ({route, navigation}) => {
           <PageHeader title="Your Profile" navigationFunction={() => navigation.navigate('Home')} /> 
         
           <View style={styles.userInfo}> 
-              <PersonalInfo firstname="Joshua" lastname="Chua"/> 
+              <PersonalInfo firstname={firstname} lastname={lastname}/> 
           </View>
     
           <View style={styles.topPicks}> 
               <Text style={styles.title}>Top Restaurant Picks</Text>
-
+              {(superlikes != [] && 
               <FlatList style={styles.topPicksList}
               showsHorizontalScrollIndicator={false}
               scrollEnabled={true}
-              data={superlikes.slice(0,5)}
+              data={superlikes.slice(0,7)}
               renderItem={({ item }) => <TopPick restaurantName={item.name} categories={item.categories[0]} rating={item.rating + "/5"} imageURI={item.imageURL[0]}/>}
               keyExtractor={(item) => item.name}
-              />
+              />)} 
           </View> 
     
     

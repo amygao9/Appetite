@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Image} from 'react-native';
+import { StyleSheet, Text, View, Image} from 'react-native';
 import colors from '../../constants/Colors';
 
 export default function TopPick(props) {
@@ -39,8 +39,7 @@ export default function TopPick(props) {
         },
 
         nameContainer: {
-            width: '30%', 
-            // textWrap: 'wrap'
+            width: '30%'
         },
 
         categoriesContainer: {
@@ -69,13 +68,6 @@ export default function TopPick(props) {
             <View style={styles.ratingContainer}> 
                 <Text style={styles.rating}>{props.rating}</Text> 
             </View> 
-        
-        
-            {/* <Image style={styles.restaurantImage} source={{ uri: props.imageURI}}/>
-            <Text style={styles.name}>{props.restaurantName}</Text> 
-            <Text style={styles.categories}>{props.categories}</Text> 
-            <Text style={styles.rating}>{props.rating}</Text>  */}
-
         </View> 
     )
 }

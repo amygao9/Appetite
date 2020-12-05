@@ -11,17 +11,18 @@ const getLocationAsync = async () => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== 'granted') {
     alert("Permission denied to access location! ")
+    return {latitude: 43.661282922175914, longitude: -79.39409611053878}; 
   } else {
     let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
-    const { latitude , longitude } = location.coords
-    console.log("LATITUDE: " + latitude + ", LONGITUDE: " + longitude)
+    return location.coords
   } 
 };
 
 
 export const apiGetRestaurants = async (cuisines, radius, price) => {
 
-  await getLocationAsync(); 
+  const { latitude , longitude } = await getLocationAsync(); 
+  console.log("LATITUDE: " + latitude + ", LONGITUDE: " + longitude)
 
   try {
     const authToken = await AsyncStorage.getItem("authToken");
@@ -29,8 +30,8 @@ export const apiGetRestaurants = async (cuisines, radius, price) => {
     //user location is hardcoded at 1 King's College Circle (to be updated for future deliverables)
     const requestBody = {
       "categories": cuisines,
-      "lat": 43.661282922175914,
-      "lng": -79.39409611053878, 
+      "lat": latitude,
+      "lng": longitude, 
       "radius": radius, 
     }
 

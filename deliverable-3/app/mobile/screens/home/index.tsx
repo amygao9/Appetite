@@ -4,7 +4,7 @@ import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
 import {apiGetRestaurants, apiSwipeOnRestaurant} from "../../api/restaurantAPI";
-import {apiSuperLikeRestaurant, apiGetSuperLikes, userLogOut} from "../../api/userAPI";
+import {apiSuperLikeRestaurant, apiGetSuperLikes, apiGetUserDetails, userLogOut} from "../../api/userAPI";
 import colors from '../../constants/Colors';
 const { height } = Dimensions.get('window')
 
@@ -23,11 +23,13 @@ const Home = ({navigation}) => {
     const [pricePreference, setPricePreference] = useState(0)
     const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
     const [superLikes, setSuperLikes] = React.useState([]); 
+    const [userDetails, setUserDetails] = React.useState([]); 
 
 
     React.useEffect(() => {
       fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
       fetchSuperLikes();  
+      fetchUserDetails(); 
     }, []);
 
     // fetches when preferences and/or radius have been updated 
@@ -87,6 +89,21 @@ const Home = ({navigation}) => {
         } 
       } 
     }
+
+
+    async function fetchUserDetails() {
+      try {
+        let userDetails = await apiGetUserDetails();
+        setUserDetails(userDetails);
+      }
+      catch(err) {
+        console.log(err)
+        if (err.message === "auth invalid") {
+          await userLogOut(navigation); 
+        } 
+      } 
+    }
+
 
     const updatePreferences = (cuisinePreferences, radius, pricePreference) => {       
       setSearchRadius(radius);
@@ -155,7 +172,7 @@ const Home = ({navigation}) => {
                 color={colors.offWhite} 
                 backgroundColor="transparent"
                 size = {32}
-                onPress={() => navigation.navigate('Profile', {superlikes: superLikes})} 
+                onPress={() => navigation.navigate('Profile', {userDetails: userDetails, superlikes: superLikes})} 
               />
             </View> 
 

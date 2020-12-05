@@ -4,6 +4,26 @@ import env from "../env";
 import client from "./axios";
 
 
+export const apiGetUserDetails = async () => {
+
+  try {
+    const authToken = await AsyncStorage.getItem("authToken");
+    const userId = await AsyncStorage.getItem("userId");
+
+    const res = await client.get(env.apiUrl + 'user/' + userId, {headers: {"Authorization" : `Bearer ${authToken}`}});
+
+    if (!res || res.status != 200 || typeof(res.data) == "string") {
+      throw 'Unable to retrieve user details.';
+    }
+
+    return res.data;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+
 export const apiGetSuperLikes = async () => {
 
     try {
@@ -12,7 +32,7 @@ export const apiGetSuperLikes = async () => {
   
       const res = await client.get(env.apiUrl + 'user/superlike/' + userId, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
-      if (!res || res.status != 200) {
+      if (!res || res.status != 200 || typeof(res.data) == "string") {
         throw 'Unable to retrieve superlikes.';
       }
 
