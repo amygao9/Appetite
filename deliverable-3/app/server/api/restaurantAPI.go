@@ -124,9 +124,12 @@ func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 		// set Yelp review
 		restaurant.TopReview = models.Review{
 			UserName:   review["user"].(map[string]interface{})["name"].(string),
-			UserImage:  review["user"].(map[string]interface{})["image_url"].(string),
 			ReviewText: review["text"].(string),
 			Rating:     int(review["rating"].(float64)),
+		}
+
+		if review["user"].(map[string]interface{})["image_url"] != nil {
+			restaurant.TopReview.UserImage = review["user"].(map[string]interface{})["image_url"].(string)
 		}
 
 		timeCreated, _ := time.Parse("2006-01-02 03:04:05", review["time_created"].(string))

@@ -6,19 +6,20 @@ import (
 )
 
 var CategoryMap = map[string]bool{
-	"italian":    true,
-	"chinese":    true,
-	"korean":     true,
-	"japanese":   true,
-	"greek":      true,
-	"sandwiches": true,
-	"bakeries":   true,
-	"icecream":   true,
-	"salad":      true,
-	"desserts":   true,
-	"coffee":     true,
-	"glutenfree": true,
-	"vegan":      true,
+	"American (Traditional)":    true,
+	"Italian":                   true,
+	"Chinese":                   true,
+	"Korean":                    true,
+	"Japanese":                  true,
+	"Greek":                     true,
+	"Sandwiches":                true,
+	"Bakeries":                  true,
+	"Ice Cream & Frozen Yogurt": true,
+	"Salad":                     true,
+	"Desserts":                  true,
+	"Coffee & Tea":              true,
+	"Gluten-Free":               true,
+	"Vegan":                     true,
 }
 
 type User struct {
@@ -29,7 +30,7 @@ type User struct {
 	Lat        float64              `json:"latitude" bson:"latitude"`
 	Lng        float64              `json:"longitude" bson:"longitude"`
 	SuperLikes []primitive.ObjectID `json:"superLikes,omitempty" bson:"superLikes,omitempty"`
-	Categories Categories           `json:"categories,omitempty" bson:"categories,omitempty"`
+	Categories map[string]float64   `json:"categories,omitempty" bson:"categories,omitempty"`
 }
 
 type AuthUser struct {
@@ -52,38 +53,21 @@ type RestaurantId struct {
 	RestaurantId primitive.ObjectID `json:"restaurantId,omitempty" bson:"restaurantId,omitempty"`
 }
 
-type Categories struct {
-	Italian    float64 `json:"italian" bson:"italian"`
-	Chinese    float64 `json:"chinese" bson:"chinese"`
-	Korean     float64 `json:"korean" bson:"korean"`
-	Japanese   float64 `json:"japanese" bson:"japanese"`
-	Greek      float64 `json:"greek" bson:"greek"`
-	Sandwiches float64 `json:"sandwiches" bson:"sandwiches"`
-	Bakeries   float64 `json:"bakeries" bson:"bakeries"`
-	Icecream   float64 `json:"icecream" bson:"icecream"`
-	Salad      float64 `json:"salad" bson:"salad"`
-	Desserts   float64 `json:"desserts" bson:"desserts"`
-	Coffee     float64 `json:"coffee" bson:"coffee"`
-	Glutenfree float64 `json:"glutenfree" bson:"glutenfree"`
-	Vegan      float64 `json:"vegan" bson:"vegan"`
-	Other      float64 `json:"other" bson:"other"`
-}
-
-func NewCategories() Categories {
-	return Categories{
-		Italian:    0,
-		Chinese:    0,
-		Korean:     0,
-		Japanese:   0,
-		Greek:      0,
-		Sandwiches: 0,
-		Bakeries:   0,
-		Icecream:   0,
-		Salad:      0,
-		Desserts:   0,
-		Coffee:     0,
-		Glutenfree: 0,
-		Vegan:      0,
-		Other:      0,
+func NewCategories() map[string]float64 {
+	return map[string]float64{
+		"American (Traditional)":    0,
+		"Italian":                   0,
+		"Chinese":                   0,
+		"Korean":                    0,
+		"Japanese":                  0,
+		"Greek":                     0,
+		"Sandwiches":                0,
+		"Bakeries":                  0,
+		"Ice Cream & Frozen Yogurt": 0,
+		"Salad":                     0,
+		"Desserts":                  0,
+		"Coffee & Tea":              0,
+		"Gluten-Free":               0,
+		"Vegan":                     0,
 	}
 }
