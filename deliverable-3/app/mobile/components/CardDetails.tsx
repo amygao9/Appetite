@@ -6,6 +6,7 @@ import colors from "../constants/Colors";
 import layout from "../constants/Layout";
 import Carousel from "react-native-snap-carousel";
 import { RFValue } from "react-native-responsive-fontsize";
+import { getCurrentPosition } from 'react-native-get-location';
 const { height } = Dimensions.get('window')
 export default function CardDetails({ route, navigation }) {
   const {title, description, photo, address, rating, price, id} = route.params;
@@ -67,12 +68,19 @@ export default function CardDetails({ route, navigation }) {
         </View> 
         <ScrollView style={styles.lower}>
         <View style={styles.lower}>
-        <Text style={styles.category}>{`${description.join(', ')}`}</Text>
+        <Text style={styles.heading}>{`${description.join(' | ')}`}</Text>
         <View style={{ flexDirection: 'column'}}>
           <View style={styles.row}>
               <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail" color={colors.blue}/>
-              <Text style={styles.category}>{`${address}`}</Text>
+              <Text style={styles.details}>{`${address}`}</Text>
           </View>
+
+          {!isLoading && (
+          <View style={styles.row}>
+            <Icon.MaterialIcons name="phone" style={styles.icons} color={colors.blue}/>
+             <Text style={styles.details}>{`${details["phonenumber"]}`}</Text>
+          </View>)} 
+
           <View style={styles.row}>
               {rating % 1 == 0.5 && (Array.from(Array(rating-0.5), (e, i) => {
                 return (
@@ -99,33 +107,30 @@ export default function CardDetails({ route, navigation }) {
               }))}
           </View>
           <View style={styles.row}>
-          {(Array.from(Array(price), (e, i) => {
-                return (
-                  <Icon.MaterialIcons name="attach-money" style={styles.icons} color={colors.green} key={i}/>  
-                )
-              }))}
+            {(Array.from(Array(price), (e, i) => {
+                  return (
+                    <Icon.MaterialIcons name="attach-money" style={styles.icons} color={colors.green} key={i}/>  
+                  )
+                }))}
           </View>
-          {!isLoading && (
-          <View style={styles.row}>
-            <Icon.MaterialIcons name="phone" style={styles.icons} color={colors.blue}/>
-             <Text style={styles.category}>{`${details["phonenumber"]}`}</Text>
-          </View>)} 
+          
+  
           
           {!isLoading && ( 
           <View>
-          <Text style={styles.category}>Hours</Text>
-          <Text style = {styles.hours}>{"Sunday:         " + `${details["hours"]["Sunday"]}`}</Text>
-          <Text style = {styles.hours}>{"Monday:        " + `${details["hours"]["Monday"]}`}</Text>
-          <Text style = {styles.hours}>{"Tuesday:       " + `${details["hours"]["Tuesday"]}`}</Text>
-          <Text style = {styles.hours}>{"Wednesday: " + `${details["hours"]["Wednesday"]}`}</Text>
-          <Text style = {styles.hours}>{"Thursday:     " + `${details["hours"]["Thursday"]}`}</Text>
-          <Text style = {styles.hours}>{"Friday:           " + `${details["hours"]["Friday"]}`}</Text>
-          <Text style = {styles.hours}>{"Saturday:      " +`${details["hours"]["Saturday"]}`}</Text>
+            <Text style={styles.heading}>Hours</Text>
+            <Text style = {styles.hours}>{"Sun:         " + `${details["hours"]["Sunday"]}`}</Text>
+            <Text style = {styles.hours}>{"Mon:        " + `${details["hours"]["Monday"]}`}</Text>
+            <Text style = {styles.hours}>{"Tues:       " + `${details["hours"]["Tuesday"]}`}</Text>
+            <Text style = {styles.hours}>{"Wed:        " + `${details["hours"]["Wednesday"]}`}</Text>
+            <Text style = {styles.hours}>{"Thurs:      " + `${details["hours"]["Thursday"]}`}</Text>
+            <Text style = {styles.hours}>{"Fri:          " + `${details["hours"]["Friday"]}`}</Text>
+            <Text style = {styles.hours}>{"Sat:         " +`${details["hours"]["Saturday"]}`}</Text>
           </View>
           )}
           {!isLoading && ( 
           <View>
-          <Text style={styles.category}>Top Review</Text>
+          <Text style={styles.heading}>Top Review</Text>
           <Text style={styles.review}>{`${details["topreview"]["reviewtext"]}`}</Text>
           </View>)}
         </View>
@@ -143,14 +148,13 @@ const styles = StyleSheet.create({
     },
     row: {
       flexDirection: 'row',
-      marginLeft: 15
+      marginLeft: 15, 
+      alignSelf: 'center'
     },
     carousel: {
-      //width: layout.window.width,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      //backgroundColor: 'transparent',
     },
     upper: {
       backgroundColor: colors.darkGray,
@@ -161,7 +165,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     lower: {
-
       backgroundColor: colors.white,
       flex: 5,
     },
@@ -170,45 +173,44 @@ const styles = StyleSheet.create({
       flex: 1,
       width: layout.window.width-25
     },
+
+    heading: {
+      backgroundColor: colors.green, 
+      padding: 5, 
+      marginTop: 10,
+      marginLeft: 5,
+      marginRight: 5,
+      marginBottom: 10,
+      textAlign: 'center',
+      fontSize: RFValue(20, 800),
+      color: colors.offWhite
+    },
+
     icons: {
-      paddingTop: 20,
-      paddingRight: 10,
-      fontSize: 24,
-      //color: colors.black,
+      margin: 5,
+      fontSize: 22
     },
-    category: {
-      paddingTop: 20,
-      paddingLeft: 10,
-      textAlign: 'left',
-      fontSize: RFValue(20, 800),
-      color: colors.black,
-      fontFamily: 'Roboto_700Bold',
-    },
+
     details: {
-      paddingTop: 20,
-      paddingLeft: 10,
-      textAlign: 'left',
-      fontSize: RFValue(20, 800),
-      color: colors.blue,
-      fontFamily: 'Roboto_700Bold',
+      margin: 5,
+      fontSize: RFValue(16, 800),
+      color: colors.blue
     },
+
     review: {
-      paddingTop: 20,
-      paddingLeft: 30,
-      paddingRight: 30,
-      paddingBottom: 30,
-      textAlign: 'left',
+      margin: 15,
+      textAlign: 'center',
       fontSize: RFValue(16, 800),
       color: colors.black,
-      fontFamily: 'Roboto_500Medium',
     },
+
+
     hours: {
-      paddingTop: 10,
+      margin: 5,
       paddingLeft: 30,
       paddingRight: 30,
-      textAlign: 'left',
+      textAlign: 'center',
       fontSize: RFValue(16, 800),
       color: colors.black,
-      fontFamily: 'Roboto_500Medium',
     }
   })
