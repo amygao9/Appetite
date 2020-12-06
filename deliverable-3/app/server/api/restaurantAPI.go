@@ -338,7 +338,7 @@ func ApplySigmoid(categories *map[string]int) map[string]float64 {
 	// PARK.js Algo step 3, puts weightings through a sigmoid function
 	var ret = make(map[string]float64)
 
-	for key, value := range(*categories) {
+	for key, value := range *categories {
 		(ret)[key] = Sigmoid(float64(value))
 	}
 
