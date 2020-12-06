@@ -30,7 +30,10 @@ export const apiGetRestaurants = async (cuisines, radius, price) => {
 
   try {
 
-    const { latitude , longitude } = await getLocationAsync(); 
+    //const { latitude , longitude } = await getLocationAsync(); 
+    
+    const { latitude , longitude } = {latitude: 43.661282922175914, longitude: -79.39409611053878};
+    
     const authToken = await AsyncStorage.getItem("authToken");
     const userId = await AsyncStorage.getItem("userId");
 

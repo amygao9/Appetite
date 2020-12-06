@@ -6,7 +6,15 @@ import colors from "../constants/Colors";
 import layout from "../constants/Layout";
 import Carousel from "react-native-snap-carousel";
 import { RFValue } from "react-native-responsive-fontsize";
-import { getCurrentPosition } from 'react-native-get-location';
+
+
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Failed prop type.',
+]);
+
+
 const { height } = Dimensions.get('window')
 export default function CardDetails({ route, navigation }) {
   const {title, description, photo, address, rating, price, id} = route.params;

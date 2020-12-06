@@ -2,6 +2,8 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import colors from '../../constants/Colors';
 
+import { RFValue } from "react-native-responsive-fontsize";
+
 export default function TopPick(props) {
     const styles = StyleSheet.create({
         container: {
@@ -18,19 +20,19 @@ export default function TopPick(props) {
         name: {
             padding: 15,
             color: colors.offWhite, 
-            fontSize: 16,
+            fontSize: RFValue(16, 800),
             fontWeight: 'bold'
         }, 
         categories: {
             padding: 15,
             color: colors.offWhite, 
-            fontSize: 16,
+            fontSize: RFValue(16, 800),
             fontStyle: 'italic'
         }, 
         rating: {
             padding: 15,
             color: 'gold', 
-            fontSize: 18,
+            fontSize: RFValue(18, 800),
             fontWeight: 'bold', 
         }, 
 
@@ -39,15 +41,15 @@ export default function TopPick(props) {
         },
 
         nameContainer: {
-            width: '30%'
+            width: '35%'
         },
 
         categoriesContainer: {
-            width: '30%', 
+            width: '32%', 
         },
 
         ratingContainer: {
-            width: '25%'
+            width: '18%'
         }
     });
 
@@ -70,7 +72,7 @@ export default function TopPick(props) {
             </View> 
 
             <View style={styles.categoriesContainer}> 
-                <Text style={styles.categories}>{props.card.categories.join(', ')}</Text> 
+                <Text style={styles.categories}>{props.card.categories[0]}</Text> 
             </View> 
 
             <View style={styles.ratingContainer}> 

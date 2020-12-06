@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Image} from 'react-native';
-import {LongButton, PersonalInfo} from "../../components";
 import * as Icon from '@expo/vector-icons'
 import colors from '../constants/Colors';
+import { RFValue } from "react-native-responsive-fontsize";
 
 
 const PageHeader = (props) => {
@@ -15,7 +15,7 @@ const PageHeader = (props) => {
         }, 
         title: {
             flex: 1.5, 
-            fontSize: 28,
+            fontSize: RFValue(32, 800),
             fontWeight: 'bold',
             color: colors.offWhite
         }
