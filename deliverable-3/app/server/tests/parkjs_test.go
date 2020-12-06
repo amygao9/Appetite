@@ -16,11 +16,11 @@ func TestSigmoid(t *testing.T) {
 	t.Run("Test Sigmoid Helper", testSigmoidHelper(numbers, expected))
 
 	categories := []string{"a", "b", "c", "d"}
-	categoryMap := map[string]float64{
-		"a": 0.0,
-		"b": 10.0,
-		"c": 100.0,
-		"d": -15.0,
+	categoryMap := map[string]int{
+		"a": 0,
+		"b": 10,
+		"c": 100,
+		"d": -15,
 	}
 
 	t.Run("Test Apply Sigmoid to Map", testApplySigmoid(categoryMap, categories, expected))
@@ -37,11 +37,11 @@ func testSigmoidHelper(testNumbers []float64, expected []string) func(*testing.T
 	}
 }
 
-func testApplySigmoid(categoryMap map[string]float64, categories []string, expected []string) func(*testing.T) {
+func testApplySigmoid(categoryMap map[string]int, categories []string, expected []string) func(*testing.T) {
 	return func(t *testing.T) {
-		parkjs.ApplySigmoid(&categoryMap)
+		ret := parkjs.ApplySigmoid(&categoryMap)
 		for i := range categories {
-			result := fmt.Sprintf("%.6f", categoryMap[categories[i]])
+			result := fmt.Sprintf("%.6f", ret[categories[i]])
 			if (result != expected[i]) {
 				t.Errorf(fmt.Sprintf("ApplySigmoid was wrong on case %v, expected %s got %s", i + 1, result, expected[i]))
 			}
