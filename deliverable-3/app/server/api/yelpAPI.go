@@ -59,7 +59,7 @@ func addOrUpdateRestaurant(data *DB, business interface{}, blockRestaurants []st
 	restaurant.Categories = []string{}
 	for _, category := range businessMap["categories"].([]interface{}) {
 		categoryMap := category.(map[string]interface{})
-		restaurant.Categories = append(restaurant.Categories, categoryMap["alias"].(string))
+		restaurant.Categories = append(restaurant.Categories, categoryMap["title"].(string))
 	}
 
 	if val, ok := businessMap["price"]; ok {
