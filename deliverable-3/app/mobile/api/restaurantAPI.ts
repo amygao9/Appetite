@@ -10,26 +10,29 @@ import * as Permissions from 'expo-permissions';
 const getLocationAsync = async () => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== 'granted') {
-    alert("Permission denied to access location! ")
+    alert("Permission denied to access location. Defaulting to downtown Toronto.");
     return {latitude: 43.661282922175914, longitude: -79.39409611053878}; 
   } else {
-    let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
-    return location.coords
+
+    try{
+      let location = await Location.getCurrentPositionAsync();
+      return location.coords
+    }catch(e){
+      alert('We could not find your position. Please make sure your location service provider is on. Defaulting to downtown Toronto.');
+      console.log('Error while trying to get location: ', e);
+      return {latitude: 43.661282922175914, longitude: -79.39409611053878}; 
+    }
   } 
 };
 
 
 export const apiGetRestaurants = async (cuisines, radius, price) => {
 
-  let { latitude , longitude } = await getLocationAsync(); 
- 
-  latitude = 43.661282922175914
-  longitude = -79.39409611053878
-
   try {
+
+    const { latitude , longitude } = await getLocationAsync(); 
     const authToken = await AsyncStorage.getItem("authToken");
 
-    //user location is hardcoded at 1 King's College Circle (to be updated for future deliverables)
     const requestBody = {
       "categories": cuisines,
       "lat": latitude,
