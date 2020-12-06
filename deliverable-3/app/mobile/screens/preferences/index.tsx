@@ -6,6 +6,7 @@ import CuisineOptionSection from '../../components/Preferences/CuisineOptionSect
 import Slider from '@react-native-community/slider';
 import colors from '../../constants/Colors';
 import layout from "../../constants/Layout";
+import { RFValue } from "react-native-responsive-fontsize";
 
 import { LogBox } from 'react-native';
 
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   },
   cuisineSections: {
     flex: 3.5,
-    paddingTop: 40,
+    paddingTop: 20,
     margin: 0
   },
   buttonsPanel: {
@@ -119,11 +120,12 @@ const styles = StyleSheet.create({
   },
   distanceSlider: {
     width: layout.window.width * 0.7, 
-    flex: 0.5
+    flex: 0.5, 
+    marginTop: -40
   },   
   priceOptions: {
     flex: 1, 
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end', 
   }, 
   itemContainer: {
     alignItems: 'center',
@@ -144,13 +146,15 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       textAlignVertical: 'center',
       color: colors.offWhite, 
-      fontSize: 18,
+      fontSize: RFValue(18, 800),
+      fontFamily: 'Roboto_400Regular',
   },
   selectedTextStyle: {
     textAlign: 'center',
     textAlignVertical: 'center',
     color: "gold", 
-    fontSize: 18,
+    fontSize: RFValue(18, 800),
+    fontFamily: 'Roboto_400Regular',
     fontWeight: 'bold',
   },
   pricesContainer: {

@@ -3,8 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList} from 'react-native';
 import {LongButton, PersonalInfo, PageHeader, TopPick} from "../../components";
 import colors from '../../constants/Colors';
 import {userLogOut} from "../../api/userAPI";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { RFValue } from "react-native-responsive-fontsize";
 
 export const Profile = ({route, navigation}) => {
     const [userDetails, setUserDetails] = React.useState(route.params.userDetails); 
@@ -33,7 +32,7 @@ export const Profile = ({route, navigation}) => {
               <FlatList style={styles.topPicksList}
               showsHorizontalScrollIndicator={false}
               scrollEnabled={true}
-              data={superlikes.slice(0,7)}
+              data={superlikes.slice(0, 10)}
               renderItem={({ item }) => <TopPick card={item} navigation = {navigation}/>}
               keyExtractor={(item) => item.name}
               />)} 
@@ -58,8 +57,8 @@ const styles = StyleSheet.create({
       margin: 20
     },
     title: {
-      fontSize: 28,
-      fontWeight: 'bold',
+      fontSize: RFValue(24, 800),
+      fontFamily: 'Roboto_700Bold',
       color: colors.offWhite
     },
     userInfo: {
