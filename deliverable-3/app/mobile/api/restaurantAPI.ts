@@ -32,12 +32,14 @@ export const apiGetRestaurants = async (cuisines, radius, price) => {
 
     const { latitude , longitude } = await getLocationAsync(); 
     const authToken = await AsyncStorage.getItem("authToken");
+    const userId = await AsyncStorage.getItem("userId");
 
     const requestBody = {
       "categories": cuisines,
       "lat": latitude,
       "lng": longitude, 
       "radius": radius, 
+      "userid": userId
     }
 
     if(price >= 1 && price <= 4){
@@ -51,7 +53,7 @@ export const apiGetRestaurants = async (cuisines, radius, price) => {
       throw new Error("auth invalid")
     }
 
-    if (!restaurants || !restaurants.data || typeof restaurants.data === 'string') {
+    if (!restaurants || !restaurants.data || restaurants.data.length == 0 || typeof restaurants.data === 'string') {
       throw 'Restaurants not found';
     } 
 
@@ -83,6 +85,7 @@ export const apiSwipeOnRestaurant = async (restaurantID, weight) => {
     const userId = await AsyncStorage.getItem("userId");
 
     const res = await client.put(env.apiUrl + 'restaurant/swipe/' + restaurantID, {"userId": userId, "weight": weight}, {headers: {"Authorization" : `Bearer ${authToken}`}});
+    
     if (!res || res.status != 200) {
       throw 'Unable to record swipe with weight ' + weight + ' on restaurant ID ' + restaurantID + '.';
     }
