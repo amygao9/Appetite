@@ -25,11 +25,10 @@ const Preferences = ({route, navigation}) => {
     return cuisinePreferences.includes(item) 
   }
 
-  //stores cuisine options (this is an alternative to persisting cuisine preferences for each user in the database, which is a TO-DO item for future deliverables)
   const cuisines = [
-    {name: "Cuisines", options: [{displayText: 'Traditional American', id: 'tradmerican', selected: isSelected('tradmerican')}, {displayText: 'Italian', id: 'italian', selected: isSelected('italian')}, {displayText: 'Chinese', id: 'chinese', selected: isSelected('chinese')}, {displayText: 'Korean', id: 'korean', selected: isSelected('korean')}, {displayText: 'Japanese', id: 'japanese', selected: isSelected('japanese')}, {displayText: 'Greek', id: 'greek', selected: isSelected('greek')}]}, 
-    {name: "Popular Items", options: [{displayText: 'Sandwiches', id: 'sandwiches', selected: isSelected('sandwiches')}, {displayText: 'Bakeries', id: 'bakeries', selected: isSelected('bakeries')}, {displayText: 'Ice Cream', id: 'icecream', selected: isSelected('icecream')}, {displayText: 'Salad', id: 'salad', selected: isSelected('salad')}, {displayText: 'Desserts', id: 'desserts', selected: isSelected('desserts')}, {displayText: 'Coffee', id: 'coffee', selected: isSelected('coffee')}]},
-    {name: "Dietary", options: [{displayText: 'Gluten Free ', id: 'glutenfree', selected: isSelected('glutenfree')}, {displayText: 'Vegan', id: 'vegan', selected: isSelected('vegan')}]} 
+    {name: "Cuisines", options: [{displayText: 'Traditional American', id: 'American (Traditional)', selected: isSelected('American (Traditional)')}, {displayText: 'Italian', id: 'Italian', selected: isSelected('Italian')}, {displayText: 'Chinese', id: 'Chinese', selected: isSelected('Chinese')}, {displayText: 'Korean', id: 'Korean', selected: isSelected('Korean')}, {displayText: 'Japanese', id: 'Japanese', selected: isSelected('Japanese')}, {displayText: 'Greek', id: 'Greek', selected: isSelected('Greek')}]}, 
+    {name: "Popular Items", options: [{displayText: 'Sandwiches', id: 'Sandwiches', selected: isSelected('Sandwiches')}, {displayText: 'Bakeries', id: 'Bakeries', selected: isSelected('Bakeries')}, {displayText: 'Pizza', id: 'Pizza', selected: isSelected('Ice Cream & Frozen Yogurt')}, {displayText: 'Salad', id: 'Salad', selected: isSelected('Salad')}, {displayText: 'Desserts', id: 'Desserts', selected: isSelected('Desserts')}, {displayText: 'Coffee', id: 'Coffee & Tea', selected: isSelected('Coffee & Tea')}]},
+    {name: "Dietary", options: [{displayText: 'Gluten Free ', id: 'Gluten-Free', selected: isSelected('Gluten-Free')}, {displayText: 'Vegan', id: 'Vegan', selected: isSelected('Vegan')}]} 
   ]
 
   //function that is passed to child components, to update the list of selected cuisines
