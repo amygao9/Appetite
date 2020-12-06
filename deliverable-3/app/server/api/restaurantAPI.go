@@ -9,11 +9,11 @@ import (
 
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
+	queue "github.com/golang-collections/go-datastructures/queue"
 
 	"math"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -28,24 +28,28 @@ func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &filter)
 	if err != nil {
 		log.Print("Error unpacking Filter data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	query := getFindQuery(filter)
+	match := bson.M{"$match": query}
+	sample := bson.M{"$sample": bson.M{"size": 100}}
+	sort := bson.M{"$sort": bson.M{"weight": -1}}
+	pipeline := []bson.M{match, sample, sort}
 
-	options := options.Find()
-	options.SetSort(bson.M{"weight": -1})
-
-	result, err := data.db.Collection("restaurant").Find(data.ctx, query, options)
+	result, err := data.db.Collection("restaurant").Aggregate(data.ctx, pipeline)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
+
 	var restaurants []models.Restaurant
 	if err = result.All(data.ctx, &restaurants); err != nil {
 		log.Print(err)
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -72,6 +76,7 @@ func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	result := data.db.Collection("restaurant").FindOne(data.ctx, bson.M{"_id": objectID})
 	err = result.Err()
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		var restaurant models.Restaurant
@@ -123,9 +128,12 @@ func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 		// set Yelp review
 		restaurant.TopReview = models.Review{
 			UserName:   review["user"].(map[string]interface{})["name"].(string),
-			UserImage:  review["user"].(map[string]interface{})["image_url"].(string),
 			ReviewText: review["text"].(string),
 			Rating:     int(review["rating"].(float64)),
+		}
+
+		if review["user"].(map[string]interface{})["image_url"] != nil {
+			restaurant.TopReview.UserImage = review["user"].(map[string]interface{})["image_url"].(string)
 		}
 
 		timeCreated, _ := time.Parse("2006-01-02 03:04:05", review["time_created"].(string))
@@ -136,7 +144,6 @@ func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(restaurant)
 	}
-
 }
 
 func (data *DB) AddRestaurant(w http.ResponseWriter, r *http.Request) {
@@ -150,12 +157,14 @@ func (data *DB) AddRestaurant(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
 		log.Print("Error unpacking restaurant data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 	restaurant.ID = primitive.NewObjectID()
 	_, err = data.db.Collection("restaurant").InsertOne(data.ctx, restaurant)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		w.Header().Set("Content-Type", "application/json")
@@ -180,12 +189,14 @@ func (data *DB) UpdateRestaurant(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &restaurant)
 	if err != nil {
 		log.Print("Error unpacking restaurant data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 	restaurant.ID = objectID
 	_, err = data.db.Collection("restaurant").ReplaceOne(data.ctx, bson.M{"_id": objectID}, restaurant)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		w.WriteHeader(http.StatusOK)
@@ -211,6 +222,13 @@ func (data *DB) Swipe(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(postBody, &swipe)
 	if err != nil {
 		log.Print("Error unpacking Weight data")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	restaurant, err := FindRestaurant(data, objectID)
+	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -218,10 +236,38 @@ func (data *DB) Swipe(w http.ResponseWriter, r *http.Request) {
 	update := bson.M{"$inc": bson.M{"weight": swipe.Weight}}
 	_, err = data.db.Collection("restaurant").UpdateOne(data.ctx, bson.M{"_id": objectID}, update)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
-	} else {
-		w.WriteHeader(http.StatusOK)
+		return
 	}
+
+	// restaurant categories to update
+	categoryUpdate := make(map[string]bool)
+
+	for _, cat := range restaurant.Categories {
+		if _, ok := models.CategoryMap[cat]; ok {
+			categoryUpdate[cat] = true
+		}
+	}
+
+	user, err := FindUser(data, swipe.UserId)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	for name, weight := range user.Categories {
+		if _, ok := categoryUpdate[name]; ok {
+			user.Categories[name] = weight + swipe.Weight
+		}
+	}
+
+	_, err = data.db.Collection("user").ReplaceOne(data.ctx, bson.M{"_id": swipe.UserId}, user)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (data *DB) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
@@ -237,6 +283,7 @@ func (data *DB) DeleteRestaurant(w http.ResponseWriter, r *http.Request) {
 
 	_, err = data.db.Collection("restaurant").DeleteOne(data.ctx, (bson.M{"_id": objectID}))
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 	} else {
 		w.WriteHeader(http.StatusOK)
@@ -276,9 +323,77 @@ func getFindQuery(filter models.Filter) bson.M {
 		queries = append(queries, bson.M{"lng": bson.M{"$gte": radius.LowLng, "$lte": radius.HiLng}})
 	}
 
+	if len(queries) == 0 {
+		return bson.M{}
+	}
+
 	query := bson.M{
 		"$and": queries,
 	}
-
 	return query
+}
+
+// PARKJS STUFF
+func ApplySigmoid(categories *map[string]int) map[string]float64 {
+	// PARK.js Algo step 3, puts weightings through a sigmoid function
+	var ret = make(map[string]float64)
+
+	for key, value := range *categories {
+		(ret)[key] = Sigmoid(float64(value))
+	}
+
+	return ret
+}
+
+func Sigmoid(valueIn float64) float64 {
+	// Helper function - the sigmoid function itself
+	var maxVal = 0.5
+	var steepness = 0.2
+	var offset = 0.25
+
+	return (maxVal / (1 + math.Exp(-steepness*valueIn))) + offset
+}
+
+func NormalizeWeights(categories *map[string]float64) {
+	// PARK.js Algo step 4, normalize sigmoid weights to probabilities
+	var multiplier = 0.0
+	for key := range *categories {
+		multiplier += (*categories)[key]
+	}
+
+	for key := range *categories {
+		(*categories)[key] /= multiplier
+	}
+}
+
+func BuildQueues(categoriesSplice []string, restaurants []models.Restaurant) map[string]*queue.Queue {
+	// PARK.js algo step 5, put restaurants into a queue
+	var ret = make(map[string]*queue.Queue)
+	var categories = make(map[string]bool)
+
+	// Build hashmap for quicker lookup
+	for _, category := range categoriesSplice {
+		categories[category] = true
+	}
+	// Initialize splices in returned map
+	for category := range categories {
+		ret[category] = queue.New(int64(len(restaurants)))
+	}
+	ret["other"] = queue.New(int64(len(restaurants)))
+
+	// Populate
+	for _, restaurant := range restaurants {
+		queued := false
+		for _, restCategory := range restaurant.Categories {
+			if _, ok := categories[restCategory]; ok {
+				ret[restCategory].Put(restaurant)
+				queued = true
+			}
+		}
+		if !queued {
+			ret["other"].Put(restaurant)
+		}
+	}
+
+	return ret
 }

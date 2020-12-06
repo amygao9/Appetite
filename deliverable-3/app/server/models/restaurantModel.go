@@ -2,18 +2,6 @@ package models
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-type Category int
-
-const (
-	Cafe Category = iota
-	Chinese
-	FastFood
-	FineDining
-	Italian
-	Mexican
-	Pizza
-)
-
 type Restaurant struct {
 	ID          primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
 	YelpID      string             `json:"yelpid" bson:"yelpid"`
@@ -41,7 +29,8 @@ type Review struct {
 }
 
 type Swipe struct {
-	Weight int `json:"weight" bson:"weight"`
+	Weight int                `json:"weight" bson:"weight"`
+	UserId primitive.ObjectID `json:"userid,omitempty" bson:"userid,omitempty"`
 }
 
 type Filter struct {
