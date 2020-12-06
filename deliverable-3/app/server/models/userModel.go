@@ -5,6 +5,23 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+var CategoryMap = map[string]bool{
+	"American (Traditional)":    true,
+	"Italian":                   true,
+	"Chinese":                   true,
+	"Korean":                    true,
+	"Japanese":                  true,
+	"Greek":                     true,
+	"Sandwiches":                true,
+	"Bakeries":                  true,
+	"Ice Cream & Frozen Yogurt": true,
+	"Salad":                     true,
+	"Desserts":                  true,
+	"Coffee & Tea":              true,
+	"Gluten-Free":               true,
+	"Vegan":                     true,
+}
+
 type User struct {
 	ID         primitive.ObjectID   `json:"id,omitempty" bson:"_id,omitempty"`
 	Name       string               `json:"name" bson:"name"`
@@ -12,8 +29,8 @@ type User struct {
 	Password   string               `json:"password" bson:"password"`
 	Lat        float64              `json:"latitude" bson:"latitude"`
 	Lng        float64              `json:"longitude" bson:"longitude"`
-	Friends    []primitive.ObjectID `json:"friends,omitempty" bson:"friends,omitempty"`
 	SuperLikes []primitive.ObjectID `json:"superLikes,omitempty" bson:"superLikes,omitempty"`
+	Categories map[string]float64   `json:"categories,omitempty" bson:"categories,omitempty"`
 }
 
 type AuthUser struct {
@@ -34,4 +51,23 @@ type Claims struct {
 
 type RestaurantId struct {
 	RestaurantId primitive.ObjectID `json:"restaurantId,omitempty" bson:"restaurantId,omitempty"`
+}
+
+func NewCategories() map[string]float64 {
+	return map[string]float64{
+		"American (Traditional)":    0,
+		"Italian":                   0,
+		"Chinese":                   0,
+		"Korean":                    0,
+		"Japanese":                  0,
+		"Greek":                     0,
+		"Sandwiches":                0,
+		"Bakeries":                  0,
+		"Ice Cream & Frozen Yogurt": 0,
+		"Salad":                     0,
+		"Desserts":                  0,
+		"Coffee & Tea":              0,
+		"Gluten-Free":               0,
+		"Vegan":                     0,
+	}
 }

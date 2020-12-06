@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
@@ -16,8 +17,88 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+type scrapeRequest struct {
+	Location string `json:"location"`
+	Radius   int    `json:"radius"`
+	Limit    int    `json:"limit"`
+}
+
+func containsRestaurant(blockList []string, restaurant string) bool {
+	cleanedRestaurant := strings.Replace(strings.ToLower(restaurant), " ", "", -1)
+	for _, blockedRestaurant := range blockList {
+		if strings.Contains(cleanedRestaurant, blockedRestaurant) || strings.Contains(blockedRestaurant, cleanedRestaurant) {
+			return true
+		}
+	}
+	return false
+}
+
+func addOrUpdateRestaurant(data *DB, business interface{}, blockRestaurants []string, wg *sync.WaitGroup) {
+	businessMap := business.(map[string]interface{})
+
+	restaurant := models.Restaurant{
+		YelpID:     businessMap["id"].(string),
+		Name:       businessMap["name"].(string),
+		Rating:     businessMap["rating"].(float64),
+		NumRatings: int(businessMap["review_count"].(float64)),
+		ImageURL:   []string{businessMap["image_url"].(string)},
+	}
+
+	if containsRestaurant(blockRestaurants, restaurant.Name) {
+		wg.Done()
+		return
+	}
+
+	coordinates := businessMap["coordinates"].(map[string]interface{})
+	restaurant.Lat = coordinates["latitude"].(float64)
+	restaurant.Lng = coordinates["longitude"].(float64)
+
+	addressMap := businessMap["location"].(map[string]interface{})
+	restaurant.Address = addressMap["address1"].(string)
+
+	restaurant.Categories = []string{}
+	for _, category := range businessMap["categories"].([]interface{}) {
+		categoryMap := category.(map[string]interface{})
+		restaurant.Categories = append(restaurant.Categories, categoryMap["title"].(string))
+	}
+
+	if val, ok := businessMap["price"]; ok {
+		restaurant.Price = strings.Count(val.(string), "$")
+	}
+
+	result := data.db.Collection("restaurant").FindOne(data.ctx, bson.M{"yelpid": restaurant.YelpID})
+	err := result.Err()
+	if err != nil {
+		restaurant.Weight = 100
+	} else {
+		var existingRestaurant models.Restaurant
+		result.Decode(&existingRestaurant)
+		restaurant.Weight = existingRestaurant.Weight
+	}
+
+	result = data.db.Collection("restaurant").FindOneAndReplace(data.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
+	wg.Done()
+}
+
 func (data *DB) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
+	var scrapeReq scrapeRequest
+	postBody, _ := ioutil.ReadAll(r.Body)
+	err := json.Unmarshal(postBody, &scrapeReq)
+	if err != nil {
+		log.Print("Error unpacking request")
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	if scrapeReq.Limit%50 != 0 {
+		log.Print("Limit is not a multiple of 50")
+		w.Write([]byte(errors.New("Scrape limit is not a multiple of 50").Error()))
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	config := getConfig()
+
 	query_url := "https://api.yelp.com/v3/businesses/search"
 	bearer := "Bearer " + config.YelpKey
 
@@ -25,13 +106,27 @@ func (data *DB) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 	req.Header.Add("Authorization", bearer)
 
 	queryParams := url.Values{}
-	queryParams.Add("location", "1 King's College Circle, Toronto, Ontario")
-	queryParams.Add("category", "restaurants")
-	queryParams.Add("radius", "2000")
+	queryParams.Add("location", scrapeReq.Location)
+	queryParams.Add("categories", "restaurants")
+	queryParams.Add("radius", strconv.Itoa(scrapeReq.Radius))
 	queryParams.Add("limit", "50")
 	queryParams.Add("offset", "0")
 
-	for i := 0; i < 4; i++ {
+	blockFile, err := ioutil.ReadFile("blocklist.txt")
+	if err != nil {
+		log.Print("Couldn't open blocked restaurants file")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	blockRestaurants := strings.Split(string(blockFile), ",")
+	blockMap := make(map[string]string)
+	for i := 0; i < len(blockRestaurants); i++ {
+		blockMap[blockRestaurants[i]] = ""
+	}
+
+	for i := 0; i < scrapeReq.Limit/50; i++ {
 		limit := 50         // Number of restaurants to return in every Yelp API call (max is 50)
 		offset := limit * i // Page offset for Yelp API call
 		queryParams.Set("limit", strconv.Itoa(limit))
@@ -59,51 +154,19 @@ func (data *DB) ScrapeRestaurants(w http.ResponseWriter, r *http.Request) {
 		}
 
 		resultsMap := results.(map[string]interface{})
-		businesses := resultsMap["businesses"].([]interface{})
-		for _, business := range businesses {
-			businessMap := business.(map[string]interface{})
-
-			restaurant := models.Restaurant{
-				YelpID:     businessMap["id"].(string),
-				Name:       businessMap["name"].(string),
-				Rating:     businessMap["rating"].(float64),
-				NumRatings: int(businessMap["review_count"].(float64)),
-				ImageURL:   []string{businessMap["image_url"].(string)},
-			}
-
-			coordinates := businessMap["coordinates"].(map[string]interface{})
-			restaurant.Lat = coordinates["latitude"].(float64)
-			restaurant.Lng = coordinates["longitude"].(float64)
-
-			addressMap := businessMap["location"].(map[string]interface{})
-			restaurant.Address = addressMap["address1"].(string)
-
-			restaurant.Categories = []string{}
-			for _, category := range businessMap["categories"].([]interface{}) {
-				categoryMap := category.(map[string]interface{})
-				restaurant.Categories = append(restaurant.Categories, categoryMap["alias"].(string))
-			}
-
-			if val, ok := businessMap["price"]; ok {
-				restaurant.Price = strings.Count(val.(string), "$")
-			}
-
-			result := data.db.Collection("restaurant").FindOne(data.ctx, bson.M{"yelpid": restaurant.YelpID})
-			err = result.Err()
-			if err != nil {
-				restaurant.Weight = 100
-			} else {
-				var existingRestaurant models.Restaurant
-				result.Decode(&existingRestaurant)
-				restaurant.Weight = existingRestaurant.Weight
-			}
-
-			result = data.db.Collection("restaurant").FindOneAndReplace(data.ctx, bson.M{"yelpid": restaurant.YelpID}, restaurant, options.FindOneAndReplace().SetUpsert(true))
-			err = result.Err()
-			if err != nil {
-				log.Print(err)
-			}
+		if resultsMap["businesses"] == nil {
+			break
 		}
+		businesses := resultsMap["businesses"].([]interface{})
+
+		wg := sync.WaitGroup{}
+		for _, business := range businesses {
+			wg.Add(1)
+			go addOrUpdateRestaurant(data, business, blockRestaurants, &wg)
+		}
+
+		wg.Wait()
+		log.Println("Concurrent restaurant add/update done")
 	}
 
 	w.WriteHeader(http.StatusOK)

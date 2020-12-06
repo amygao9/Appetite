@@ -2,14 +2,17 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/auth"
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -50,10 +53,27 @@ func (data *DB) AddUser(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal(postBody, &user)
 	if err != nil {
 		log.Print("Error unpacking user data")
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
+
+	var userExists models.User
+	err = data.db.Collection("user").FindOne(data.ctx, bson.M{"email": user.Email}).Decode(&userExists)
+	if err != nil && err != mongo.ErrNoDocuments {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	if userExists.Email != "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(errors.New("User already exists").Error()))
+		return
+	}
+
+	user.Email = strings.ToLower(user.Email)
 	user.ID = primitive.NewObjectID()
+	user.Categories = models.NewCategories()
 	hashed, err := auth.HashPassword(user.Password)
 	if err != nil {
 		w.Write([]byte(err.Error()))
@@ -91,6 +111,8 @@ func (data *DB) AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
+
+	user.Email = strings.ToLower(user.Email)
 
 	err = data.db.Collection("user").FindOne(data.ctx, bson.M{"email": authUser.Email}).Decode(&user)
 	if err != nil {
@@ -178,6 +200,13 @@ func (data *DB) GetSuperLikes(w http.ResponseWriter, r *http.Request) {
 
 	if user.SuperLikes != nil && len(user.SuperLikes) > 0 {
 		query = bson.M{"_id": bson.M{"$in": user.SuperLikes}}
+	} else if len(user.SuperLikes) == 0 {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+
+		response, _ := json.Marshal([]models.Restaurant{})
+		w.Write(response)
+		return
 	}
 
 	res, err := data.db.Collection("restaurant").Find(data.ctx, query)
