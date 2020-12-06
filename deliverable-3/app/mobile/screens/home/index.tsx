@@ -28,8 +28,6 @@ const Home = ({route, navigation}) => {
     React.useEffect(() => {
 
         if(route.params.login == true) {
-          console.log("FROM LOGIN");
-
           fetchUserDetails(); 
           fetchSuperLikes();  
         } 
@@ -72,8 +70,11 @@ const Home = ({route, navigation}) => {
         console.log(err)
         if (err.message === "auth invalid") {
           await userLogOut(navigation); 
-        } else if (err == 'Restaurants not found') {
-          //alert("No restaurants found! Change preferences to see more.");
+        } else {
+          if (err == "Restaurants not found") {
+            alert("No restaurants found! Change preferences to see more.");
+          }
+         
           setCards([]);
           setLoading(false);
           setButtonsDisabled(true);
