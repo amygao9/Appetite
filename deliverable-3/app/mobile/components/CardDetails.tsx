@@ -5,7 +5,7 @@ import * as Icon from '@expo/vector-icons';
 import {apiGetDetails} from "../api/restaurantAPI";
 import colors from "../constants/Colors";
 import layout from "../constants/Layout";
-import Carousel from "react-native-carousel";
+import Carousel from "react-native-snap-carousel";
 
 const { height } = Dimensions.get('window')
 export default function CardDetails({ route, navigation }) {
@@ -31,56 +31,50 @@ export default function CardDetails({ route, navigation }) {
       }
     }
     }
+
+    const renderItem = ({item, index}) => {
+      console.log(item)
+      return (
+        <View style={styles.carousel} key={index}>
+        <Image
+          style={styles.image}
+          source={{uri: item}}
+          resizeMode="cover"
+        />
+      </View>
+      );
+    }
     return (
       <SafeAreaView style={styles.container}>
         
         <View style={styles.upper}>
-        <Image
-            style={styles.image}
-            source={photo}
-            resizeMode="cover"
-          />
-        {/* {isLoading && ( 
+         {isLoading && ( 
           <Image
             style={styles.image}
             source={photo}
             resizeMode="cover"
           /> )}
-        {!isLoading && ( 
-          <Carousel delay={3000}>
-            <View style={styles.carousel}>
-              <Image
-                style={styles.image}
-                source={photo}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.carousel}>
-              <Image
-                style={styles.image}
-                source={{uri: details["imageURL"][1]}}
-                resizeMode="cover"
-            />
-            </View>
-            <View style={styles.carousel}>
-              <Image
-                style={styles.image}
-                source={{uri: details["imageURL"][2]}}
-                resizeMode="cover"
-            />
-            </View>
-          </Carousel> )} */}
-          
+        {!isLoading && (
+          <Carousel
+          layout={"default"}
+          data={details["imageURL"]}
+          sliderWidth={400}
+          itemWidth={400}
+          renderItem={renderItem}
+          autoplay={true}
+          loop={true}
+          /> 
+        )}
         </View> 
         <ScrollView style={styles.lower}>
         <View style={styles.lower}>
         <Text style={styles.category}>{`${description}`}</Text>
         <View style={{ flexDirection: 'column'}}>
-          <View style={{ flexDirection: 'row'}}>
+          <View style={styles.row}>
               <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail" color={colors.blue}/>
               <Text style={styles.category}>{`${address}`}</Text>
           </View>
-          <View style={{ flexDirection: 'row'}}>
+          <View style={styles.row}>
               {rating % 1 == 0.5 && (Array.from(Array(rating-0.5), (e, i) => {
                 return (
                   <Icon.MaterialIcons name="star" style={styles.icons} color={"gold"} key={i}/>  
@@ -89,7 +83,7 @@ export default function CardDetails({ route, navigation }) {
               {rating % 1 == 0.5 && 
                   <Icon.MaterialIcons name="star-half" style={styles.icons} color={"gold"}/>  
               }
-              {rating % 1 == 0.5 && (Array.from(Array(5-rating+0.5), (e, i) => {
+              {rating % 1 == 0.5 && (Array.from(Array(4-rating+0.5), (e, i) => {
                 return (
                   <Icon.MaterialIcons name="star-border" style={styles.icons} color={"gold"} key={i}/>  
                 )
@@ -105,12 +99,15 @@ export default function CardDetails({ route, navigation }) {
                 )
               }))}
           </View>
-          <View style={{ flexDirection: 'row'}}>
-          <Icon.MaterialIcons name="attach-money" style={styles.icons} color={colors.blue}/>
-              <Text style={styles.category}>{`${price}`+'/4'}</Text>
+          <View style={styles.row}>
+          {(Array.from(Array(price), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="attach-money" style={styles.icons} color={colors.green} key={i}/>  
+                )
+              }))}
           </View>
           {!isLoading && (
-          <View style={{ flexDirection: 'row'}}>
+          <View style={styles.row}>
             <Icon.MaterialIcons name="phone" style={styles.icons} color={colors.blue}/>
              <Text style={styles.category}>{`${details["phonenumber"]}`}</Text>
           </View>)} 
@@ -153,6 +150,10 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       justifyContent: 'center',
     },
+    row: {
+      flexDirection: 'row',
+      marginLeft: 15
+    },
     carousel: {
       //width: layout.window.width,
       flex: 1,
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
     },
     icons: {
       paddingTop: 20,
-      paddingLeft: 20,
+      paddingRight: 10,
       fontSize: 24,
       //color: colors.black,
     },
