@@ -43,13 +43,21 @@ function MainNavigator() {
       <Stack.Screen name="Auth" component={Auth}/>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Restaurant Details" component={CardDetails} 
-      options={{ headerShown: true, headerTintColor: colorTheme.offWhite, headerStyle: {
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-        backgroundColor: colorTheme.darkGray
-      }
-      }}/>
+      options={({route}) => (
+        {
+          title: route.params.title,
+          headerShown: true, 
+          headerTintColor: colorTheme.offWhite, 
+          headerTitleAlign: 'center',
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
+            backgroundColor: colorTheme.darkGray,
+          }
+        }
+      )
+      }/>
     </Stack.Navigator>
   );
 }

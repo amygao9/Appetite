@@ -35,7 +35,12 @@ export default function CardDetails({ route, navigation }) {
       <SafeAreaView style={styles.container}>
         
         <View style={styles.upper}>
-        {isLoading && ( 
+        <Image
+            style={styles.image}
+            source={photo}
+            resizeMode="cover"
+          />
+        {/* {isLoading && ( 
           <Image
             style={styles.image}
             source={photo}
@@ -64,30 +69,49 @@ export default function CardDetails({ route, navigation }) {
                 resizeMode="cover"
             />
             </View>
-          </Carousel> )}
+          </Carousel> )} */}
           
         </View> 
         <ScrollView style={styles.lower}>
         <View style={styles.lower}>
-        <Text style={styles.title}>{`${title}`}</Text>
-        <Divider style={{ height: 3, backgroundColor: "#808080"}} />
         <Text style={styles.category}>{`${description}`}</Text>
         <View style={{ flexDirection: 'column'}}>
           <View style={{ flexDirection: 'row'}}>
-              <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail"/>
+              <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail" color={colors.blue}/>
               <Text style={styles.category}>{`${address}`}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
-              <Icon.MaterialIcons name="star" style={styles.icons} />
-              <Text style={styles.category}>{`${rating}`+'/5'}</Text>
+              {rating % 1 == 0.5 && (Array.from(Array(rating-0.5), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+              {rating % 1 == 0.5 && 
+                  <Icon.MaterialIcons name="star-half" style={styles.icons} color={"gold"}/>  
+              }
+              {rating % 1 == 0.5 && (Array.from(Array(5-rating+0.5), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star-border" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+              {rating % 1 == 0 && (Array.from(Array(rating), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+              {rating % 1 == 0 && (Array.from(Array(5-rating), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star-border" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
           </View>
           <View style={{ flexDirection: 'row'}}>
-          <Icon.MaterialIcons name="attach-money" style={styles.icons} />
+          <Icon.MaterialIcons name="attach-money" style={styles.icons} color={colors.blue}/>
               <Text style={styles.category}>{`${price}`+'/4'}</Text>
           </View>
           {!isLoading && (
           <View style={{ flexDirection: 'row'}}>
-            <Icon.MaterialIcons name="phone" style={styles.icons} />
+            <Icon.MaterialIcons name="phone" style={styles.icons} color={colors.blue}/>
              <Text style={styles.category}>{`${details["phonenumber"]}`}</Text>
           </View>)} 
           
@@ -124,17 +148,17 @@ type FixedShape =  {
 }
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: colors.offWhite,
+      backgroundColor: colors.white,
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
     },
     carousel: {
-      width: layout.window.width,
+      //width: layout.window.width,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'transparent',
+      //backgroundColor: 'transparent',
     },
     upper: {
       backgroundColor: colors.darkGray,
@@ -146,7 +170,7 @@ const styles = StyleSheet.create({
     },
     lower: {
 
-      backgroundColor: colors.offWhite,
+      backgroundColor: colors.white,
       flex: 5,
     },
     image: {
@@ -159,8 +183,7 @@ const styles = StyleSheet.create({
       paddingTop: 20,
       paddingLeft: 20,
       fontSize: 24,
-      color: colors.black,
-      opacity: 0.60,
+      //color: colors.black,
     },
     title: {
       textAlign: 'left',
@@ -177,7 +200,6 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       fontSize: 20,
       color: colors.black,
-      opacity: 0.60,
       fontFamily: 'Roboto_700Bold',
     },
     review: {
@@ -188,7 +210,6 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       fontSize: 16,
       color: colors.black,
-      opacity: 0.60,
       fontFamily: 'Roboto_500Medium',
     },
     hours: {
@@ -198,7 +219,6 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       fontSize: 16,
       color: colors.black,
-      opacity: 0.60,
       fontFamily: 'Roboto_500Medium',
     }
   })
