@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import colors from '../../constants/Colors';
 
 export default function TopPick(props) {
@@ -52,22 +52,31 @@ export default function TopPick(props) {
     });
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => props.navigation.navigate('Restaurant Details', 
+        {title: props.card.name, 
+            description: props.card.categories,
+            photo: props.card.imageURL,
+            address: props.card.address,
+            rating: props.card.rating,
+            price: props.card.price,
+            id: props.card.id
+          })}>
             <View style={styles.imageContainer}> 
-                <Image style={styles.restaurantImage} source={{ uri: props.imageURI}}/>
+                <Image style={styles.restaurantImage} source={{ uri: props.card.imageURL[0]}}/>
             </View> 
 
             <View style={styles.nameContainer}> 
-                <Text style={styles.name}>{props.restaurantName}</Text> 
+                <Text style={styles.name}>{props.card.name}</Text> 
             </View> 
 
             <View style={styles.categoriesContainer}> 
-                <Text style={styles.categories}>{props.categories}</Text> 
+                <Text style={styles.categories}>{props.card.categories.join(', ')}</Text> 
             </View> 
 
             <View style={styles.ratingContainer}> 
-                <Text style={styles.rating}>{props.rating}</Text> 
-            </View> 
-        </View> 
+                <Text style={styles.rating}>{props.card.rating}</Text> 
+            </View>
+        </TouchableOpacity>
+        
     )
 }

@@ -34,7 +34,7 @@ export const Profile = ({route, navigation}) => {
               showsHorizontalScrollIndicator={false}
               scrollEnabled={true}
               data={superlikes.slice(0,7)}
-              renderItem={({ item }) => <TopPick restaurantName={item.name} categories={item.categories[0]} rating={item.rating + "/5"} imageURI={item.imageURL[0]}/>}
+              renderItem={({ item }) => <TopPick card={item} navigation = {navigation}/>}
               keyExtractor={(item) => item.name}
               />)} 
           </View> 

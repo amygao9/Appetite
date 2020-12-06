@@ -77,9 +77,9 @@ export const apiGetDetails = async (id) => {
 export const apiSwipeOnRestaurant = async (restaurantID, weight) => {
   try {
     const authToken = await AsyncStorage.getItem("authToken");
+    const userId = await AsyncStorage.getItem("userId");
 
-    const res = await client.put(env.apiUrl + 'restaurant/swipe/' + restaurantID, {"weight": weight}, {headers: {"Authorization" : `Bearer ${authToken}`}});
-      
+    const res = await client.put(env.apiUrl + 'restaurant/swipe/' + restaurantID, {"userId": userId, "weight": weight}, {headers: {"Authorization" : `Bearer ${authToken}`}});
     if (!res || res.status != 200) {
       throw 'Unable to record swipe with weight ' + weight + ' on restaurant ID ' + restaurantID + '.';
     }

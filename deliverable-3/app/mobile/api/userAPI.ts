@@ -53,7 +53,7 @@ export const apiSuperLikeRestaurant = async (restaurantId) => {
       const authToken = await AsyncStorage.getItem("authToken");
       const userId = await AsyncStorage.getItem("userId");
   
-      const res = await client.post(env.apiUrl + 'user/add/superlike/', {id: userId, restaurantId: restaurantId}, {headers: {"Authorization" : `Bearer ${authToken}`}});
+      const res = await client.post(env.apiUrl + 'user/add/superlike/'+userId, {restaurantId: restaurantId}, {headers: {"Authorization" : `Bearer ${authToken}`}});
 
       if (!res || res.status != 200) {
         throw 'Unable to record superlike for user ' + userId + ' on restaurant ID ' + restaurantId + '.';
