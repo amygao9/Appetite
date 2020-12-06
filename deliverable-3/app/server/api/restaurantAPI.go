@@ -2,8 +2,10 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -41,6 +43,7 @@ func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 
 	result, err := data.db.Collection("restaurant").Aggregate(data.ctx, pipeline)
 	if err != nil {
+		log.Print(err)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
@@ -54,10 +57,46 @@ func (data *DB) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userResult := data.db.Collection("user").FindOne(data.ctx, bson.M{"_id": filter.UserId})
+	err = userResult.Err()
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	var user models.User
+	userResult.Decode(&user)
+
+	categoryWeights := make(map[string]int)
+	categories := []string{}
+	for category, weight := range user.Categories {
+		categoryWeights[category] = weight
+		categories = append(categories, category)
+	}
+	categoryProbabilities := ApplySigmoid(&categoryWeights)
+
+	sum := 0.0
+	count := float64(len(categoryProbabilities))
+	for _, probability := range categoryProbabilities {
+		sum += float64(probability)
+	}
+	categoryProbabilities["other"] = sum / count
+
+	queues := BuildQueues(categories, restaurants)
+
+	for category, queue := range queues {
+		if queue.Len() == 0 {
+			categoryProbabilities[category] = 0.0
+		}
+	}
+	NormalizeWeights(&categoryProbabilities)
+
+	sampledRestaurants := SampleRestaurants(categoryProbabilities, queues)
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	response, _ := json.Marshal(restaurants)
+	response, _ := json.Marshal(sampledRestaurants)
 	w.Write(response)
 
 }
@@ -334,6 +373,52 @@ func getFindQuery(filter models.Filter) bson.M {
 }
 
 // PARKJS STUFF
+
+func SampleRestaurants(probabilities map[string]float64, restaurantsMap map[string]*queue.Queue) []models.Restaurant {
+	totalRestaurants := 0 // total number of restaurants in
+	for _, restaurants := range restaurantsMap {
+		totalRestaurants += int(restaurants.Len())
+	}
+
+	restIDSet := make(map[primitive.ObjectID]bool)
+	finalStack := []models.Restaurant{}
+
+	for i := 0; i < totalRestaurants; i++ {
+		category, err := SampleCategory(probabilities)
+		if err != nil {
+			log.Print(err)
+		} else {
+			restaurants, err := restaurantsMap[category].Get(1)
+			if err != nil {
+				log.Print(err)
+			} else {
+				restaurant := restaurants[0].(models.Restaurant)
+				if !restIDSet[restaurant.ID] {
+					restIDSet[restaurant.ID] = true
+					finalStack = append(finalStack, restaurant)
+				}
+			}
+			if restaurantsMap[category].Empty() {
+				probabilities[category] = 0
+				NormalizeWeights(&probabilities)
+			}
+		}
+	}
+
+	return finalStack
+}
+
+func SampleCategory(probabilities map[string]float64) (string, error) {
+	x := rand.Float64()
+	for category, probability := range probabilities {
+		if x < probability {
+			return category, nil
+		}
+		x -= probability
+	}
+	return "", errors.New("sampleCategory: probabilities do not sum to 1")
+}
+
 func ApplySigmoid(categories *map[string]int) map[string]float64 {
 	// PARK.js Algo step 3, puts weightings through a sigmoid function
 	var ret = make(map[string]float64)
