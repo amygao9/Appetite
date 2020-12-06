@@ -40,7 +40,7 @@ export const Profile = ({route, navigation}) => {
           </View> 
     
     
-          <View style={styles.logOut}> 
+          <View> 
               <LongButton style={styles.logoutButton} title="LOGOUT" onPress={() => logOut()}/>
           </View> 
     
@@ -72,12 +72,6 @@ const styles = StyleSheet.create({
       alignItems: 'center', 
     }, topPicksList: {
       marginTop: 20
-    }, 
-    logOut: {
-      flex: 1, 
-      width: '100%', 
-      alignItems: 'center', 
-      justifyContent: 'flex-start' 
     }, 
     logoutButton: {
       marginTop: 25,
