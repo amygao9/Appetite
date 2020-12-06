@@ -28,7 +28,7 @@ export const Card = (props: any) =>
             title="Details >"
             titleStyle={{
               color: colors.offWhite,
-              fontSize: RFValue(16, 700),
+              fontSize: RFValue(16, 800),
               fontFamily: 'Roboto_700Bold',
             }}
             type="clear"
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     title: {
       textAlign: 'left',
       left: 15,
-      fontSize: RFValue(24, 750),
+      fontSize: RFValue(24, 800),
       color: colors.offWhite,
       fontFamily: 'Roboto_700Bold',
     },
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
       flex: 0.8,
       left: 15,
       paddingTop: 10,
-      fontSize: RFValue(16, 750),
+      fontSize: RFValue(16, 800),
       color: colors.offWhite,
       opacity: 0.60,
       fontFamily: 'Roboto_700Bold',

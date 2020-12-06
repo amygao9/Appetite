@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import { View, Text, Image, Dimensions, ImageSourcePropType, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
-import { Divider } from 'react-native-elements';
 import * as Icon from '@expo/vector-icons';
 import {apiGetDetails} from "../api/restaurantAPI";
 import colors from "../constants/Colors";
 import layout from "../constants/Layout";
 import Carousel from "react-native-snap-carousel";
-
+import { RFValue } from "react-native-responsive-fontsize";
 const { height } = Dimensions.get('window')
 export default function CardDetails({ route, navigation }) {
   const {title, description, photo, address, rating, price, id} = route.params;
@@ -58,8 +57,8 @@ export default function CardDetails({ route, navigation }) {
           <Carousel
           layout={"default"}
           data={details["imageURL"]}
-          sliderWidth={400}
-          itemWidth={400}
+          sliderWidth={layout.window.width-10}
+          itemWidth={layout.window.width-10}
           renderItem={renderItem}
           autoplay={true}
           loop={true}
@@ -68,7 +67,7 @@ export default function CardDetails({ route, navigation }) {
         </View> 
         <ScrollView style={styles.lower}>
         <View style={styles.lower}>
-        <Text style={styles.category}>{`${description}`}</Text>
+        <Text style={styles.category}>{`${description.join(', ')}`}</Text>
         <View style={{ flexDirection: 'column'}}>
           <View style={styles.row}>
               <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail" color={colors.blue}/>
@@ -135,14 +134,6 @@ export default function CardDetails({ route, navigation }) {
       </SafeAreaView>
     );
 }
-type RestaurantProps = {
-    details: FixedShape
-}
-type FixedShape =  {
-    photo: ImageSourcePropType, 
-    title: string, 
-    description: string
-}
 const styles = StyleSheet.create({
     container: {
       backgroundColor: colors.white,
@@ -175,10 +166,9 @@ const styles = StyleSheet.create({
       flex: 5,
     },
     image: {
-      
       borderRadius: 10,
       flex: 1,
-      width: '95%'
+      width: layout.window.width-25
     },
     icons: {
       paddingTop: 20,
@@ -186,21 +176,20 @@ const styles = StyleSheet.create({
       fontSize: 24,
       //color: colors.black,
     },
-    title: {
-      textAlign: 'left',
-      paddingLeft: 10,
-      paddingTop: 20,
-      paddingBottom: 10,
-      fontSize: 24,
-      color: colors.black,
-      fontFamily: 'Roboto_700Bold',
-    },
     category: {
       paddingTop: 20,
       paddingLeft: 10,
       textAlign: 'left',
-      fontSize: 20,
+      fontSize: RFValue(20, 800),
       color: colors.black,
+      fontFamily: 'Roboto_700Bold',
+    },
+    details: {
+      paddingTop: 20,
+      paddingLeft: 10,
+      textAlign: 'left',
+      fontSize: RFValue(20, 800),
+      color: colors.blue,
       fontFamily: 'Roboto_700Bold',
     },
     review: {
@@ -209,7 +198,7 @@ const styles = StyleSheet.create({
       paddingRight: 30,
       paddingBottom: 30,
       textAlign: 'left',
-      fontSize: 16,
+      fontSize: RFValue(16, 800),
       color: colors.black,
       fontFamily: 'Roboto_500Medium',
     },
@@ -218,7 +207,7 @@ const styles = StyleSheet.create({
       paddingLeft: 30,
       paddingRight: 30,
       textAlign: 'left',
-      fontSize: 16,
+      fontSize: RFValue(16, 800),
       color: colors.black,
       fontFamily: 'Roboto_500Medium',
     }
