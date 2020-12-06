@@ -6,20 +6,20 @@ import (
 )
 
 var CategoryMap = map[string]bool{
-	"American (Traditional)":    true,
-	"Italian":                   true,
-	"Chinese":                   true,
-	"Korean":                    true,
-	"Japanese":                  true,
-	"Greek":                     true,
-	"Sandwiches":                true,
-	"Bakeries":                  true,
-	"Ice Cream & Frozen Yogurt": true,
-	"Salad":                     true,
-	"Desserts":                  true,
-	"Coffee & Tea":              true,
-	"Gluten-Free":               true,
-	"Vegan":                     true,
+	"American (Traditional)": true,
+	"Italian":                true,
+	"Chinese":                true,
+	"Korean":                 true,
+	"Japanese":               true,
+	"Greek":                  true,
+	"Sandwiches":             true,
+	"Bakeries":               true,
+	"Pizza":                  true,
+	"Salad":                  true,
+	"Desserts":               true,
+	"Coffee & Tea":           true,
+	"Gluten-Free":            true,
+	"Vegan":                  true,
 }
 
 type User struct {
@@ -55,19 +55,19 @@ type RestaurantId struct {
 
 func NewCategories() map[string]int {
 	return map[string]int{
-		"American (Traditional)":    0,
-		"Italian":                   0,
-		"Chinese":                   0,
-		"Korean":                    0,
-		"Japanese":                  0,
-		"Greek":                     0,
-		"Sandwiches":                0,
-		"Bakeries":                  0,
-		"Ice Cream & Frozen Yogurt": 0,
-		"Salad":                     0,
-		"Desserts":                  0,
-		"Coffee & Tea":              0,
-		"Gluten-Free":               0,
-		"Vegan":                     0,
+		"American (Traditional)": 0,
+		"Italian":                0,
+		"Chinese":                0,
+		"Korean":                 0,
+		"Japanese":               0,
+		"Greek":                  0,
+		"Sandwiches":             0,
+		"Bakeries":               0,
+		"Pizza":                  0,
+		"Salad":                  0,
+		"Desserts":               0,
+		"Coffee & Tea":           0,
+		"Gluten-Free":            0,
+		"Vegan":                  0,
 	}
 }
