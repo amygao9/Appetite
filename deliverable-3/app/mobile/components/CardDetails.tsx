@@ -53,12 +53,12 @@ export default function CardDetails({ route, navigation }) {
       <SafeAreaView style={styles.container}>
         
         <View style={styles.upper}>
-         {isLoading && ( 
+         {isLoading && photo != undefined && ( 
           <Image
             style={styles.image}
             source={photo}
             resizeMode="cover"
-          /> )}
+          /> )} 
         {!isLoading && (
           <Carousel
           layout={"default"}

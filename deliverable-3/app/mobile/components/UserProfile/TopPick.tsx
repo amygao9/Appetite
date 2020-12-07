@@ -57,7 +57,7 @@ export default function TopPick(props) {
         <TouchableOpacity style={styles.container} onPress={() => props.navigation.navigate('Restaurant Details', 
         {title: props.card.name, 
             description: props.card.categories,
-            photo: props.card.imageURL,
+            photo: {uri: props.card.imageURL[0]},
             address: props.card.address,
             rating: props.card.rating,
             price: props.card.price,
