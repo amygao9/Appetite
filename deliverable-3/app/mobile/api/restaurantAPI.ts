@@ -10,28 +10,39 @@ import * as Permissions from 'expo-permissions';
 const getLocationAsync = async () => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== 'granted') {
-    alert("Permission denied to access location! ")
+    alert("Permission denied to access location. Defaulting to downtown Toronto.");
+    return {latitude: 43.661282922175914, longitude: -79.39409611053878}; 
   } else {
-    let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
-    const { latitude , longitude } = location.coords
-    console.log("LATITUDE: " + latitude + ", LONGITUDE: " + longitude)
+
+    try{
+      let location = await Location.getCurrentPositionAsync();
+      return location.coords
+    }catch(e){
+      alert('We could not find your position. Please make sure your location service provider is on. Defaulting to downtown Toronto.');
+      console.log('Error while trying to get location: ', e);
+      return {latitude: 43.661282922175914, longitude: -79.39409611053878}; 
+    }
   } 
 };
 
 
 export const apiGetRestaurants = async (cuisines, radius, price) => {
 
-  await getLocationAsync(); 
-
   try {
-    const authToken = await AsyncStorage.getItem("authToken");
 
-    //user location is hardcoded at 1 King's College Circle (to be updated for future deliverables)
+    //const { latitude , longitude } = await getLocationAsync(); 
+    
+    const { latitude , longitude } = {latitude: 43.661282922175914, longitude: -79.39409611053878};
+    
+    const authToken = await AsyncStorage.getItem("authToken");
+    const userId = await AsyncStorage.getItem("userId");
+
     const requestBody = {
       "categories": cuisines,
-      "lat": 43.661282922175914,
-      "lng": -79.39409611053878, 
+      "lat": latitude,
+      "lng": longitude, 
       "radius": radius, 
+      "userid": userId
     }
 
     if(price >= 1 && price <= 4){
@@ -45,7 +56,7 @@ export const apiGetRestaurants = async (cuisines, radius, price) => {
       throw new Error("auth invalid")
     }
 
-    if (!restaurants || !restaurants.data || typeof restaurants.data === 'string') {
+    if (!restaurants || !restaurants.data || restaurants.data.length == 0 || typeof restaurants.data === 'string') {
       throw 'Restaurants not found';
     } 
 
@@ -74,9 +85,10 @@ export const apiGetDetails = async (id) => {
 export const apiSwipeOnRestaurant = async (restaurantID, weight) => {
   try {
     const authToken = await AsyncStorage.getItem("authToken");
+    const userId = await AsyncStorage.getItem("userId");
 
-    const res = await client.put(env.apiUrl + 'restaurant/swipe/' + restaurantID, {"weight": weight}, {headers: {"Authorization" : `Bearer ${authToken}`}});
-      
+    const res = await client.put(env.apiUrl + 'restaurant/swipe/' + restaurantID, {"userId": userId, "weight": weight}, {headers: {"Authorization" : `Bearer ${authToken}`}});
+    
     if (!res || res.status != 200) {
       throw 'Unable to record swipe with weight ' + weight + ' on restaurant ID ' + restaurantID + '.';
     }

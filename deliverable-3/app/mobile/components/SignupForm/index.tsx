@@ -4,7 +4,7 @@ import { StyleSheet, Switch, View} from 'react-native';
 import { Input } from 'react-native-elements';
 import colors from '../../constants/Colors';
 
-export default function LoginForm(props) {
+export default function SignupForm(props) {
     const styles = StyleSheet.create({
             input: {
                 backgroundColor: colors.offWhite,
@@ -41,6 +41,15 @@ export default function LoginForm(props) {
                 inputStyle={styles.input}
                 inputContainerStyle={styles.container}
                 secureTextEntry={true}
+                autoCapitalize = 'none'
+            />
+            <Input
+                label='Name'
+                onChangeText={props.onChangeName}
+                labelStyle={styles.label}
+                underlineColorAndroid="transparent"
+                inputStyle={styles.input}
+                inputContainerStyle={styles.container}
                 autoCapitalize = 'none'
             />
         </>

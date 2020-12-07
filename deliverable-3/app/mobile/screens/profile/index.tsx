@@ -3,11 +3,14 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList} from 'react-native';
 import {LongButton, PersonalInfo, PageHeader, TopPick} from "../../components";
 import colors from '../../constants/Colors';
 import {userLogOut} from "../../api/userAPI";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { RFValue } from "react-native-responsive-fontsize";
 
 export const Profile = ({route, navigation}) => {
+    const [userDetails, setUserDetails] = React.useState(route.params.userDetails); 
     const [superlikes, setSuperLikes] = React.useState(route.params.superlikes); 
+
+    const firstname = userDetails.name.substr(0, userDetails.name.indexOf(' ')); 
+    const lastname = userDetails.name.substr(userDetails.name.indexOf(' ')+1);
 
     const logOut = async () => {
       await userLogOut(navigation); 
@@ -17,26 +20,26 @@ export const Profile = ({route, navigation}) => {
   
         <SafeAreaView style={styles.container}> 
 
-          <PageHeader title="Your Profile" navigationFunction={() => navigation.navigate('Home')} /> 
+          <PageHeader title="Your Profile" navigationFunction={() => navigation.navigate('Home', {login: false})} /> 
         
           <View style={styles.userInfo}> 
-              <PersonalInfo firstname="Joshua" lastname="Chua"/> 
+              <PersonalInfo firstname={firstname} lastname={lastname}/> 
           </View>
     
           <View style={styles.topPicks}> 
               <Text style={styles.title}>Top Restaurant Picks</Text>
-
+              {(superlikes != [] && 
               <FlatList style={styles.topPicksList}
               showsHorizontalScrollIndicator={false}
               scrollEnabled={true}
-              data={superlikes.slice(0,5)}
-              renderItem={({ item }) => <TopPick restaurantName={item.name} categories={item.categories[0]} rating={item.rating + "/5"} imageURI={item.imageURL[0]}/>}
+              data={superlikes.slice(0, 10)}
+              renderItem={({ item }) => <TopPick card={item} navigation = {navigation}/>}
               keyExtractor={(item) => item.name}
-              />
+              />)} 
           </View> 
     
     
-          <View style={styles.logOut}> 
+          <View> 
               <LongButton style={styles.logoutButton} title="LOGOUT" onPress={() => logOut()}/>
           </View> 
     
@@ -54,8 +57,8 @@ const styles = StyleSheet.create({
       margin: 20
     },
     title: {
-      fontSize: 28,
-      fontWeight: 'bold',
+      fontSize: RFValue(24, 800),
+      fontFamily: 'Roboto_700Bold',
       color: colors.offWhite
     },
     userInfo: {
@@ -68,12 +71,6 @@ const styles = StyleSheet.create({
       alignItems: 'center', 
     }, topPicksList: {
       marginTop: 20
-    }, 
-    logOut: {
-      flex: 1, 
-      width: '100%', 
-      alignItems: 'center', 
-      justifyContent: 'flex-start' 
     }, 
     logoutButton: {
       marginTop: 25,

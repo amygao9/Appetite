@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, FlatList, Text, View } from 'react-native';
 import CuisineOption from './CuisineOption';
 import colors from '../../constants/Colors';
+import { RFValue } from "react-native-responsive-fontsize";
 
 
 export default function CuisineOptionSection(props: any) {
@@ -31,7 +32,8 @@ const styles = StyleSheet.create({
   sectionHeader: {
     paddingLeft: 10,
     paddingBottom: 2,
-    fontSize: 24,
+    fontSize: RFValue(20, 800),
+    fontFamily: 'Roboto_500Medium',
     fontWeight: 'bold',
     color: colors.offWhite
   }

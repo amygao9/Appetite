@@ -6,6 +6,7 @@ import CuisineOptionSection from '../../components/Preferences/CuisineOptionSect
 import Slider from '@react-native-community/slider';
 import colors from '../../constants/Colors';
 import layout from "../../constants/Layout";
+import { RFValue } from "react-native-responsive-fontsize";
 
 import { LogBox } from 'react-native';
 
@@ -25,11 +26,10 @@ const Preferences = ({route, navigation}) => {
     return cuisinePreferences.includes(item) 
   }
 
-  //stores cuisine options (this is an alternative to persisting cuisine preferences for each user in the database, which is a TO-DO item for future deliverables)
   const cuisines = [
-    {name: "Cuisines", options: [{displayText: 'Traditional American', id: 'tradmerican', selected: isSelected('tradmerican')}, {displayText: 'Italian', id: 'italian', selected: isSelected('italian')}, {displayText: 'Chinese', id: 'chinese', selected: isSelected('chinese')}, {displayText: 'Korean', id: 'korean', selected: isSelected('korean')}, {displayText: 'Japanese', id: 'japanese', selected: isSelected('japanese')}, {displayText: 'Greek', id: 'greek', selected: isSelected('greek')}]}, 
-    {name: "Popular Items", options: [{displayText: 'Sandwiches', id: 'sandwiches', selected: isSelected('sandwiches')}, {displayText: 'Bakeries', id: 'bakeries', selected: isSelected('bakeries')}, {displayText: 'Ice Cream', id: 'icecream', selected: isSelected('icecream')}, {displayText: 'Salad', id: 'salad', selected: isSelected('salad')}, {displayText: 'Desserts', id: 'desserts', selected: isSelected('desserts')}, {displayText: 'Coffee', id: 'coffee', selected: isSelected('coffee')}]},
-    {name: "Dietary", options: [{displayText: 'Gluten Free ', id: 'glutenfree', selected: isSelected('glutenfree')}, {displayText: 'Vegan', id: 'vegan', selected: isSelected('vegan')}]} 
+    {name: "Cuisines", options: [{displayText: 'Traditional American', id: 'American (Traditional)', selected: isSelected('American (Traditional)')}, {displayText: 'Italian', id: 'Italian', selected: isSelected('Italian')}, {displayText: 'Chinese', id: 'Chinese', selected: isSelected('Chinese')}, {displayText: 'Korean', id: 'Korean', selected: isSelected('Korean')}, {displayText: 'Japanese', id: 'Japanese', selected: isSelected('Japanese')}, {displayText: 'Greek', id: 'Greek', selected: isSelected('Greek')}]}, 
+    {name: "Popular Items", options: [{displayText: 'Sandwiches', id: 'Sandwiches', selected: isSelected('Sandwiches')}, {displayText: 'Bakeries', id: 'Bakeries', selected: isSelected('Bakeries')}, {displayText: 'Pizza', id: 'Pizza', selected: isSelected('Ice Cream & Frozen Yogurt')}, {displayText: 'Salad', id: 'Salad', selected: isSelected('Salad')}, {displayText: 'Desserts', id: 'Desserts', selected: isSelected('Desserts')}, {displayText: 'Coffee', id: 'Coffee & Tea', selected: isSelected('Coffee & Tea')}]},
+    {name: "Dietary", options: [{displayText: 'Gluten Free ', id: 'Gluten-Free', selected: isSelected('Gluten-Free')}, {displayText: 'Vegan', id: 'Vegan', selected: isSelected('Vegan')}]} 
   ]
 
   //function that is passed to child components, to update the list of selected cuisines
@@ -49,14 +49,14 @@ const Preferences = ({route, navigation}) => {
 
   const applyPreferences = () => {
     //passes in the selected cuisines and distance radius to the main page 
-    navigation.goBack(); 
+    navigation.navigate('Home', {login: false}); 
     route.params.onGoBack(cuisinePreferences, distanceRadius, pricePreference);
   }
 
   return (
     <SafeAreaView style={styles.container}>
 
-        <PageHeader title="User Preferences" navigationFunction={() => navigation.navigate('Home')} /> 
+        <PageHeader title="User Preferences" navigationFunction={() => navigation.navigate('Home', {login: false})} /> 
 
         <View style={styles.cuisineSections}> 
         {cuisineSections}
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   cuisineSections: {
     flex: 3.5,
-    paddingTop: 40,
+    paddingTop: 20,
     margin: 0
   },
   buttonsPanel: {
@@ -120,11 +120,12 @@ const styles = StyleSheet.create({
   },
   distanceSlider: {
     width: layout.window.width * 0.7, 
-    flex: 0.5
+    flex: 0.5, 
+    marginTop: -40
   },   
   priceOptions: {
     flex: 1, 
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end', 
   }, 
   itemContainer: {
     alignItems: 'center',
@@ -145,13 +146,15 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       textAlignVertical: 'center',
       color: colors.offWhite, 
-      fontSize: 18,
+      fontSize: RFValue(18, 800),
+      fontFamily: 'Roboto_400Regular',
   },
   selectedTextStyle: {
     textAlign: 'center',
     textAlignVertical: 'center',
     color: "gold", 
-    fontSize: 18,
+    fontSize: RFValue(18, 800),
+    fontFamily: 'Roboto_400Regular',
     fontWeight: 'bold',
   },
   pricesContainer: {

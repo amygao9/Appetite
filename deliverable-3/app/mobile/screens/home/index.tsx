@@ -4,9 +4,8 @@ import * as Icon from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper';
 import {Card, CircleButton} from "../../components";
 import {apiGetRestaurants, apiSwipeOnRestaurant} from "../../api/restaurantAPI";
-import {apiSuperLikeRestaurant, apiGetSuperLikes, userLogOut} from "../../api/userAPI";
+import {apiSuperLikeRestaurant, apiGetSuperLikes, apiGetUserDetails, userLogOut} from "../../api/userAPI";
 import colors from '../../constants/Colors';
-const { height } = Dimensions.get('window')
 
 import { LogBox } from 'react-native';
 
@@ -14,7 +13,7 @@ LogBox.ignoreLogs([
   'Possible Unhandled Promise Rejection',
 ]);
 
-const Home = ({navigation}) => {
+const Home = ({route, navigation}) => {
     const useSwiper = useRef(null)
     const [isLoading, setLoading] = useState(true);
     const [restaurantCards, setCards] = useState([]);
@@ -23,17 +22,23 @@ const Home = ({navigation}) => {
     const [pricePreference, setPricePreference] = useState(0)
     const [buttonsDisabled, setButtonsDisabled] = React.useState(true)
     const [superLikes, setSuperLikes] = React.useState([]); 
-
+    const [userDetails, setUserDetails] = React.useState([]); 
+ 
 
     React.useEffect(() => {
-      fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
-      fetchSuperLikes();  
-    }, []);
 
-    // fetches when preferences and/or radius have been updated 
+        if(route.params.login == true) {
+          fetchUserDetails(); 
+          fetchSuperLikes();  
+        } 
+
+    }, [navigation]);
+
     React.useEffect(() => {
+
       setLoading(true);
       fetchRestaurants(cuisinePreferences, searchRadius, pricePreference);
+
     }, [cuisinePreferences, searchRadius, pricePreference]);
 
 
@@ -65,8 +70,11 @@ const Home = ({navigation}) => {
         console.log(err)
         if (err.message === "auth invalid") {
           await userLogOut(navigation); 
-        } else if (err == 'Restaurants not found') {
-          alert("No restaurants found! Change preferences to see more.");
+        } else {
+          if (err == "Restaurants not found") {
+            alert("No restaurants found! Change preferences to see more.");
+          }
+         
           setCards([]);
           setLoading(false);
           setButtonsDisabled(true);
@@ -87,6 +95,21 @@ const Home = ({navigation}) => {
         } 
       } 
     }
+
+
+    async function fetchUserDetails() {
+      try {
+        let userDetails = await apiGetUserDetails();
+        setUserDetails(userDetails);
+      }
+      catch(err) {
+        console.log(err)
+        if (err.message === "auth invalid") {
+          await userLogOut(navigation); 
+        } 
+      } 
+    }
+
 
     const updatePreferences = (cuisinePreferences, radius, pricePreference) => {       
       setSearchRadius(radius);
@@ -155,7 +178,7 @@ const Home = ({navigation}) => {
                 color={colors.offWhite} 
                 backgroundColor="transparent"
                 size = {32}
-                onPress={() => navigation.navigate('Profile', {superlikes: superLikes})} 
+                onPress={() => navigation.navigate('Profile', {userDetails: userDetails, superlikes: superLikes})} 
               />
             </View> 
 

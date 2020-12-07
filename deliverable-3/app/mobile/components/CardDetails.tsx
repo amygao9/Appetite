@@ -1,11 +1,19 @@
 import React, {useState} from 'react';
 import { View, Text, Image, Dimensions, ImageSourcePropType, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
-import { Divider } from 'react-native-elements';
 import * as Icon from '@expo/vector-icons';
 import {apiGetDetails} from "../api/restaurantAPI";
 import colors from "../constants/Colors";
 import layout from "../constants/Layout";
-import Carousel from "react-native-carousel";
+import Carousel from "react-native-snap-carousel";
+import { RFValue } from "react-native-responsive-fontsize";
+
+
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Failed prop type.',
+]);
+
 
 const { height } = Dimensions.get('window')
 export default function CardDetails({ route, navigation }) {
@@ -31,81 +39,106 @@ export default function CardDetails({ route, navigation }) {
       }
     }
     }
+
+    const renderItem = ({item, index}) => {
+      console.log(item)
+      return (
+        <View style={styles.carousel} key={index}>
+        <Image
+          style={styles.image}
+          source={{uri: item}}
+          resizeMode="cover"
+        />
+      </View>
+      );
+    }
     return (
       <SafeAreaView style={styles.container}>
         
         <View style={styles.upper}>
-        {isLoading && ( 
+         {isLoading && ( 
           <Image
             style={styles.image}
             source={photo}
             resizeMode="cover"
           /> )}
-        {!isLoading && ( 
-          <Carousel delay={3000}>
-            <View style={styles.carousel}>
-              <Image
-                style={styles.image}
-                source={photo}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.carousel}>
-              <Image
-                style={styles.image}
-                source={{uri: details["imageURL"][1]}}
-                resizeMode="cover"
-            />
-            </View>
-            <View style={styles.carousel}>
-              <Image
-                style={styles.image}
-                source={{uri: details["imageURL"][2]}}
-                resizeMode="cover"
-            />
-            </View>
-          </Carousel> )}
-          
+        {!isLoading && (
+          <Carousel
+          layout={"default"}
+          data={details["imageURL"]}
+          sliderWidth={layout.window.width-10}
+          itemWidth={layout.window.width-10}
+          renderItem={renderItem}
+          autoplay={true}
+          loop={true}
+          /> 
+        )}
         </View> 
         <ScrollView style={styles.lower}>
         <View style={styles.lower}>
-        <Text style={styles.title}>{`${title}`}</Text>
-        <Divider style={{ height: 3, backgroundColor: "#808080"}} />
-        <Text style={styles.category}>{`${description}`}</Text>
+        <Text style={styles.heading}>{`${description.join(' | ')}`}</Text>
         <View style={{ flexDirection: 'column'}}>
-          <View style={{ flexDirection: 'row'}}>
-              <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail"/>
-              <Text style={styles.category}>{`${address}`}</Text>
+          <View style={styles.row}>
+              <Icon.MaterialIcons name="location-on" style={styles.icons} iconRight title="Mail" color={colors.blue}/>
+              <Text style={styles.details}>{`${address}`}</Text>
           </View>
-          <View style={{ flexDirection: 'row'}}>
-              <Icon.MaterialIcons name="star" style={styles.icons} />
-              <Text style={styles.category}>{`${rating}`+'/5'}</Text>
-          </View>
-          <View style={{ flexDirection: 'row'}}>
-          <Icon.MaterialIcons name="attach-money" style={styles.icons} />
-              <Text style={styles.category}>{`${price}`+'/4'}</Text>
-          </View>
+
           {!isLoading && (
-          <View style={{ flexDirection: 'row'}}>
-            <Icon.MaterialIcons name="phone" style={styles.icons} />
-             <Text style={styles.category}>{`${details["phonenumber"]}`}</Text>
+          <View style={styles.row}>
+            <Icon.MaterialIcons name="phone" style={styles.icons} color={colors.blue}/>
+             <Text style={styles.details}>{`${details["phonenumber"]}`}</Text>
           </View>)} 
+
+          <View style={styles.row}>
+              {rating % 1 == 0.5 && (Array.from(Array(rating-0.5), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+              {rating % 1 == 0.5 && 
+                  <Icon.MaterialIcons name="star-half" style={styles.icons} color={"gold"}/>  
+              }
+              {rating % 1 == 0.5 && (Array.from(Array(4-rating+0.5), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star-border" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+              {rating % 1 == 0 && (Array.from(Array(rating), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+              {rating % 1 == 0 && (Array.from(Array(5-rating), (e, i) => {
+                return (
+                  <Icon.MaterialIcons name="star-border" style={styles.icons} color={"gold"} key={i}/>  
+                )
+              }))}
+          </View>
+          <View style={styles.row}>
+            {(Array.from(Array(price), (e, i) => {
+                  return (
+                    <Icon.MaterialIcons name="attach-money" style={styles.icons} color={colors.green} key={i}/>  
+                  )
+                }))}
+          </View>
+          
+  
           
           {!isLoading && ( 
           <View>
-          <Text style={styles.category}>Hours</Text>
-          <Text style = {styles.hours}>{"Sunday:         " + `${details["hours"]["Sunday"]}`}</Text>
-          <Text style = {styles.hours}>{"Monday:        " + `${details["hours"]["Monday"]}`}</Text>
-          <Text style = {styles.hours}>{"Tuesday:       " + `${details["hours"]["Tuesday"]}`}</Text>
-          <Text style = {styles.hours}>{"Wednesday: " + `${details["hours"]["Wednesday"]}`}</Text>
-          <Text style = {styles.hours}>{"Thursday:     " + `${details["hours"]["Thursday"]}`}</Text>
-          <Text style = {styles.hours}>{"Friday:           " + `${details["hours"]["Friday"]}`}</Text>
-          <Text style = {styles.hours}>{"Saturday:      " +`${details["hours"]["Saturday"]}`}</Text>
+            <Text style={styles.heading}>Hours</Text>
+            <Text style = {styles.hours}>{"Sun:         " + `${details["hours"]["Sunday"]}`}</Text>
+            <Text style = {styles.hours}>{"Mon:        " + `${details["hours"]["Monday"]}`}</Text>
+            <Text style = {styles.hours}>{"Tues:       " + `${details["hours"]["Tuesday"]}`}</Text>
+            <Text style = {styles.hours}>{"Wed:        " + `${details["hours"]["Wednesday"]}`}</Text>
+            <Text style = {styles.hours}>{"Thurs:      " + `${details["hours"]["Thursday"]}`}</Text>
+            <Text style = {styles.hours}>{"Fri:          " + `${details["hours"]["Friday"]}`}</Text>
+            <Text style = {styles.hours}>{"Sat:         " +`${details["hours"]["Saturday"]}`}</Text>
           </View>
           )}
           {!isLoading && ( 
           <View>
-          <Text style={styles.category}>Top Review</Text>
+          <Text style={styles.heading}>Top Review</Text>
           <Text style={styles.review}>{`${details["topreview"]["reviewtext"]}`}</Text>
           </View>)}
         </View>
@@ -114,27 +147,22 @@ export default function CardDetails({ route, navigation }) {
       </SafeAreaView>
     );
 }
-type RestaurantProps = {
-    details: FixedShape
-}
-type FixedShape =  {
-    photo: ImageSourcePropType, 
-    title: string, 
-    description: string
-}
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: colors.offWhite,
+      backgroundColor: colors.white,
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
     },
+    row: {
+      flexDirection: 'row',
+      marginLeft: 15, 
+      alignSelf: 'center'
+    },
     carousel: {
-      width: layout.window.width,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'transparent',
     },
     upper: {
       backgroundColor: colors.darkGray,
@@ -145,60 +173,52 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     lower: {
-
-      backgroundColor: colors.offWhite,
+      backgroundColor: colors.white,
       flex: 5,
     },
     image: {
-      
       borderRadius: 10,
       flex: 1,
-      width: '95%'
+      width: layout.window.width-25
     },
+
+    heading: {
+      backgroundColor: colors.green, 
+      padding: 5, 
+      marginTop: 10,
+      marginLeft: 5,
+      marginRight: 5,
+      marginBottom: 10,
+      textAlign: 'center',
+      fontSize: RFValue(20, 800),
+      color: colors.offWhite
+    },
+
     icons: {
-      paddingTop: 20,
-      paddingLeft: 20,
-      fontSize: 24,
-      color: colors.black,
-      opacity: 0.60,
+      margin: 5,
+      fontSize: 22
     },
-    title: {
-      textAlign: 'left',
-      paddingLeft: 10,
-      paddingTop: 20,
-      paddingBottom: 10,
-      fontSize: 24,
-      color: colors.black,
-      fontFamily: 'Roboto_700Bold',
+
+    details: {
+      margin: 5,
+      fontSize: RFValue(16, 800),
+      color: colors.blue
     },
-    category: {
-      paddingTop: 20,
-      paddingLeft: 10,
-      textAlign: 'left',
-      fontSize: 20,
-      color: colors.black,
-      opacity: 0.60,
-      fontFamily: 'Roboto_700Bold',
-    },
+
     review: {
-      paddingTop: 20,
-      paddingLeft: 30,
-      paddingRight: 30,
-      paddingBottom: 30,
-      textAlign: 'left',
-      fontSize: 16,
+      margin: 15,
+      textAlign: 'center',
+      fontSize: RFValue(16, 800),
       color: colors.black,
-      opacity: 0.60,
-      fontFamily: 'Roboto_500Medium',
     },
+
+
     hours: {
-      paddingTop: 10,
+      margin: 5,
       paddingLeft: 30,
       paddingRight: 30,
-      textAlign: 'left',
-      fontSize: 16,
+      textAlign: 'center',
+      fontSize: RFValue(16, 800),
       color: colors.black,
-      opacity: 0.60,
-      fontFamily: 'Roboto_500Medium',
     }
   })
