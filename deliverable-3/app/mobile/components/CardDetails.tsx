@@ -7,12 +7,9 @@ import layout from "../constants/Layout";
 import Carousel from "react-native-snap-carousel";
 import { RFValue } from "react-native-responsive-fontsize";
 
-
 import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs([
-  'Failed prop type.',
-]);
+LogBox.ignoreAllLogs(); //Ignore all warning notifications
 
 
 const { height } = Dimensions.get('window')
