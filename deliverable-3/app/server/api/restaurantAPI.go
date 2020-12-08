@@ -130,21 +130,23 @@ func (data *DB) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		hours := make(map[int]string)
-		for i, hour := range results["hours"].([]interface{})[0].(map[string]interface{})["open"].([]interface{}) {
-			hourMap := hour.(map[string]interface{})
-			start, _ := time.Parse("1504", hourMap["start"].(string))
-			end, _ := time.Parse("1504", hourMap["end"].(string))
-			hours[i] = start.Format("3:04 pm") + " - " + end.Format("3:04 pm")
-		}
+		if results["hours"] != nil {
+			hours := make(map[int]string)
+			for i, hour := range results["hours"].([]interface{})[0].(map[string]interface{})["open"].([]interface{}) {
+				hourMap := hour.(map[string]interface{})
+				start, _ := time.Parse("1504", hourMap["start"].(string))
+				end, _ := time.Parse("1504", hourMap["end"].(string))
+				hours[i] = start.Format("3:04 pm") + " - " + end.Format("3:04 pm")
+			}
 
-		restaurant.Hours = make(map[string]string)
-		days := []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
-		for i := 0; i < 7; i++ {
-			if val, ok := hours[i]; ok {
-				restaurant.Hours[days[i]] = val
-			} else {
-				restaurant.Hours[days[i]] = "Closed"
+			restaurant.Hours = make(map[string]string)
+			days := []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+			for i := 0; i < 7; i++ {
+				if val, ok := hours[i]; ok {
+					restaurant.Hours[days[i]] = val
+				} else {
+					restaurant.Hours[days[i]] = "Closed"
+				}
 			}
 		}
 
