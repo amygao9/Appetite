@@ -6,7 +6,6 @@ import (
 	"github.com/csc301-fall-2020/team-project-31-appetite/server/models"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -38,7 +37,6 @@ func FindUser(data *DB, objectID primitive.ObjectID) (models.User, error) {
 	result := data.db.Collection("user").FindOne(
 		data.ctx,
 		bson.M{"_id": objectID},
-		options.FindOne().SetProjection(bson.M{"password": 0}),
 	)
 
 	err := result.Err()
