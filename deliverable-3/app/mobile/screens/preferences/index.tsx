@@ -14,6 +14,7 @@ LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
+//allows users to modify their preferences based on cuisine, price and distance
 
 const priceOptions = [{label: 'Any Price', value: 0}, {label: '$', value: 1}, {label: '$$', value: 2}, {label: '$$$', value: 3}, {label: '$$$$', value: 4}]
 

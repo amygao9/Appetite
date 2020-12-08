@@ -7,6 +7,8 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
  
 
+//api calls for getting restaurants, restaurant details, and logging swipe actions on a restaurant card
+
 const getLocationAsync = async () => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== 'granted') {

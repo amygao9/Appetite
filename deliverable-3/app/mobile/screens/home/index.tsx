@@ -42,6 +42,8 @@ const Home = ({route, navigation}) => {
     }, [cuisinePreferences, searchRadius, pricePreference]);
 
 
+    //functions for fetching data about restaurants, superlikes and user details
+
     async function fetchRestaurants(cuisine, radius, price) {
       setButtonsDisabled(true);
       
@@ -96,7 +98,6 @@ const Home = ({route, navigation}) => {
       } 
     }
 
-
     async function fetchUserDetails() {
       try {
         let userDetails = await apiGetUserDetails();
@@ -111,11 +112,16 @@ const Home = ({route, navigation}) => {
     }
 
 
+    //callback function after navigating from preferences page, updates the state on this page
+    //the updating of the state triggers a React useEffect which fetches new restaurants with the updated preferences
     const updatePreferences = (cuisinePreferences, radius, pricePreference) => {       
       setSearchRadius(radius);
       setCuisinePreferences(cuisinePreferences);
       setPricePreference(pricePreference)
     } 
+
+
+    //functions corresponding to swipe actions
 
     const onClickSuperlike = () => {
       if(!buttonsDisabled) {

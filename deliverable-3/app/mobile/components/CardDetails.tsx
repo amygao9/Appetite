@@ -9,8 +9,10 @@ import { RFValue } from "react-native-responsive-fontsize";
 
 import { LogBox } from 'react-native';
 
-LogBox.ignoreAllLogs(); //Ignore all warning notifications
+LogBox.ignoreAllLogs(); 
 
+// component to display additional information about a restaurant card 
+// makes an additional api to get details such as store hours and Yelp reviews
 
 const { height } = Dimensions.get('window')
 export default function CardDetails({ route, navigation }) {

@@ -5,6 +5,8 @@ import colors from '../../constants/Colors';
 import { RFValue } from "react-native-responsive-fontsize";
 
 
+//displays one section of the cuisine preferences, generating a flatlist for all the items passed in through props 
+
 export default function CuisineOptionSection(props: any) {
 
   return (

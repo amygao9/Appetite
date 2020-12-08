@@ -3,6 +3,9 @@ import { StyleSheet, Switch, View} from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import colors from '../../constants/Colors';
 
+//component that represents one type of cuisine preference 
+//upon being checked, the component updates the state through the function that is passed as a prop 
+
 export default function CuisineOption(props: any) {
   const [isChecked, setIsChecked] = React.useState(props.checked);
   const toggleCheckBox = () => {
