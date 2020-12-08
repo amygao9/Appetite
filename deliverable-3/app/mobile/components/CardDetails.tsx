@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, Image, Dimensions, ImageSourcePropType, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import { View, Text, Image, Dimensions, ActivityIndicator, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import * as Icon from '@expo/vector-icons';
 import {apiGetDetails} from "../api/restaurantAPI";
 import colors from "../constants/Colors";
@@ -119,9 +119,8 @@ export default function CardDetails({ route, navigation }) {
                 }))}
           </View>
           
-  
-          
-          {!isLoading && ( 
+   
+          {!isLoading && "hours" in details &&  ( 
           <View>
             <Text style={styles.heading}>Hours</Text>
             <Text style = {styles.hours}>{"Sun:         " + `${details["hours"]["Sunday"]}`}</Text>
@@ -133,6 +132,8 @@ export default function CardDetails({ route, navigation }) {
             <Text style = {styles.hours}>{"Sat:         " +`${details["hours"]["Saturday"]}`}</Text>
           </View>
           )}
+
+     
           {!isLoading && ( 
           <View>
           <Text style={styles.heading}>Top Review</Text>
@@ -140,6 +141,11 @@ export default function CardDetails({ route, navigation }) {
           </View>)}
         </View>
         </View>
+
+        {isLoading && (
+              <ActivityIndicator style={styles.activityIndicator} size="large" color={colors.green} />
+        )}
+          
         </ScrollView>
       </SafeAreaView>
     );
@@ -209,7 +215,6 @@ const styles = StyleSheet.create({
       color: colors.black,
     },
 
-
     hours: {
       margin: 5,
       paddingLeft: 30,
@@ -217,5 +222,10 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontSize: RFValue(16, 800),
       color: colors.black,
-    }
+    }, 
+
+    activityIndicator: {
+      marginTop: 100, 
+      marginBottom: 100
+    } 
   })
