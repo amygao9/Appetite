@@ -4,6 +4,8 @@ import colors from '../../constants/Colors';
 
 import { RFValue } from "react-native-responsive-fontsize";
 
+//component that allows users to view and interact with a restaurant they have previously superliked
+
 export default function TopPick(props) {
     const styles = StyleSheet.create({
         container: {

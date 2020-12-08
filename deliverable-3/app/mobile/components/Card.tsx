@@ -3,6 +3,9 @@ import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import {Button } from 'react-native-elements';
 import colors from "../constants/Colors"
 import { RFValue } from "react-native-responsive-fontsize";
+
+//the design for each restaurant card in the main swiper 
+
 export const Card = (props: any) => 
 
 (

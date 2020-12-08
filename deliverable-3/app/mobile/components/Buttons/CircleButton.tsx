@@ -3,6 +3,8 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../../constants/Colors';
 
+//reusable circle buttons that display an icon in the middle 
+
 export default function CircleButton(props) {
     const styles = StyleSheet.create({
         circle: {

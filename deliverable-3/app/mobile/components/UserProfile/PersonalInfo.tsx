@@ -4,6 +4,9 @@ import { StyleSheet, Text, View, SafeAreaView, Image} from 'react-native';
 import colors from '../../constants/Colors';
 import { RFValue } from "react-native-responsive-fontsize";
 
+//component for displaying personal information about the user 
+//currently displays the user's name only and an avatar, but could be expanded for future deliverables
+
 export default function PersonalInfo(props) {
     const styles = StyleSheet.create({
         container: {

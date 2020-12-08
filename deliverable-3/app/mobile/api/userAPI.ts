@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from "../env";
 import client from "./axios";
 
+//api calls for retrieving user details, getting a user's list of previous superlikes, superliking a restaurant
 
 export const apiGetUserDetails = async () => {
 
@@ -67,12 +68,12 @@ export const apiSuperLikeRestaurant = async (restaurantId) => {
 
 export const userLogOut = async (navigation) => {
     try {
-
+        //removes auth token and id, to allow other users to sign in 
         await AsyncStorage.removeItem("authToken");
         await AsyncStorage.removeItem("userId");
     }
     catch(exception) {
-      console.log("ERROR DESTROYING AUTHTOKEN OR USERID")
+      console.log("Unable to remove authtoken or userid on logout.")
     } finally {
       console.log("logging out!");
       navigation.navigate("Auth"); 

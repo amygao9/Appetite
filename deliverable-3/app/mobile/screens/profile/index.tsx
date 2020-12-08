@@ -5,6 +5,8 @@ import colors from '../../constants/Colors';
 import {userLogOut} from "../../api/userAPI";
 import { RFValue } from "react-native-responsive-fontsize";
 
+//displays the user's name through PersonalInfo component, list of 10 superliked restaurants, and logout button
+
 export const Profile = ({route, navigation}) => {
     const [userDetails, setUserDetails] = React.useState(route.params.userDetails); 
     const [superlikes, setSuperLikes] = React.useState(route.params.superlikes); 
@@ -15,7 +17,7 @@ export const Profile = ({route, navigation}) => {
     const logOut = async () => {
       await userLogOut(navigation); 
     }
-
+    
     return (
   
         <SafeAreaView style={styles.container}> 

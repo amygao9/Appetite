@@ -2,6 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from "../env";
 
+//api calls for login and signout functionality
 
 export const apiLogin = async (email: string, password: string) => {
   try {

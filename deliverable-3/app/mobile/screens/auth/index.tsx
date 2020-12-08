@@ -65,6 +65,11 @@ const Auth = ({navigation}) => {
         }
     };
 
+    const changeView = (viewName: string) => {
+        setView(viewName)
+        setError('');
+    }
+
     const styles = StyleSheet.create({
         logo: {
           width: 270,
@@ -110,8 +115,8 @@ const Auth = ({navigation}) => {
                 />
             </View>
             <View style={styles.buttonHolder}>
-                <LongButton style={styles.loginButton} title="LOGIN" onPress={() => setView("login")}/>
-                <LongButton style={styles.loginButton} title="SIGN UP" onPress={() => setView("signup")} secondary />
+                <LongButton style={styles.loginButton} title="LOGIN" onPress={() => changeView("login")}/>
+                <LongButton style={styles.loginButton} title="SIGN UP" onPress={() => changeView("signup")} secondary />
             </View>
         </View>
     )
@@ -128,7 +133,7 @@ const Auth = ({navigation}) => {
             {error.length > 0 && <Text style={styles.text}>{error}</Text>}
             <View style={styles.buttonHolder}>
                 <LongButton style={styles.loginButton} title="LOGIN" onPress={() => login()} disabled={email.length == 0 || password.length == 0}/>
-                <LongButton style={styles.loginButton} title="BACK" onPress={() => setView("main")} secondary/>
+                <LongButton style={styles.loginButton} title="BACK" onPress={() => changeView("main")} secondary/>
             </View>
         </View>
     )
@@ -145,7 +150,7 @@ const Auth = ({navigation}) => {
             {error.length > 0 && <Text style={styles.text}>{error}</Text>}
             <View style={styles.buttonHolder}>
                 <LongButton style={styles.loginButton} title="SIGN UP" onPress={() => signup()} disabled={email.length == 0 || password.length == 0 || name.length == 0} />
-                <LongButton style={styles.loginButton} title="BACK" onPress={() => setView("main")} secondary/>
+                <LongButton style={styles.loginButton} title="BACK" onPress={() => changeView("main")} secondary/>
             </View>
         </View>
     )

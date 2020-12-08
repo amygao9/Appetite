@@ -14,8 +14,6 @@ const MyTheme = {
   },
 };
 
-// If you are not familiar with React Navigation, we recommend going through the
-// "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer theme={MyTheme}>
@@ -26,10 +24,9 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
 
 const Stack = createStackNavigator();
-
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
 const RootStack = createStackNavigator(); 
+
+// main navigator, connecting the auth, home and restaurant details pages
 
 function MainNavigator() {
   return (
@@ -61,6 +58,8 @@ function MainNavigator() {
     </Stack.Navigator>
   );
 }
+
+//rootstack navigator that connects with the main navigator, allowing modal pages to be opened from the home screen 
 
 function RootStackScreen() {
   return (
