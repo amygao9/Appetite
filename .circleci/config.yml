@@ -10,7 +10,7 @@ jobs:
         environment:
           GO111MODULE: "on"
       - image: circleci/postgres:9.4
-    working_directory: ~/repo/deliverable-2/app/server
+    working_directory: ~/repo/deliverable-3/app/server
     steps:
       - checkout:
           path: ~/repo
@@ -30,7 +30,7 @@ jobs:
   deploy-apk:
     docker:
       - image: circleci/node:14-stretch-browsers
-    working_directory: ~/repo/deliverable-2/app/mobile
+    working_directory: ~/repo/deliverable-3/app/mobile
     steps:
       - checkout:
           path: ~/repo
