@@ -2,7 +2,7 @@
   "expo": {
     "name": "Appetite",
     "slug": "appetite",
-    "version": "2.0",
+    "version": "1.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -36,7 +36,8 @@
         "xxhdpi": "./assets/images/splash.png",
         "xxxhdpi": "./assets/images/splash.png"
       },
-      "package": "com.parkjs.appetite"
+      "package": "com.parkjs.appetite",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
