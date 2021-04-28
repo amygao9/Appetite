@@ -115,3 +115,7 @@ Our group chose an MIT license for this project.
 This license allows just about anything, including commercial use, distribution, modification and private use in closed-source projects. The only conditions is that a copy of the license and copyright notice must be included with the licensed material.
 
 Since this project was not built for a partner, we wanted the project to be open source and available for anyone who wished to modify our work. Of course, we also didn't want to be liable for issues or provide a warranty; thus, the MIT license matched our goals.
+
+## Contributers
+
+Rishab Luthra, Joshua Chua, Kevin Xu, Poplar Wang, Shayan Khalili-Moghaddam, Amy Gao
