@@ -1,6 +1,6 @@
 # Appetite
 
-## D4 Demo Video
+## Demo Video
 https://drive.google.com/file/d/1jGiKGla7vDXrkSPC5ZcSrzLkxg5qv6pf/view
 
 ## Description
