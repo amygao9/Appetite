@@ -57,41 +57,6 @@ Password: `pass`
 
 Here's a video showing a quick walkthrough of the app so far: [https://www.loom.com/share/d4fb05c35cce42089a523dbf47f8021f](https://www.loom.com/share/d4fb05c35cce42089a523dbf47f8021f)
 
-### Running the server and app locally
-
-#### Backend Server
-
-Install the latest version of Go from [https://golang.org/](https://golang.org/) (ensure that it's at least version 1.15)
-
-set up a file named `.env` in the `deliverable-2/app/server` directory with the following content:
-
-```bash
-PORT="5000"
-MONGO_URI="mongodb+srv://csc301-TA:Re9xIcWwoHqHYuGv@cluster0.ioc7w.mongodb.net/appdb?retryWrites=true&w=majority"
-JWT_SECRET="secret123"
-YELP_KEY="LR3os-3Cj_WRIBY5GrpHvKNBuy3Me4iw9tHpGmw9BVqWeKvKVDOwIMRvKBo_tgMLhIn9QvD83vjtxkunJaGEmkPf2CsL_bxpszp-ER0SCjbGcw9jWYJPaKX5VcesX3Yx"
-```
-
-To run from the top directory: `go run deliverable-2/app/server/main.go`
-
-#### Running backend tests
-
-To run tests for the backend server, cd into the `deliverable-2/app/server/tests` folder and run `go test -v`. Note that this runs on [localhost](http://localhost) using the port defined in `.env`, and thus the server must be running before running tests.
-
-#### Mobile App (Android Emulator Tested Only)
-
-Install the latest version of Node from [https://nodejs.org/en/](https://nodejs.org/en/) (tested on Node 15.+)
-
-cd into `deliverable-2/app/mobile` directory and run `npm ci` to install all the dependencies. 
-
-Setup Android Studio and an Android Emulator on the latest version of the Android emulator (https://docs.expo.io/workflow/android-studio-emulator/). 
-
-If you have already used an expo app, you may have to wipe the simulator's data
-
-Run the Android emulator
-
-run `npm run android` to run Expo and press `a` to bring up the Android emulator (MUST HAVE BACKEND SERVER RUNNING)
-
 ## Deployment and Github Workflow
 
 By effectively splitting up the tasks prior to working on the codebase, we were able to minimize merge conflicts by working on different branches and submitting pull requests due to this initial scoping out of tasks. 
